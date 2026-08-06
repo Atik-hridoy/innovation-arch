@@ -1,0 +1,20 @@
+@theme {
+  --color-primary-fixed-dim: #ddb7ff;
+  --color-secondary: #adc6ff;
+  --color-secondary-fixed-dim: #adc6ff;
+  --color-on-surface: #e5e2e1;
+  --color-on-surface-variant: #cfc2d6;
+  --color-primary: #ddb7ff;
+  --color-primary-fixed: #f0dbff;
+  
+  --spacing-stack-md: 80px;
+  --spacing-gutter: 24px;
+  --spacing-stack-sm: 40px;
+  --spacing-stack-xl: 160px;
+  --spacing-margin-edge: 5vw;
+}
+
+:root {
+  --background: #050505;
+  --foreground: #e5e2e1;
+}
