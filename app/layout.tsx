@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Innovative Arc - Premium Digital Studio",
+  title: "Innovative Ark - Premium Digital Studio",
   description: "Immersive digital product design and engineering studio. We build high-performance web products.",
 };
 

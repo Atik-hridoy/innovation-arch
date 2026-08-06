@@ -71,7 +71,7 @@ export function Hero() {
         </h1>
         
         <p ref={paraRef} className="opacity-0 text-base md:text-lg text-on-surface-variant max-w-xl leading-relaxed font-normal">
-          Innovative Arc is a digital product studio building mobile apps, web platforms and AI agents that solve real problems and drive growth.
+          Innovative Ark is a digital product studio building mobile apps, web platforms and AI agents that solve real problems and drive growth.
         </p>
         
         <div ref={actionRef} className="opacity-0 flex flex-col sm:flex-row items-center justify-start gap-6 w-full mt-4 font-sans">

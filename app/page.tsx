@@ -118,7 +118,7 @@ export default function Home() {
       {/* Navigation Bar */}
       <nav className="fixed top-0 w-full z-50 bg-[#050505]/40 backdrop-blur-xl border-b border-white/5 flex justify-between items-center px-margin-edge py-6 shadow-none">
         <div className="font-display-lg text-headline-md tracking-tighter text-on-surface select-none">
-          Innovative Arc
+          Innovative Ark
         </div>
         <div className="hidden md:flex gap-gutter items-center">
           <a className="font-body-md text-[14px] uppercase tracking-widest text-on-surface-variant/70 hover:text-on-surface hover:backdrop-brightness-125 transition-all duration-300" href="#work">Work</a>
@@ -156,7 +156,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="w-full py-stack-md flex flex-col md:flex-row justify-between items-center px-margin-edge bg-[#050505] border-t border-white/5 shadow-none relative z-40">
         <div className="font-display-lg-mobile text-[24px] text-on-surface mb-6 md:mb-0 select-none">
-          Innovative Arc
+          Innovative Ark
         </div>
         <div className="flex flex-wrap justify-center gap-6 mb-6 md:mb-0">
           <a className="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors duration-500" href="#">Instagram</a>
@@ -165,7 +165,7 @@ export default function Home() {
           <a className="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors duration-500" href="#">Twitter</a>
         </div>
         <div className="font-label-caps text-label-caps text-on-surface-variant text-center md:text-right opacity-50 hover:opacity-100 transition-opacity duration-300">
-          © 2026 Innovative Arc Studio. All rights reserved.
+          © 2026 Innovative Ark Studio. All rights reserved.
         </div>
       </footer>
 
