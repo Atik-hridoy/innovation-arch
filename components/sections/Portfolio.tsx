@@ -272,7 +272,7 @@ export function Portfolio() {
   };
 
   return (
-    <section id="work" className="relative py-stack-xl px-margin-edge border-t border-white/5 z-10 bg-[#070609] overflow-hidden">
+    <section id="work" className="relative py-12 md:py-stack-xl px-4 sm:px-margin-edge border-t border-white/5 z-10 bg-[#070609] overflow-hidden">
       
       {/* Volumetric dynamic image background matching active card's 1st image */}
       <div className="absolute inset-0 z-0 transition-all duration-1000 ease-in-out pointer-events-none">
@@ -289,10 +289,10 @@ export function Portfolio() {
       </div>
 
       {/* Section Header with Nav Buttons */}
-      <div className="w-full max-w-7xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 relative z-10">
-        <div className="flex flex-col gap-6">
+      <div className="w-full max-w-7xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6 mb-8 md:mb-16 relative z-10">
+        <div className="flex flex-col gap-3 md:gap-6">
           <span className="font-label-caps text-label-caps text-primary/70 block">FEATURED WORK</span>
-          <h2 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface leading-[0.95] tracking-tighter">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-on-surface leading-[0.95] tracking-tighter font-bold">
             Real projects. Real impact.
           </h2>
         </div>
@@ -320,7 +320,7 @@ export function Portfolio() {
       <div
         ref={scrollRef}
         onScroll={handleScroll}
-        className="w-full flex gap-8 overflow-x-auto snap-x snap-mandatory pb-8 scroll-smooth relative z-10"
+        className="w-full flex gap-4 sm:gap-8 overflow-x-auto snap-x snap-mandatory pb-8 scroll-smooth relative z-10"
         style={{
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
@@ -336,7 +336,7 @@ export function Portfolio() {
       </div>
 
       {/* Metrics Grid Footer Row */}
-      <div className="scroll-reveal w-full max-w-7xl mx-auto rounded-2xl border border-white/5 bg-white/[0.01] backdrop-blur-md p-8 grid grid-cols-2 md:grid-cols-5 gap-8 mt-16 items-center relative z-20">
+      <div className="scroll-reveal w-full max-w-7xl mx-auto rounded-2xl border border-white/5 bg-white/[0.01] backdrop-blur-md p-4 sm:p-8 grid grid-cols-2 md:grid-cols-5 gap-4 sm:gap-8 mt-8 md:mt-16 items-center relative z-20">
         <div>
           <div className="text-[32px] font-extrabold text-white leading-none">10+</div>
           <div className="text-[9px] uppercase tracking-wider text-on-surface-variant/60 mt-2 font-mono">Projects Delivered</div>

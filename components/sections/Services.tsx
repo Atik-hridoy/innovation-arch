@@ -198,7 +198,7 @@ export function Services() {
     <section
       ref={sectionRef}
       id="services"
-      className="relative w-full min-h-screen flex items-center justify-center overflow-hidden border-t border-white/5 z-10 bg-[#080810]"
+      className="relative w-full lg:min-h-screen flex items-center justify-center overflow-hidden border-t border-white/5 z-10 bg-[#080810]"
     >
       {/* ━━━ Background Motion Layer (preserved) ━━━ */}
       <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden">
@@ -206,7 +206,7 @@ export function Services() {
         <div className="absolute top-[10%] left-0 w-full overflow-hidden whitespace-nowrap">
           <div className="animate-marquee-reverse inline-flex whitespace-nowrap">
             {[0, 1].map((i) => (
-              <span key={i} className="font-sans font-black text-[9vw] tracking-[0.25em] text-transparent uppercase marquee-back-text px-4" style={{ WebkitTextStroke: '2px rgba(255,255,255,0.35)' }}>
+              <span key={i} className="font-sans font-black text-[18vw] md:text-[12vw] lg:text-[9vw] tracking-[0.25em] text-transparent uppercase marquee-back-text px-4" style={{ WebkitTextStroke: '2px rgba(255,255,255,0.35)' }}>
                 {marqueeText}
               </span>
             ))}
@@ -217,7 +217,7 @@ export function Services() {
         <div className="absolute bottom-[10%] left-0 w-full overflow-hidden whitespace-nowrap">
           <div className="animate-marquee inline-flex whitespace-nowrap">
             {[0, 1].map((i) => (
-              <span key={i} className="font-sans font-black text-[9vw] tracking-[0.25em] text-transparent uppercase marquee-back-text px-4" style={{ WebkitTextStroke: '2px rgba(255,255,255,0.35)' }}>
+              <span key={i} className="font-sans font-black text-[18vw] md:text-[12vw] lg:text-[9vw] tracking-[0.25em] text-transparent uppercase marquee-back-text px-4" style={{ WebkitTextStroke: '2px rgba(255,255,255,0.35)' }}>
                 {marqueeText}
               </span>
             ))}
@@ -225,7 +225,7 @@ export function Services() {
         </div>
 
         {/* Floating Code Stream */}
-        <div className="absolute top-[32%] left-[6%] max-w-[40vw] flex flex-col gap-1 font-mono text-[9px] text-[#00bfff]">
+        <div className="absolute top-[32%] left-[6%] max-w-[40vw] hidden md:flex flex-col gap-1 font-mono text-[9px] text-[#00bfff]">
           {snippets.map((line, i) => (
             <div key={i} className="code-line-item opacity-25 whitespace-nowrap">{line}</div>
           ))}
@@ -239,10 +239,10 @@ export function Services() {
       </div>
 
       {/* ━━━ Foreground Content ━━━ */}
-      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 py-20 lg:py-28">
+      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 lg:px-20 py-12 md:py-20 lg:py-28">
 
         {/* ── Section Header ── */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 md:gap-6 mb-8 md:mb-16">
           <div className="flex flex-col gap-3">
             <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary/70 font-semibold">
               // WHAT WE BUILD
@@ -253,12 +253,12 @@ export function Services() {
           </div>
 
           {/* ── Tab Pills ── */}
-          <div className="flex items-center gap-2 p-1 rounded-full border border-white/10 bg-white/[0.02] backdrop-blur-sm">
+          <div className="flex flex-wrap items-center gap-2 p-1 rounded-full border border-white/10 bg-white/[0.02] backdrop-blur-sm">
             {SLIDES.map((slide, idx) => (
               <button
                 key={slide.title}
                 onClick={() => setActiveIndex(idx)}
-                className={`relative px-5 py-2.5 rounded-full font-mono text-[10px] uppercase tracking-wider font-bold transition-all duration-400 cursor-pointer ${
+                className={`relative px-3 sm:px-5 py-2 sm:py-2.5 rounded-full font-mono text-[8px] sm:text-[10px] uppercase tracking-wider font-bold transition-all duration-400 cursor-pointer ${
                   idx === activeIndex
                     ? 'text-white bg-white/10 border border-white/15 shadow-lg'
                     : 'text-white/40 hover:text-white/70 border border-transparent'
@@ -277,7 +277,7 @@ export function Services() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
 
           {/* ▎ Main Feature Card (Large, spans 7 cols) */}
-          <div className="lg:col-span-7 relative rounded-[28px] border border-white/8 bg-[#0a0a0c]/60 backdrop-blur-xl overflow-hidden min-h-[420px] flex flex-col justify-between p-8 md:p-10 group">
+          <div className="lg:col-span-7 relative rounded-[20px] sm:rounded-[28px] border border-white/8 bg-[#0a0a0c]/60 backdrop-blur-xl overflow-hidden min-h-[320px] sm:min-h-[420px] flex flex-col justify-between p-5 sm:p-8 md:p-10 group">
             {/* Card bg image */}
             <div className="absolute inset-0 z-0 opacity-30 mix-blend-luminosity">
               <img src={active.image} alt={active.title} className="w-full h-full object-cover" />
@@ -297,7 +297,7 @@ export function Services() {
 
             {/* Title + Desc */}
             <div className="relative z-10 mt-auto flex flex-col gap-4">
-              <h3 className="svc-hero-title font-sans font-extrabold text-4xl md:text-5xl lg:text-[3.5rem] text-white uppercase tracking-tighter leading-[0.95]">
+              <h3 className="svc-hero-title font-sans font-extrabold text-2xl sm:text-4xl md:text-5xl lg:text-[3.5rem] text-white uppercase tracking-tighter leading-[0.95]">
                 {active.title}
               </h3>
               <p className="svc-hero-desc text-sm md:text-base text-white/60 leading-relaxed max-w-lg">
@@ -400,7 +400,7 @@ export function Services() {
           {active.features.map((feat) => (
             <div
               key={feat.title}
-              className="svc-feat-card lg:col-span-3 rounded-[20px] border border-white/6 bg-[#08080a]/50 backdrop-blur-md p-5 flex flex-col gap-3 hover:bg-white/[0.03] hover:border-white/12 transition-all duration-300 group/feat relative overflow-hidden"
+              className="svc-feat-card col-span-1 sm:col-span-1 md:col-span-1 lg:col-span-3 rounded-[16px] sm:rounded-[20px] border border-white/6 bg-[#08080a]/50 backdrop-blur-md p-4 sm:p-5 flex flex-col gap-3 hover:bg-white/[0.03] hover:border-white/12 transition-all duration-300 group/feat relative overflow-hidden"
             >
               {/* Accent top line */}
               <div className="absolute top-0 left-0 w-full h-[1px]" style={{ background: `linear-gradient(90deg, transparent, ${themeColor}30, transparent)` }} />

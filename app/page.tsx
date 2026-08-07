@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
@@ -14,6 +14,7 @@ import { CTA } from '@/components/sections/CTA';
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     // 1. Initialize Lenis Smooth Scroll
@@ -101,7 +102,7 @@ export default function Home() {
       </div>
 
       {/* Navigation Bar */}
-      <nav className="fixed top-0 w-full z-50 bg-[#050505]/40 backdrop-blur-xl border-b border-white/5 flex justify-between items-center px-margin-edge py-6 shadow-none">
+      <nav className="fixed top-0 w-full z-50 bg-[#050505]/40 backdrop-blur-xl border-b border-white/5 flex justify-between items-center px-4 sm:px-margin-edge py-4 sm:py-6 shadow-none">
         <Logo />
         <div className="hidden md:flex gap-gutter items-center">
           <a className="font-body-md text-[14px] uppercase tracking-widest text-on-surface-variant/70 hover:text-on-surface hover:backdrop-brightness-125 transition-all duration-300" href="#work">Work</a>
@@ -112,47 +113,74 @@ export default function Home() {
           <a className="font-body-md text-[14px] uppercase tracking-widest text-on-surface-variant/70 hover:text-on-surface hover:backdrop-brightness-125 transition-all duration-300" href="#insights">Insights</a>
         </div>
         <div className="flex items-center gap-4">
-          <a className="glass-panel px-6 py-2.5 rounded-full font-label-caps text-label-caps text-primary border border-primary/20 bg-primary/5 hover:bg-primary/10 transition-colors" href="#contact">
+          <a className="hidden sm:inline-flex glass-panel px-6 py-2.5 rounded-full font-label-caps text-label-caps text-primary border border-primary/20 bg-primary/5 hover:bg-primary/10 transition-colors" href="#contact">
             Let's Talk
           </a>
-          <button className="md:hidden text-on-surface" aria-label="Open Menu">
-            <span className="material-symbols-outlined">menu</span>
+          <button
+            className="md:hidden text-on-surface cursor-pointer"
+            aria-label="Toggle Menu"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            <span className="material-symbols-outlined text-2xl">{mobileMenuOpen ? 'close' : 'menu'}</span>
           </button>
         </div>
       </nav>
 
+      {/* Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-[45] bg-[#050505]/95 backdrop-blur-2xl flex flex-col items-center justify-center gap-8 md:hidden">
+          {['Work', 'Services', 'Process', 'About', 'Tech', 'Insights'].map((item) => (
+            <a
+              key={item}
+              href={`#${item.toLowerCase()}`}
+              onClick={() => setMobileMenuOpen(false)}
+              className="font-sans font-extrabold text-2xl uppercase tracking-wider text-white/70 hover:text-primary transition-colors duration-300"
+            >
+              {item}
+            </a>
+          ))}
+          <a
+            href="#contact"
+            onClick={() => setMobileMenuOpen(false)}
+            className="mt-4 px-8 py-3 rounded-full border border-primary/30 bg-primary/10 text-primary font-mono text-sm uppercase tracking-widest font-bold"
+          >
+            Let's Talk
+          </a>
+        </div>
+      )}
+
       {/* Main Stacking Container */}
       <main className="relative w-full z-10">
         {/* Hero Section Component */}
-        <div className="sticky top-0 w-full min-h-screen z-10 bg-[#050505]">
+        <div className="lg:sticky lg:top-0 w-full min-h-screen z-10 bg-[#050505]">
           <Hero />
         </div>
 
         {/* Services Section Component */}
-        <div className="sticky top-0 w-full min-h-screen z-20 bg-[#050505] shadow-[0_-30px_60px_rgba(0,0,0,0.9)] border-t border-white/5">
+        <div className="lg:sticky lg:top-0 w-full lg:min-h-screen z-20 bg-[#050505] shadow-[0_-30px_60px_rgba(0,0,0,0.9)] border-t border-white/5">
           <Services />
         </div>
 
         {/* Process Section Component */}
-        <div className="sticky top-0 w-full min-h-screen z-30 bg-[#050505] shadow-[0_-30px_60px_rgba(0,0,0,0.9)] border-t border-white/5">
+        <div className="lg:sticky lg:top-0 w-full lg:min-h-screen z-30 bg-[#050505] shadow-[0_-30px_60px_rgba(0,0,0,0.9)] border-t border-white/5">
           <Process />
         </div>
 
         {/* Featured Work Portfolio Component */}
-        <div className="sticky top-0 w-full min-h-screen z-40 bg-[#050505] shadow-[0_-30px_60px_rgba(0,0,0,0.9)] border-t border-white/5">
+        <div className="lg:sticky lg:top-0 w-full lg:min-h-screen z-40 bg-[#050505] shadow-[0_-30px_60px_rgba(0,0,0,0.9)] border-t border-white/5">
           <Portfolio />
         </div>
 
         {/* CTA Portal Stage Component */}
-        <div className="sticky top-0 w-full min-h-screen z-50 bg-[#050505] shadow-[0_-30px_60px_rgba(0,0,0,0.9)] border-t border-white/5">
+        <div className="lg:sticky lg:top-0 w-full lg:min-h-screen z-50 bg-[#050505] shadow-[0_-30px_60px_rgba(0,0,0,0.9)] border-t border-white/5">
           <CTA />
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="w-full py-stack-md flex flex-col md:flex-row justify-between items-center px-margin-edge bg-[#050505] border-t border-white/5 shadow-none relative z-50">
+      <footer className="w-full py-8 md:py-stack-md flex flex-col md:flex-row justify-between items-center gap-6 px-4 sm:px-margin-edge bg-[#050505] border-t border-white/5 shadow-none relative z-50">
         <Logo layout="vertical" />
-        <div className="flex flex-wrap justify-center gap-6 mb-6 md:mb-0">
+        <div className="flex flex-wrap justify-center gap-4 md:gap-6">
           <a className="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors duration-500" href="#">Instagram</a>
           <a className="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors duration-500" href="#">LinkedIn</a>
           <a className="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors duration-500" href="#">Vimeo</a>

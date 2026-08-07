@@ -157,15 +157,15 @@ export function Process() {
   }, []);
 
   return (
-    <section ref={containerRef} id="process" className="process-section relative py-stack-xl px-margin-edge border-t border-white/5 z-10 overflow-hidden">
+    <section ref={containerRef} id="process" className="process-section relative py-12 md:py-stack-xl px-4 sm:px-margin-edge border-t border-white/5 z-10 overflow-hidden">
       {/* Architectural Background Grids */}
       <div className="absolute inset-0 pointer-events-none opacity-5">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
       </div>
 
-      <div className="w-full max-w-7xl mx-auto flex flex-col justify-start items-start gap-6 mb-16 relative z-10">
+      <div className="w-full max-w-7xl mx-auto flex flex-col justify-start items-start gap-4 md:gap-6 mb-8 md:mb-16 relative z-10">
         <span className="font-label-caps text-label-caps text-primary/70 block">OUR METHODOLOGY</span>
-        <h2 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface leading-[0.95] tracking-tighter max-w-2xl">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-on-surface leading-[0.95] tracking-tighter max-w-2xl font-bold">
           Crafting a precise path from concept to digital excellence.
         </h2>
       </div>
@@ -247,7 +247,7 @@ export function Process() {
       </div>
 
       {/* ================= MOBILE LAYOUT (sm and below) ================= */}
-      <div className="md:hidden flex flex-col gap-10 relative pl-8 mt-8 border-l border-white/10 z-20">
+      <div className="md:hidden flex flex-col gap-8 sm:gap-10 relative pl-10 sm:pl-12 mt-8 border-l border-white/10 z-20 mx-2">
         {/* Mobile vertical curve indicator */}
         <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-secondary/50 to-white/5" />
 
@@ -259,7 +259,7 @@ export function Process() {
             onMouseLeave={() => setActiveStep(null)}
           >
             {/* Step node placement on vertical border */}
-            <div className="absolute -left-[45px] top-1.5 w-8 h-8 rounded-full bg-[#050505] border border-white/20 flex items-center justify-center group-hover:border-primary transition-all duration-300">
+            <div className="absolute -left-[37px] sm:-left-[41px] top-1.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#050505] border border-white/20 flex items-center justify-center group-hover:border-primary transition-all duration-300">
               <span className="text-[10px] font-mono font-bold text-primary">{step.id}</span>
             </div>
 
