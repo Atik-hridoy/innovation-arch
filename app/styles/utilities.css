@@ -59,3 +59,83 @@ html.lenis {
 .lenis-scrolling iframe {
   pointer-events: none;
 }
+
+/* Custom Typewriter Typing Animation */
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: #00bfff; }
+}
+
+.animate-typewriter {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid transparent;
+  width: 0;
+  animation: 
+    typing 1.4s steps(14, end) 0.6s forwards,
+    blink-caret 0.7s step-end 3; /* blinks exactly 3 times, then cursor disappears */
+}
+
+/* Custom 3D Volumetric Floating animation for pedestal placeholders */
+@keyframes float3D {
+  0% {
+    transform: translateY(0px) rotateX(15deg) rotateY(-12deg);
+  }
+  50% {
+    transform: translateY(-8px) rotateX(18deg) rotateY(-8deg);
+  }
+  100% {
+    transform: translateY(0px) rotateX(15deg) rotateY(-12deg);
+  }
+}
+
+.animate-float-3d {
+  transform-style: preserve-3d;
+  animation: float3D 6s ease-in-out infinite;
+}
+
+/* Horizontal Scrolling Text Marquee */
+@keyframes scrollTextMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: scrollTextMarquee 38s linear infinite;
+}
+
+/* Reverse Horizontal Scrolling Text Marquee */
+@keyframes scrollTextMarqueeReverse {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-marquee-reverse {
+  animation: scrollTextMarqueeReverse 38s linear infinite;
+}
+
+/* Typewriter code line entry */
+@keyframes fadeSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

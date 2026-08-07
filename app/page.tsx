@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
+import { Logo } from '@/components/Logo';
 import { Hero } from '@/components/sections/Hero';
 import { Services } from '@/components/sections/Services';
 import { Process } from '@/components/sections/Process';
@@ -80,22 +81,6 @@ export default function Home() {
       });
     }
 
-    // Process path drawing animation on scroll
-    const processPath = document.querySelector('.process-path') as SVGPathElement;
-    if (processPath) {
-      const len = processPath.getTotalLength();
-      gsap.set(processPath, { strokeDasharray: len, strokeDashoffset: len });
-      gsap.to(processPath, {
-        strokeDashoffset: 0,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '#process',
-          start: 'top 60%',
-          end: 'bottom 80%',
-          scrub: 1,
-        },
-      });
-    }
 
     return () => {
       lenis.destroy();
@@ -117,9 +102,7 @@ export default function Home() {
 
       {/* Navigation Bar */}
       <nav className="fixed top-0 w-full z-50 bg-[#050505]/40 backdrop-blur-xl border-b border-white/5 flex justify-between items-center px-margin-edge py-6 shadow-none">
-        <div className="font-display-lg text-headline-md tracking-tighter text-on-surface select-none">
-          Innovative Ark
-        </div>
+        <Logo />
         <div className="hidden md:flex gap-gutter items-center">
           <a className="font-body-md text-[14px] uppercase tracking-widest text-on-surface-variant/70 hover:text-on-surface hover:backdrop-brightness-125 transition-all duration-300" href="#work">Work</a>
           <a className="font-body-md text-[14px] uppercase tracking-widest text-on-surface-variant/70 hover:text-on-surface hover:backdrop-brightness-125 transition-all duration-300" href="#services">Services</a>
@@ -138,26 +121,37 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Hero Section Component */}
-      <Hero />
+      {/* Main Stacking Container */}
+      <main className="relative w-full z-10">
+        {/* Hero Section Component */}
+        <div className="sticky top-0 w-full min-h-screen z-10 bg-[#050505]">
+          <Hero />
+        </div>
 
-      {/* Services Section Component */}
-      <Services />
+        {/* Services Section Component */}
+        <div className="sticky top-0 w-full min-h-screen z-20 bg-[#050505] shadow-[0_-30px_60px_rgba(0,0,0,0.9)] border-t border-white/5">
+          <Services />
+        </div>
 
-      {/* Process Section Component */}
-      <Process />
+        {/* Process Section Component */}
+        <div className="sticky top-0 w-full min-h-screen z-30 bg-[#050505] shadow-[0_-30px_60px_rgba(0,0,0,0.9)] border-t border-white/5">
+          <Process />
+        </div>
 
-      {/* Featured Work Portfolio Component */}
-      <Portfolio />
+        {/* Featured Work Portfolio Component */}
+        <div className="sticky top-0 w-full min-h-screen z-40 bg-[#050505] shadow-[0_-30px_60px_rgba(0,0,0,0.9)] border-t border-white/5">
+          <Portfolio />
+        </div>
 
-      {/* CTA Portal Stage Component */}
-      <CTA />
+        {/* CTA Portal Stage Component */}
+        <div className="sticky top-0 w-full min-h-screen z-50 bg-[#050505] shadow-[0_-30px_60px_rgba(0,0,0,0.9)] border-t border-white/5">
+          <CTA />
+        </div>
+      </main>
 
       {/* Footer */}
-      <footer className="w-full py-stack-md flex flex-col md:flex-row justify-between items-center px-margin-edge bg-[#050505] border-t border-white/5 shadow-none relative z-40">
-        <div className="font-display-lg-mobile text-[24px] text-on-surface mb-6 md:mb-0 select-none">
-          Innovative Ark
-        </div>
+      <footer className="w-full py-stack-md flex flex-col md:flex-row justify-between items-center px-margin-edge bg-[#050505] border-t border-white/5 shadow-none relative z-50">
+        <Logo layout="vertical" />
         <div className="flex flex-wrap justify-center gap-6 mb-6 md:mb-0">
           <a className="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors duration-500" href="#">Instagram</a>
           <a className="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors duration-500" href="#">LinkedIn</a>
