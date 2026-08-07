@@ -9,6 +9,7 @@ import { Hero } from '@/components/sections/Hero';
 import { Services } from '@/components/sections/Services';
 import { Process } from '@/components/sections/Process';
 import { Portfolio } from '@/components/sections/Portfolio';
+import { TechStack } from '@/components/sections/TechStack';
 import { CTA } from '@/components/sections/CTA';
 
 export default function Home() {
@@ -110,7 +111,6 @@ export default function Home() {
           <a className="font-body-md text-[14px] uppercase tracking-widest text-on-surface-variant/70 hover:text-on-surface hover:backdrop-brightness-125 transition-all duration-300" href="#process">Process</a>
           <a className="font-body-md text-[14px] uppercase tracking-widest text-on-surface-variant/70 hover:text-on-surface hover:backdrop-brightness-125 transition-all duration-300" href="#about">About</a>
           <a className="font-body-md text-[14px] uppercase tracking-widest text-on-surface-variant/70 hover:text-on-surface hover:backdrop-brightness-125 transition-all duration-300" href="#tech">Tech</a>
-          <a className="font-body-md text-[14px] uppercase tracking-widest text-on-surface-variant/70 hover:text-on-surface hover:backdrop-brightness-125 transition-all duration-300" href="#insights">Insights</a>
         </div>
         <div className="flex items-center gap-4">
           <a className="hidden sm:inline-flex glass-panel px-6 py-2.5 rounded-full font-label-caps text-label-caps text-primary border border-primary/20 bg-primary/5 hover:bg-primary/10 transition-colors" href="#contact">
@@ -129,7 +129,7 @@ export default function Home() {
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-[45] bg-[#050505]/95 backdrop-blur-2xl flex flex-col items-center justify-center gap-8 md:hidden">
-          {['Work', 'Services', 'Process', 'About', 'Tech', 'Insights'].map((item) => (
+          {['Work', 'Services', 'Process', 'About', 'Tech'].map((item) => (
             <a
               key={item}
               href={`#${item.toLowerCase()}`}
@@ -175,6 +175,13 @@ export default function Home() {
           {/* Seamless Top Blend Fade */}
           <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-30" />
           <Portfolio />
+        </div>
+
+        {/* Architectural Tech Stack Component */}
+        <div className="lg:sticky lg:top-0 w-full lg:min-h-screen z-[45] bg-[#050505] shadow-[0_-50px_100px_rgba(5,5,5,1)] relative">
+          {/* Seamless Top Blend Fade */}
+          <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-30" />
+          <TechStack />
         </div>
 
         {/* CTA Portal Stage Component */}

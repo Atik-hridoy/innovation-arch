@@ -150,12 +150,12 @@ export function Process() {
             }
           },
         });
-        // Mobile ScrollTrigger: progressively fill line height and unlock step cards as visitor scrolls
+        // Mobile ScrollTrigger: only trigger animation when section reaches upper center / top portion of screen
         const progressLine = containerRef.current?.querySelector('.mobile-progress-line') as HTMLElement;
         ScrollTrigger.create({
           trigger: '.mobile-process-container',
-          start: 'top 90%',
-          end: 'bottom 75%',
+          start: 'top 30%',
+          end: 'bottom 30%',
           scrub: 0.3,
           onUpdate: (self) => {
             if (progressLine) {
