@@ -150,6 +150,24 @@ export function Process() {
             }
           },
         });
+        // Mobile ScrollTrigger: progressively fill line height and unlock step cards as visitor scrolls
+        const progressLine = containerRef.current?.querySelector('.mobile-progress-line') as HTMLElement;
+        ScrollTrigger.create({
+          trigger: '.mobile-process-container',
+          start: 'top 90%',
+          end: 'bottom 75%',
+          scrub: 0.3,
+          onUpdate: (self) => {
+            if (progressLine) {
+              progressLine.style.height = `${self.progress * 100}%`;
+            }
+            const stepIndex = Math.min(
+              steps.length - 1,
+              Math.floor(self.progress * steps.length)
+            );
+            setActiveStep(stepIndex);
+          },
+        });
       }
     }, containerRef);
 
@@ -158,9 +176,19 @@ export function Process() {
 
   return (
     <section ref={containerRef} id="process" className="process-section relative py-12 md:py-stack-xl px-4 sm:px-margin-edge border-t border-white/5 z-10 overflow-hidden">
-      {/* Architectural Background Grids */}
-      <div className="absolute inset-0 pointer-events-none opacity-5">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
+      {/* Mobile-Visible Dynamic Color Motion Ambient Background */}
+      <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden animate-color-motion">
+        {/* Dynamic Color Motion Node 1 (Violet / Purple) */}
+        <div className="animate-aurora absolute top-[-10%] left-[-15%] w-[100vw] sm:w-[75vw] h-[100vw] sm:h-[75vw] rounded-full bg-gradient-to-tr from-primary/35 via-[#842bd2]/25 to-transparent blur-[70px] sm:blur-[140px] opacity-85" />
+        
+        {/* Dynamic Color Motion Node 2 (Deep Indigo / Cyan Glow) */}
+        <div className="animate-aurora absolute bottom-[-10%] right-[-15%] w-[90vw] sm:w-[65vw] h-[90vw] sm:h-[65vw] rounded-full bg-gradient-to-bl from-secondary/30 via-primary/20 to-transparent blur-[80px] sm:blur-[150px] opacity-80" style={{ animationDirection: 'reverse', animationDuration: '22s' }} />
+
+        {/* Center Spotlight */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] sm:w-[55vw] h-[70vw] sm:h-[55vw] rounded-full bg-radial from-primary/20 via-transparent to-transparent blur-[60px] sm:blur-[110px]" />
+
+        {/* Soft Dark Vignette Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-transparent to-[#050505] opacity-75" />
       </div>
 
       <div className="w-full max-w-7xl mx-auto flex flex-col justify-start items-start gap-4 md:gap-6 mb-8 md:mb-16 relative z-10">
@@ -246,39 +274,61 @@ export function Process() {
         ))}
       </div>
 
-      {/* ================= MOBILE LAYOUT (sm and below) ================= */}
-      <div className="md:hidden flex flex-col gap-8 sm:gap-10 relative pl-10 sm:pl-12 mt-8 border-l border-white/10 z-20 mx-2">
-        {/* Mobile vertical curve indicator */}
-        <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-secondary/50 to-white/5" />
-
-        {steps.map((step, idx) => (
-          <div
-            key={step.id}
-            className="flex flex-col gap-3 relative group"
-            onMouseEnter={() => setActiveStep(idx)}
-            onMouseLeave={() => setActiveStep(null)}
-          >
-            {/* Step node placement on vertical border */}
-            <div className="absolute -left-[37px] sm:-left-[41px] top-1.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#050505] border border-white/20 flex items-center justify-center group-hover:border-primary transition-all duration-300">
-              <span className="text-[10px] font-mono font-bold text-primary">{step.id}</span>
-            </div>
-
-            <div className="glass-panel p-6 rounded-2xl border border-white/5 hover:border-primary/20 bg-white/[0.01] hover:bg-white/[0.03] transition-all duration-500">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
-                  {step.icon}
+      {/* ================= MOBILE LAYOUT (sm and below) - Modern Editorial Accordion ================= */}
+      <div className="mobile-process-container md:hidden relative w-full mt-4 mb-8 z-20 flex flex-col gap-3">
+        {steps.map((step, idx) => {
+          const isOpen = (activeStep === null ? 0 : activeStep) === idx;
+          return (
+            <div
+              key={step.id}
+              onClick={() => setActiveStep(idx)}
+              className={`rounded-2xl border transition-all duration-500 overflow-hidden cursor-pointer ${
+                isOpen
+                  ? 'border-primary/40 bg-white/[0.03] shadow-[0_10px_30px_rgba(221,183,255,0.08)]'
+                  : 'border-white/8 bg-[#09090c]/70 hover:border-white/15'
+              }`}
+            >
+              {/* Accordion Bar Header */}
+              <div className="flex items-center justify-between p-4 sm:p-5">
+                <div className="flex items-center gap-3.5">
+                  <div className={`p-2.5 rounded-xl border transition-colors shrink-0 ${
+                    isOpen
+                      ? 'bg-primary/15 border-primary/40 text-primary shadow-[0_0_15px_rgba(221,183,255,0.2)]'
+                      : 'bg-white/5 border-white/10 text-white/40'
+                  }`}>
+                    {step.icon}
+                  </div>
+                  <div>
+                    <span className="text-[8px] font-mono tracking-[0.2em] text-primary/80 uppercase block font-semibold">
+                      {step.id} // {step.name}
+                    </span>
+                    <h3 className="text-xs sm:text-sm font-bold text-white tracking-wide">
+                      {step.title}
+                    </h3>
+                  </div>
                 </div>
-                <div>
-                  <span className="text-[9px] font-mono tracking-widest text-primary block">{step.name}</span>
-                  <h3 className="text-sm font-bold text-white tracking-wide">{step.title}</h3>
+                <div className={`w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/50 transition-transform duration-500 shrink-0 ${
+                  isOpen ? 'rotate-180 text-primary border-primary/30 bg-primary/10' : ''
+                }`}>
+                  <span className="material-symbols-outlined text-sm">expand_more</span>
                 </div>
               </div>
-              <p className="text-xs text-on-surface-variant leading-relaxed">
-                {step.description}
-              </p>
+
+              {/* Accordion Expanded Content */}
+              {isOpen && (
+                <div className="px-4 sm:px-5 pb-5 pt-2 border-t border-white/5 flex flex-col gap-3 animate-[fadeSlideIn_0.3s_ease-out]">
+                  <p className="text-[11px] text-on-surface-variant/90 leading-relaxed font-normal">
+                    {step.description}
+                  </p>
+                  <div className="flex items-center gap-2 pt-2 text-[9px] font-mono text-primary/80 uppercase tracking-widest font-semibold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary animate-ping" />
+                    <span>Phase 0{idx + 1} Deliverable Executing</span>
+                  </div>
+                </div>
+              )}
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

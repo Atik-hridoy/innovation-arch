@@ -139,3 +139,42 @@ html.lenis {
     transform: translateY(0);
   }
 }
+
+/* Aurora Mesh Light Wave */
+@keyframes auroraWave {
+  0% {
+    transform: translate(-10%, -10%) rotate(0deg) scale(1);
+  }
+  50% {
+    transform: translate(10%, 15%) rotate(180deg) scale(1.15);
+  }
+  100% {
+    transform: translate(-10%, -10%) rotate(360deg) scale(1);
+  }
+}
+
+.animate-aurora {
+  animation: auroraWave 25s ease-in-out infinite;
+}
+
+/* Mobile-Optimized Dynamic Color Motion Shift */
+@keyframes colorMotionShift {
+  0% {
+    filter: hue-rotate(0deg) opacity(0.7);
+    transform: scale(1);
+  }
+  50% {
+    filter: hue-rotate(60deg) opacity(0.95);
+    transform: scale(1.1);
+  }
+  100% {
+    filter: hue-rotate(0deg) opacity(0.7);
+    transform: scale(1);
+  }
+}
+
+.animate-color-motion {
+  animation: colorMotionShift 14s ease-in-out infinite;
+}
+
+
