@@ -140,6 +140,63 @@ const SLIDES: ServiceSlide[] = [
   },
 ];
 
+/* ─── Mobile Single-Row Pure Icons Component ─── */
+function MobileIconsRow({ features, themeColor }: { features: any[]; themeColor: string }) {
+  const [activeIdx, setActiveIdx] = useState<number | null>(null);
+
+  return (
+    <div className="md:hidden flex flex-col gap-3 w-full">
+      {/* Single Row of Pure Icons */}
+      <div className="flex items-center justify-between gap-2 px-2 py-2 rounded-2xl border border-white/8 bg-[#08080a]/80 backdrop-blur-xl">
+        {features.map((feat, idx) => {
+          const isActive = activeIdx === idx;
+          return (
+            <button
+              key={feat.title}
+              onClick={() => setActiveIdx(isActive ? null : idx)}
+              className={`flex-1 py-3 rounded-xl border flex flex-col items-center justify-center gap-1 transition-all duration-300 active:scale-95 cursor-pointer ${
+                isActive
+                  ? 'border-primary bg-primary/20 text-primary shadow-[0_0_15px_rgba(221,183,255,0.3)]'
+                  : 'border-white/5 bg-white/[0.02] text-white/50 hover:text-white hover:border-white/15'
+              }`}
+            >
+              <span className="material-symbols-outlined text-xl" style={{ color: isActive ? undefined : themeColor }}>
+                {feat.icon}
+              </span>
+              <span className="font-mono text-[7px] uppercase tracking-widest font-bold opacity-60">
+                {feat.spec}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Expandable Detail Drawer on Icon Tap */}
+      {activeIdx !== null && (
+        <div className="p-4 rounded-2xl border border-primary/30 bg-[#0a0a0d]/90 backdrop-blur-2xl flex flex-col gap-1.5 animate-[fadeSlideIn_0.25s_ease-out] relative">
+          <div className="flex items-center justify-between">
+            <span className="font-mono text-[8px] uppercase tracking-widest text-primary font-bold">
+              {features[activeIdx].spec} // FEATURE DETAILS
+            </span>
+            <button
+              onClick={() => setActiveIdx(null)}
+              className="text-white/40 hover:text-white text-xs font-mono"
+            >
+              ✕
+            </button>
+          </div>
+          <h4 className="font-sans font-bold text-xs text-white tracking-wide">
+            {features[activeIdx].title}
+          </h4>
+          <p className="font-mono text-[10px] text-white/60 leading-relaxed">
+            {features[activeIdx].desc}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ─── Component ─── */
 
 export function Services() {
@@ -198,29 +255,67 @@ export function Services() {
     <section
       ref={sectionRef}
       id="services"
-      className="relative w-full lg:min-h-screen flex items-center justify-center overflow-hidden border-t border-white/5 z-10 bg-[#080810]"
+      className="relative w-full lg:min-h-screen flex items-center justify-center overflow-hidden z-10 bg-[#080810]"
     >
-      {/* ━━━ Background Motion Layer (preserved) ━━━ */}
+      {/* ━━━ Background Motion Layer (Boosted Prominence) ━━━ */}
       <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden">
-        {/* Top Marquee (Left → Right) */}
-        <div className="absolute top-[10%] left-0 w-full overflow-hidden whitespace-nowrap">
-          <div className="animate-marquee-reverse inline-flex whitespace-nowrap">
-            {[0, 1].map((i) => (
-              <span key={i} className="font-sans font-black text-[18vw] md:text-[12vw] lg:text-[9vw] tracking-[0.25em] text-transparent uppercase marquee-back-text px-4" style={{ WebkitTextStroke: '2px rgba(255,255,255,0.35)' }}>
-                {marqueeText}
-              </span>
-            ))}
-          </div>
+        {/* ━━━ MOBILE ONLY: 7-Line Alternating Kinetic Text Curtain ━━━ */}
+        <div className="md:hidden absolute inset-0 flex flex-col justify-between py-6 overflow-hidden pointer-events-none opacity-40 z-0">
+          {[
+            { dir: 'reverse', text: 'AI SYSTEMS • NEURAL ENGINE • COMPILATION • ', stroke: 'rgba(221, 183, 255, 0.4)' },
+            { dir: 'normal', text: 'BRAND ARCHITECTURE • CREATIVE DIRECTION • ', stroke: 'rgba(132, 43, 210, 0.4)' },
+            { dir: 'reverse', text: 'DIGITAL PRODUCTS • IMMERSIVE WEB • ', stroke: 'rgba(173, 198, 255, 0.4)' },
+            { dir: 'normal', text: 'STRATEGY • ARCHITECTURE • ENGINEERING • ', stroke: 'rgba(221, 183, 255, 0.35)' },
+            { dir: 'reverse', text: 'DEPLOYMENT • HIGH PERFORMANCE • ', stroke: 'rgba(132, 43, 210, 0.4)' },
+            { dir: 'normal', text: 'OPTIMIZATION • INTELLIGENCE • SCALING • ', stroke: 'rgba(173, 198, 255, 0.35)' },
+            { dir: 'reverse', text: 'INNOVATION ARCH • FUTURE PROOF • ', stroke: 'rgba(221, 183, 255, 0.4)' },
+          ].map((line, idx) => (
+            <div key={idx} className="w-full overflow-hidden whitespace-nowrap leading-none">
+              <div className={`${line.dir === 'reverse' ? 'animate-marquee-reverse' : 'animate-marquee'} inline-flex whitespace-nowrap`}>
+                {[0, 1].map((i) => (
+                  <span
+                    key={i}
+                    className="font-sans font-black text-[12vw] tracking-[0.15em] text-transparent uppercase px-2"
+                    style={{ WebkitTextStroke: `1.8px ${line.stroke}` }}
+                  >
+                    {line.text}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* Bottom Marquee (Right → Left) */}
-        <div className="absolute bottom-[10%] left-0 w-full overflow-hidden whitespace-nowrap">
-          <div className="animate-marquee inline-flex whitespace-nowrap">
-            {[0, 1].map((i) => (
-              <span key={i} className="font-sans font-black text-[18vw] md:text-[12vw] lg:text-[9vw] tracking-[0.25em] text-transparent uppercase marquee-back-text px-4" style={{ WebkitTextStroke: '2px rgba(255,255,255,0.35)' }}>
-                {marqueeText}
-              </span>
-            ))}
+        {/* ━━━ DESKTOP ONLY: Dual Text Marquees ━━━ */}
+        <div className="hidden md:block">
+          {/* Top Marquee (Left → Right) */}
+          <div className="absolute top-[18%] left-0 w-full overflow-hidden whitespace-nowrap z-0">
+            <div className="animate-marquee-reverse inline-flex whitespace-nowrap opacity-60">
+              {[0, 1].map((i) => (
+                <span
+                  key={i}
+                  className="font-sans font-black text-[12vw] lg:text-[10vw] tracking-[0.2em] text-transparent uppercase marquee-back-text px-4"
+                  style={{ WebkitTextStroke: '2.5px rgba(221, 183, 255, 0.45)' }}
+                >
+                  {marqueeText}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Bottom Marquee (Right → Left) */}
+          <div className="absolute bottom-[18%] left-0 w-full overflow-hidden whitespace-nowrap z-0">
+            <div className="animate-marquee inline-flex whitespace-nowrap opacity-60">
+              {[0, 1].map((i) => (
+                <span
+                  key={i}
+                  className="font-sans font-black text-[12vw] lg:text-[10vw] tracking-[0.2em] text-transparent uppercase marquee-back-text px-4"
+                  style={{ WebkitTextStroke: '2.5px rgba(132, 43, 210, 0.45)' }}
+                >
+                  {marqueeText}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -242,8 +337,8 @@ export function Services() {
       <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 lg:px-20 py-12 md:py-20 lg:py-28">
 
         {/* ── Section Header ── */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 md:gap-6 mb-8 md:mb-16">
-          <div className="flex flex-col gap-3">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between items-center text-center md:text-left gap-4 md:gap-6 mb-8 md:mb-16">
+          <div className="flex flex-col gap-3 items-center md:items-start">
             <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary/70 font-semibold">
               // WHAT WE BUILD
             </span>
@@ -252,13 +347,13 @@ export function Services() {
             </h2>
           </div>
 
-          {/* ── Tab Pills ── */}
-          <div className="flex flex-wrap items-center gap-2 p-1 rounded-full border border-white/10 bg-white/[0.02] backdrop-blur-sm">
+          {/* ── Tab Pills (Centered on Mobile) ── */}
+          <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 rounded-2xl md:rounded-full border border-white/10 bg-white/[0.02] backdrop-blur-sm w-full md:w-auto">
             {SLIDES.map((slide, idx) => (
               <button
                 key={slide.title}
                 onClick={() => setActiveIndex(idx)}
-                className={`relative px-3 sm:px-5 py-2 sm:py-2.5 rounded-full font-mono text-[8px] sm:text-[10px] uppercase tracking-wider font-bold transition-all duration-400 cursor-pointer ${
+                className={`relative px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl md:rounded-full font-mono text-[9px] sm:text-[10px] uppercase tracking-wider font-bold transition-all duration-400 cursor-pointer ${
                   idx === activeIndex
                     ? 'text-white bg-white/10 border border-white/15 shadow-lg'
                     : 'text-white/40 hover:text-white/70 border border-transparent'
@@ -277,11 +372,11 @@ export function Services() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
 
           {/* ▎ Main Feature Card (Large, spans 7 cols) */}
-          <div className="lg:col-span-7 relative rounded-[20px] sm:rounded-[28px] border border-white/8 bg-[#0a0a0c]/60 backdrop-blur-xl overflow-hidden min-h-[320px] sm:min-h-[420px] flex flex-col justify-between p-5 sm:p-8 md:p-10 group">
+          <div className="lg:col-span-7 relative rounded-[20px] sm:rounded-[28px] border border-white/10 bg-[#0a0a0c]/40 backdrop-blur-md overflow-hidden min-h-[280px] sm:min-h-[380px] flex flex-col justify-between p-5 sm:p-7 md:p-9 group shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
             {/* Card bg image */}
-            <div className="absolute inset-0 z-0 opacity-30 mix-blend-luminosity">
+            <div className="absolute inset-0 z-0 opacity-25 mix-blend-luminosity">
               <img src={active.image} alt={active.title} className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-[#0a0a0c]/70 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-[#0a0a0c]/60 to-transparent" />
             </div>
 
             {/* Top badge row */}
@@ -296,17 +391,17 @@ export function Services() {
             </div>
 
             {/* Title + Desc */}
-            <div className="relative z-10 mt-auto flex flex-col gap-4">
-              <h3 className="svc-hero-title font-sans font-extrabold text-2xl sm:text-4xl md:text-5xl lg:text-[3.5rem] text-white uppercase tracking-tighter leading-[0.95]">
+            <div className="relative z-10 mt-auto flex flex-col gap-3">
+              <h3 className="svc-hero-title font-sans font-extrabold text-2xl sm:text-4xl md:text-5xl lg:text-[3.2rem] text-white uppercase tracking-tighter leading-[0.95]">
                 {active.title}
               </h3>
-              <p className="svc-hero-desc text-sm md:text-base text-white/60 leading-relaxed max-w-lg">
+              <p className="svc-hero-desc text-xs sm:text-sm md:text-base text-white/60 leading-relaxed max-w-lg">
                 {active.desc}
               </p>
-              <div className="flex items-center gap-6 mt-2">
+              <div className="flex items-center gap-6 mt-1">
                 <button
                   onClick={() => setExpanded(true)}
-                  className="inline-flex items-center gap-2 px-7 py-3 rounded-full border border-white/15 bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/25 text-white font-mono text-[10px] uppercase tracking-widest font-bold transition-all duration-300 backdrop-blur-md cursor-pointer"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-white/15 bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/25 text-white font-mono text-[10px] uppercase tracking-widest font-bold transition-all duration-300 backdrop-blur-md cursor-pointer"
                 >
                   Explore Service
                   <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
@@ -317,10 +412,10 @@ export function Services() {
           </div>
 
           {/* ▎ Right Column: Code Console + Nav (spans 5 cols) */}
-          <div className="lg:col-span-5 flex flex-col gap-5">
+          <div className="lg:col-span-5 flex flex-col gap-4">
 
             {/* Code Terminal / Facilities Card */}
-            <div className="relative rounded-[24px] border border-white/8 bg-[#08080a]/70 backdrop-blur-xl p-6 flex-1 overflow-hidden">
+            <div className="relative rounded-[24px] border border-white/10 bg-[#08080a]/50 backdrop-blur-md p-5 sm:p-6 flex-1 overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
               {/* Terminal Header */}
               <div className="flex items-center gap-2 mb-4 pb-3 border-b border-white/5">
                 <span className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
@@ -396,23 +491,29 @@ export function Services() {
             </div>
           </div>
 
-          {/* ▎ Bottom Row: Feature Spec Cards (4 cards spanning full width) */}
-          {active.features.map((feat) => (
-            <div
-              key={feat.title}
-              className="svc-feat-card col-span-1 sm:col-span-1 md:col-span-1 lg:col-span-3 rounded-[16px] sm:rounded-[20px] border border-white/6 bg-[#08080a]/50 backdrop-blur-md p-4 sm:p-5 flex flex-col gap-3 hover:bg-white/[0.03] hover:border-white/12 transition-all duration-300 group/feat relative overflow-hidden"
-            >
-              {/* Accent top line */}
-              <div className="absolute top-0 left-0 w-full h-[1px]" style={{ background: `linear-gradient(90deg, transparent, ${themeColor}30, transparent)` }} />
+          {/* ▎ Bottom Row: Feature Spec Cards (Desktop: 4 Cards; Mobile: 1 Row of Pure Icons) */}
+          <div className="col-span-1 lg:col-span-12 mt-2">
+            {/* MOBILE ONLY: Single Row of 4 Pure Icons */}
+            <MobileIconsRow features={active.features} themeColor={themeColor} />
 
-              <div className="flex items-center justify-between">
-                <span className="material-symbols-outlined text-lg" style={{ color: themeColor }}>{feat.icon}</span>
-                <span className="font-mono text-[7px] uppercase tracking-widest text-white/20 font-bold">{feat.spec}</span>
-              </div>
-              <span className="font-sans font-bold text-[13px] text-white tracking-tight leading-tight">{feat.title}</span>
-              <span className="font-mono text-[10px] text-white/40 leading-snug">{feat.desc}</span>
+            {/* DESKTOP ONLY: 4 Spec Cards Grid */}
+            <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-5">
+              {active.features.map((feat) => (
+                <div
+                  key={feat.title}
+                  className="rounded-[20px] border border-white/6 bg-[#08080a]/50 backdrop-blur-md p-5 flex flex-col gap-3 hover:bg-white/[0.03] hover:border-white/12 transition-all duration-300 relative overflow-hidden group"
+                >
+                  <div className="absolute top-0 left-0 w-full h-[1px]" style={{ background: `linear-gradient(90deg, transparent, ${themeColor}30, transparent)` }} />
+                  <div className="flex items-center justify-between">
+                    <span className="material-symbols-outlined text-lg" style={{ color: themeColor }}>{feat.icon}</span>
+                    <span className="font-mono text-[7px] uppercase tracking-widest text-white/20 font-bold">{feat.spec}</span>
+                  </div>
+                  <span className="font-sans font-bold text-[13px] text-white tracking-tight leading-tight">{feat.title}</span>
+                  <span className="font-mono text-[10px] text-white/40 leading-snug">{feat.desc}</span>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
 
       </div>

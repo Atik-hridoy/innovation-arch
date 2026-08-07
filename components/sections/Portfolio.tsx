@@ -272,7 +272,7 @@ export function Portfolio() {
   };
 
   return (
-    <section id="work" className="relative py-12 md:py-stack-xl px-4 sm:px-margin-edge border-t border-white/5 z-10 bg-[#070609] overflow-hidden">
+    <section id="work" className="relative py-12 md:py-stack-xl px-4 sm:px-margin-edge z-10 bg-[#070609] overflow-hidden">
       
       {/* Volumetric dynamic image background matching active card's 1st image */}
       <div className="absolute inset-0 z-0 transition-all duration-1000 ease-in-out pointer-events-none">

@@ -149,30 +149,38 @@ export default function Home() {
         </div>
       )}
 
-      {/* Main Stacking Container */}
-      <main className="relative w-full z-10">
+      {/* Main Stacking Container with Seamless Gradient Transitions */}
+      <main className="relative w-full z-10 bg-[#050505]">
         {/* Hero Section Component */}
-        <div className="lg:sticky lg:top-0 w-full min-h-screen z-10 bg-[#050505]">
+        <div className="lg:sticky lg:top-0 w-full min-h-[85vh] sm:min-h-screen z-10 bg-[#050505]">
           <Hero />
         </div>
 
         {/* Services Section Component */}
-        <div className="lg:sticky lg:top-0 w-full lg:min-h-screen z-20 bg-[#050505] shadow-[0_-30px_60px_rgba(0,0,0,0.9)] border-t border-white/5">
+        <div className="lg:sticky lg:top-0 w-full lg:min-h-screen z-20 bg-[#050505] shadow-[0_-50px_100px_rgba(5,5,5,1)] relative">
+          {/* Seamless Top Blend Fade */}
+          <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-30" />
           <Services />
         </div>
 
         {/* Process Section Component */}
-        <div className="lg:sticky lg:top-0 w-full lg:min-h-screen z-30 bg-[#050505] shadow-[0_-30px_60px_rgba(0,0,0,0.9)] border-t border-white/5">
+        <div className="lg:sticky lg:top-0 w-full lg:min-h-screen z-30 bg-[#050505] shadow-[0_-50px_100px_rgba(5,5,5,1)] relative">
+          {/* Seamless Top Blend Fade */}
+          <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-30" />
           <Process />
         </div>
 
         {/* Featured Work Portfolio Component */}
-        <div className="lg:sticky lg:top-0 w-full lg:min-h-screen z-40 bg-[#050505] shadow-[0_-30px_60px_rgba(0,0,0,0.9)] border-t border-white/5">
+        <div className="lg:sticky lg:top-0 w-full lg:min-h-screen z-40 bg-[#050505] shadow-[0_-50px_100px_rgba(5,5,5,1)] relative">
+          {/* Seamless Top Blend Fade */}
+          <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-30" />
           <Portfolio />
         </div>
 
         {/* CTA Portal Stage Component */}
-        <div className="lg:sticky lg:top-0 w-full lg:min-h-screen z-50 bg-[#050505] shadow-[0_-30px_60px_rgba(0,0,0,0.9)] border-t border-white/5">
+        <div className="lg:sticky lg:top-0 w-full lg:min-h-screen z-50 bg-[#050505] shadow-[0_-50px_100px_rgba(5,5,5,1)] relative">
+          {/* Seamless Top Blend Fade */}
+          <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-30" />
           <CTA />
         </div>
       </main>

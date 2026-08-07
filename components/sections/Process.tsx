@@ -175,7 +175,7 @@ export function Process() {
   }, []);
 
   return (
-    <section ref={containerRef} id="process" className="process-section relative py-12 md:py-stack-xl px-4 sm:px-margin-edge border-t border-white/5 z-10 overflow-hidden">
+    <section ref={containerRef} id="process" className="process-section relative py-12 md:py-stack-xl px-4 sm:px-margin-edge z-10 overflow-hidden">
       {/* Mobile-Visible Dynamic Color Motion Ambient Background */}
       <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden animate-color-motion">
         {/* Dynamic Color Motion Node 1 (Violet / Purple) */}

@@ -40,7 +40,7 @@ export function Hero() {
   };
 
   return (
-    <header className="relative w-full min-h-screen flex items-center justify-center pt-[80px] sm:pt-[100px] lg:pt-[120px] pb-stack-xl px-4 sm:px-margin-edge overflow-hidden z-10">
+    <header className="relative w-full min-h-[85vh] sm:min-h-screen flex items-center justify-center pt-[70px] sm:pt-[100px] lg:pt-[120px] pb-12 sm:pb-stack-xl px-4 sm:px-margin-edge overflow-hidden z-10">
       
       {/* Background Coding Video Playlist Loop */}
       <div className="absolute inset-0 z-0 opacity-[0.12] pointer-events-none mix-blend-screen overflow-hidden">
