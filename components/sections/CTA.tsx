@@ -4,12 +4,16 @@ export function CTA() {
   return (
     <section className="relative w-full min-h-[400px] sm:h-[500px] lg:h-[600px] flex flex-col justify-center items-center overflow-hidden border-t border-white/5 z-10">
       
-      {/* Reflective Neon Stage Gates */}
-      <div className="absolute inset-y-0 left-[5%] sm:left-[10%] w-[2px] bg-gradient-to-b from-primary/40 via-primary to-transparent shadow-[0_0_30px_rgba(221,183,255,0.8)] pointer-events-none"></div>
-      <div className="absolute inset-y-0 right-[5%] sm:right-[10%] w-[2px] bg-gradient-to-b from-primary/40 via-primary to-transparent shadow-[0_0_30px_rgba(221,183,255,0.8)] pointer-events-none"></div>
-      
-      {/* Portal Floor Reflection */}
-      <div className="absolute bottom-0 w-full h-[150px] bg-gradient-to-t from-primary/10 to-transparent blur-md opacity-70 pointer-events-none"></div>
+      {/* ━━━ User Specified Background Image (/images/g.jpg) ━━━ */}
+      <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden">
+        <img
+          src="/images/g.jpg"
+          alt="Let's Build Together Background"
+          className="w-full h-full object-cover object-center filter contrast-110 brightness-75 blur-sm"
+        />
+        {/* Dark Obsidian Blend Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/70 to-[#050505]/80" />
+      </div>
 
       <div className="relative z-20 flex flex-col items-center text-center px-4 sm:px-margin-edge w-full max-w-4xl mx-auto space-y-6 sm:space-y-8">
         <div className="space-y-6">
