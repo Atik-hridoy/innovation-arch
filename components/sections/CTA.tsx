@@ -45,11 +45,14 @@ export function CTA() {
       
       {/* ━━━ User Specified Background Image (/images/g.jpg) ━━━ */}
       <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden flex items-center justify-center">
-        <img
-          src="/images/g.jpg"
-          alt="Let's Build Together Background"
-          className="w-[80%] h-[80%] object-cover object-center filter contrast-110 brightness-75 blur-sm"
-        />
+        <picture>
+          <source media="(max-width: 640px)" srcSet="/images/mobile.webp" />
+          <img
+            src="/images/g.jpg"
+            alt="Let's Build Together Background"
+            className="w-[80%] h-[80%] object-cover object-center filter contrast-110 brightness-75 blur-sm"
+          />
+        </picture>
         {/* Dark Obsidian Blend Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/70 to-[#050505]/80" />
       </div>
