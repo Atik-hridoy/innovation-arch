@@ -45,12 +45,12 @@ export function CTA() {
       
       {/* ━━━ User Specified Background Image (/images/g.jpg) ━━━ */}
       <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden flex items-center justify-center">
-        <picture>
+        <picture className="w-full h-full">
           <source media="(max-width: 640px)" srcSet="/images/mobile.webp" />
           <img
             src="/images/g.jpg"
             alt="Let's Build Together Background"
-            className="w-[80%] h-[80%] object-cover object-center filter contrast-110 brightness-75 blur-sm"
+            className="w-full h-full object-cover object-center filter contrast-110 brightness-75 blur-sm"
           />
         </picture>
         {/* Dark Obsidian Blend Overlay */}
