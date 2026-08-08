@@ -6,7 +6,6 @@ import gsap from 'gsap';
 export function Hero() {
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const paraRef = useRef<HTMLParagraphElement>(null);
-  const actionRef = useRef<HTMLDivElement>(null);
 
   // Video playlist setup
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -21,8 +20,7 @@ export function Hero() {
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
     tl.fromTo('.hero-tagline', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.8, delay: 0.2 })
       .fromTo(headlineRef.current, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.2 }, '-=0.6')
-      .fromTo(paraRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1 }, '-=0.8')
-      .fromTo(actionRef.current, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.8 }, '-=0.7');
+      .fromTo(paraRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1 }, '-=0.8');
   }, []);
 
   // Guarantee player triggers loading on index change
@@ -73,18 +71,6 @@ export function Hero() {
         <p ref={paraRef} className="opacity-0 text-base md:text-lg text-on-surface-variant max-w-xl leading-relaxed font-normal">
           Innovative Ark is a digital product studio building mobile apps, web platforms and AI agents that solve real problems and drive growth.
         </p>
-        
-        <div ref={actionRef} className="opacity-0 flex flex-col sm:flex-row items-center justify-start gap-6 w-full mt-4 font-sans">
-          <a className="relative inline-flex items-center justify-center font-body-md text-body-md font-bold text-white px-10 py-5 rounded-full overflow-hidden transition-all duration-300 shadow-[0_0_30px_rgba(221,183,255,0.2)] bg-gradient-to-r from-primary/20 to-secondary/20 border border-primary/40 hover:scale-105 group cursor-pointer" href="#">
-            Start A Project
-            <span className="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform ml-2">arrow_forward</span>
-          </a>
-          <a className="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2 relative group py-3" href="#">
-            <span className="material-symbols-outlined text-[18px]">play_circle</span>
-            Watch Showreel
-          </a>
-        </div>
-
       </div>
 
       {/* Bottom Scroll Indicator */}
