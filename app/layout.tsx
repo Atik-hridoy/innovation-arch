@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Innovative Ark - Premium Digital Studio",
   description: "Immersive digital product design and engineering studio. We build high-performance web products.",
+  icons: {
+    icon: '/icon.svg',
+  },
 };
 
 export default function RootLayout({
