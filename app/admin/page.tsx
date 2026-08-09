@@ -45,6 +45,7 @@ interface SiteSettings {
 export default function AdminDashboard() {
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Auth State
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -408,7 +409,13 @@ export default function AdminDashboard() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#030303] text-white flex items-center justify-center font-sans">
+      <div className="min-h-screen bg-[#030303] text-white flex items-center justify-center font-sans relative overflow-hidden">
+        {/* Background Image Overlay */}
+        <div className="absolute inset-0 z-0">
+          <img src="/admin-bg.jpg" alt="Admin Background" className="w-full h-full object-cover opacity-[0.03] mix-blend-screen" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-[#030303]/80 to-transparent" />
+        </div>
+        
         <div className="absolute inset-0 pointer-events-none z-0">
           <div className="absolute top-0 left-0 w-full h-[500px] bg-primary/5 blur-[150px] mix-blend-screen" />
           <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-[#1D9E75]/10 blur-[150px] mix-blend-screen rounded-full" />
@@ -456,33 +463,41 @@ export default function AdminDashboard() {
         <div className="absolute inset-0 opacity-[0.02] mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
       </div>
 
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-40 bg-black/80 backdrop-blur-sm lg:hidden" onClick={() => setIsMobileMenuOpen(false)} />
+      )}
+
       {/* Sidebar Navigation */}
-      <aside className="w-64 border-r border-white/[0.05] bg-black/50 backdrop-blur-xl z-20 flex-col hidden lg:flex">
-        <div className="h-20 flex items-center px-8 border-b border-white/[0.05]">
+      <aside className={`fixed lg:static top-0 left-0 h-full w-64 border-r border-white/[0.05] bg-[#030303]/95 lg:bg-black/50 backdrop-blur-xl z-50 flex flex-col transition-transform duration-300 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+        <div className="h-16 lg:h-20 flex items-center justify-between px-6 lg:px-8 border-b border-white/[0.05]">
           <span className="font-bold text-xl tracking-tight">ARK <span className="text-primary">ADMIN</span></span>
+          <button className="lg:hidden text-white/50 hover:text-white" onClick={() => setIsMobileMenuOpen(false)}>
+            <span className="material-symbols-outlined">close</span>
+          </button>
         </div>
-        <nav className="flex-1 py-8 px-4 flex flex-col gap-2">
-          <button onClick={() => setViewMode('list')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${viewMode === 'list' ? 'bg-white/[0.05] text-primary border border-white/5 font-medium' : 'text-white/50 hover:text-white hover:bg-white/[0.02]'}`}>
+        <nav className="flex-1 py-6 px-4 flex flex-col gap-2 overflow-y-auto">
+          <button onClick={() => { setViewMode('list'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${viewMode === 'list' ? 'bg-white/[0.05] text-primary border border-white/5 font-medium' : 'text-white/50 hover:text-white hover:bg-white/[0.02]'}`}>
             <span className="material-symbols-outlined text-[20px]">folder</span>
             All Projects
           </button>
-          <button onClick={() => setViewMode('messages')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${viewMode === 'messages' ? 'bg-white/[0.05] text-primary border border-white/5 font-medium' : 'text-white/50 hover:text-white hover:bg-white/[0.02]'}`}>
+          <button onClick={() => { setViewMode('messages'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${viewMode === 'messages' ? 'bg-white/[0.05] text-primary border border-white/5 font-medium' : 'text-white/50 hover:text-white hover:bg-white/[0.02]'}`}>
             <span className="material-symbols-outlined text-[20px]">mail</span>
             Messages
           </button>
-          <button onClick={() => { setViewMode('faqs'); setEditingFaqId(null); setFaqQuestion(''); setFaqAnswer(''); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${viewMode === 'faqs' ? 'bg-white/[0.05] text-primary border border-white/5 font-medium' : 'text-white/50 hover:text-white hover:bg-white/[0.02]'}`}>
+          <button onClick={() => { setViewMode('faqs'); setEditingFaqId(null); setFaqQuestion(''); setFaqAnswer(''); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${viewMode === 'faqs' ? 'bg-white/[0.05] text-primary border border-white/5 font-medium' : 'text-white/50 hover:text-white hover:bg-white/[0.02]'}`}>
             <span className="material-symbols-outlined text-[20px]">quiz</span>
             Manage FAQs
           </button>
-          <button onClick={() => setViewMode('settings')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${viewMode === 'settings' ? 'bg-white/[0.05] text-primary border border-white/5 font-medium' : 'text-white/50 hover:text-white hover:bg-white/[0.02]'}`}>
+          <button onClick={() => { setViewMode('settings'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${viewMode === 'settings' ? 'bg-white/[0.05] text-primary border border-white/5 font-medium' : 'text-white/50 hover:text-white hover:bg-white/[0.02]'}`}>
             <span className="material-symbols-outlined text-[20px]">settings</span>
             Site Settings
           </button>
-          <button onClick={openCreateMode} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${viewMode === 'create' ? 'bg-white/[0.05] text-primary border border-white/5 font-medium' : 'text-white/50 hover:text-white hover:bg-white/[0.02]'}`}>
+          <button onClick={() => { openCreateMode(); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${viewMode === 'create' ? 'bg-white/[0.05] text-primary border border-white/5 font-medium' : 'text-white/50 hover:text-white hover:bg-white/[0.02]'}`}>
             <span className="material-symbols-outlined text-[20px]">add_circle</span>
             Add Project
           </button>
-          <div className="mt-auto">
+          <div className="mt-auto pt-4">
             <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all font-bold">
               <span className="material-symbols-outlined text-[20px]">logout</span>
               Logout
@@ -492,8 +507,16 @@ export default function AdminDashboard() {
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 h-screen overflow-y-auto relative z-10 p-6 md:p-12">
-        <div className="max-w-4xl mx-auto space-y-8 pb-20">
+      <main className="flex-1 h-screen overflow-y-auto relative z-10">
+        {/* Mobile Header */}
+        <div className="lg:hidden sticky top-0 w-full h-16 bg-[#030303]/80 backdrop-blur-md border-b border-white/[0.05] flex items-center justify-between px-6 z-30">
+          <span className="font-bold text-xl tracking-tight">ARK <span className="text-primary">ADMIN</span></span>
+          <button onClick={() => setIsMobileMenuOpen(true)} className="text-white hover:text-primary transition-colors">
+            <span className="material-symbols-outlined">menu</span>
+          </button>
+        </div>
+
+        <div className="p-6 md:p-12 max-w-4xl mx-auto space-y-8 pb-20">
           
           {/* Header */}
           <div>
