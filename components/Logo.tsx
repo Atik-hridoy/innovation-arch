@@ -10,7 +10,7 @@ export function Logo({ className = '', showText = true, layout = 'horizontal' }:
   const isVertical = layout === 'vertical';
 
   return (
-    <div className={`flex ${isVertical ? 'flex-col items-center text-center gap-6' : 'items-center gap-3'} group select-none ${className}`}>
+    <a href="/" className={`flex ${isVertical ? 'flex-col items-center text-center gap-6' : 'items-center gap-3'} group select-none ${className}`}>
       
       {/* 3D Volumetric SVG Logo Icon Container */}
       <div 
@@ -129,6 +129,6 @@ export function Logo({ className = '', showText = true, layout = 'horizontal' }:
           )}
         </div>
       )}
-    </div>
+    </a>
   );
 }

@@ -1,15 +1,38 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Logo } from '@/components/Logo';
+import { CONFIG } from '../lib/config';
+
+interface SiteSettings {
+  facebook_url: string;
+  whatsapp_number: string;
+  phone_number: string;
+  email_address: string;
+}
 
 export function Footer() {
+  const [settings, setSettings] = useState<SiteSettings | null>(null);
+
+  useEffect(() => {
+    fetch(`${CONFIG.API_BASE_URL}/settings/`)
+      .then(res => res.json())
+      .then(data => setSettings(data))
+      .catch(err => console.error("Failed to load settings:", err));
+  }, []);
+
+  const fbUrl = settings?.facebook_url || "https://facebook.com";
+  const waUrl = settings?.whatsapp_number ? `https://wa.me/${settings.whatsapp_number.replace(/[^0-9+]/g, '')}` : "https://wa.me/";
+  const callUrl = settings?.phone_number ? `tel:${settings.phone_number.replace(/[^0-9+]/g, '')}` : "tel:+1234567890";
+  const mailUrl = settings?.email_address ? `mailto:${settings.email_address}` : "mailto:contact@innovativeark.com";
+
   return (
     <footer className="w-full py-8 md:py-stack-md flex flex-col md:flex-row justify-between items-center gap-6 px-4 sm:px-margin-edge bg-[#050505] border-t border-white/5 relative z-50">
       <Logo layout="vertical" />
       <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-8 md:gap-10">
         <a 
           className="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors duration-300 flex items-center gap-2 group" 
-          href="https://facebook.com" 
+          href={fbUrl} 
           target="_blank" 
           rel="noopener noreferrer"
         >
@@ -20,7 +43,7 @@ export function Footer() {
         </a>
         <a 
           className="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors duration-300 flex items-center gap-2 group" 
-          href="https://wa.me/" 
+          href={waUrl} 
           target="_blank" 
           rel="noopener noreferrer"
         >
@@ -31,7 +54,7 @@ export function Footer() {
         </a>
         <a 
           className="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors duration-300 flex items-center gap-2 group" 
-          href="tel:+1234567890"
+          href={callUrl}
         >
           <svg className="w-4 h-4 fill-current group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
             <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
@@ -40,7 +63,7 @@ export function Footer() {
         </a>
         <a 
           className="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors duration-300 flex items-center gap-2 group" 
-          href="mailto:contact@innovativeark.com"
+          href={mailUrl}
         >
           <svg className="w-4 h-4 fill-current group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
             <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
@@ -49,7 +72,7 @@ export function Footer() {
         </a>
       </div>
       <div className="font-label-caps text-label-caps text-on-surface-variant text-center md:text-right opacity-50 hover:opacity-100 transition-opacity duration-300">
-        © 2026 Innovative Ark Studio. All rights reserved.
+        © 2026 Innovative Ark. All rights reserved.
       </div>
     </footer>
   );

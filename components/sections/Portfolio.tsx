@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Project, PROJECTS } from '../../data/portfolio';
+import { Project } from '../../data/portfolio';
+import { CONFIG } from '../../lib/config';
 
 // Reusable Project Card component
 interface ProjectCardProps {
@@ -180,8 +181,59 @@ function ProjectCard({ project, isActive }: ProjectCardProps) {
 export function Portfolio() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeCardIdx, setActiveCardIdx] = useState(0);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const currentBgImage = PROJECTS[activeCardIdx]?.mockups[0];
+  useEffect(() => {
+    async function fetchProjects() {
+      try {
+        const res = await fetch(`${CONFIG.API_BASE_URL}/projects/`);
+        if (!res.ok) throw new Error('Failed to load projects');
+        
+        const data = await res.json();
+        if (data && data.length > 0) {
+          const mappedProjects: Project[] = data.map((apiProj: any) => {
+            // Collect all non-null mockups
+            const mockups = [
+              apiProj.mockup_1, 
+              apiProj.mockup_2, 
+              apiProj.mockup_3, 
+              apiProj.mockup_4
+            ].filter(Boolean);
+            
+            // Fallback image if none uploaded
+            if (mockups.length === 0) mockups.push(CONFIG.FALLBACK_IMAGE);
+
+            return {
+              id: apiProj.id.toString(),
+              title: apiProj.title || 'Untitled Project',
+              subtitle: apiProj.subtitle || 'Category',
+              description: apiProj.description || 'No description provided.',
+              tags: apiProj.tags || [],
+              mockups: mockups,
+              metrics: {
+                value: apiProj.metric_value || '-',
+                label: apiProj.metric_label || 'Metric'
+              }
+            };
+          });
+          setProjects(mappedProjects);
+        } else {
+          setProjects([]);
+        }
+      } catch (err) {
+        console.error("Failed to fetch projects from backend:", err);
+        setError("Unable to load projects at this time.");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    
+    fetchProjects();
+  }, []);
+
+  const currentBgImage = projects[activeCardIdx]?.mockups[0];
 
   // Scroll listener to compute which card is closest to horizontal center
   const handleScroll = () => {
@@ -272,13 +324,38 @@ export function Portfolio() {
           msOverflowStyle: 'none',
         }}
       >
-        {PROJECTS.map((project, idx) => (
-          <ProjectCard 
-            key={project.id} 
-            project={project} 
-            isActive={activeCardIdx === idx}
-          />
-        ))}
+        {isLoading ? (
+          <div className="w-full flex items-center justify-center min-h-[400px]">
+            <div className="flex flex-col items-center gap-4 text-white/50">
+              <span className="material-symbols-outlined text-4xl animate-spin">refresh</span>
+              <p className="font-mono text-sm tracking-widest">LOADING PROJECTS...</p>
+            </div>
+          </div>
+        ) : error ? (
+          <div className="w-full flex items-center justify-center min-h-[400px]">
+            <div className="border border-red-500/20 bg-red-500/5 rounded-3xl p-10 flex flex-col items-center gap-4 text-center max-w-md backdrop-blur-md">
+              <span className="material-symbols-outlined text-red-400 text-5xl">warning</span>
+              <h3 className="text-xl font-bold text-white">Oops! Connection Failed</h3>
+              <p className="text-sm text-white/50">{error}</p>
+            </div>
+          </div>
+        ) : projects.length === 0 ? (
+          <div className="w-full flex items-center justify-center min-h-[400px]">
+            <div className="border border-white/5 bg-white/[0.02] rounded-3xl p-10 flex flex-col items-center gap-4 text-center max-w-md backdrop-blur-md">
+              <span className="material-symbols-outlined text-white/20 text-5xl">folder_off</span>
+              <h3 className="text-xl font-bold text-white">No Projects Found</h3>
+              <p className="text-sm text-white/50">There are currently no case studies available to display. Please add some from the admin dashboard.</p>
+            </div>
+          </div>
+        ) : (
+          projects.map((project, idx) => (
+            <ProjectCard 
+              key={project.id} 
+              project={project} 
+              isActive={activeCardIdx === idx}
+            />
+          ))
+        )}
       </div>
 
       {/* Metrics Grid Footer Row */}
