@@ -114,18 +114,7 @@ function ProjectCard({ project, isActive }: ProjectCardProps) {
           ))}
         </div>
 
-        {/* View Case Study Arrow Link */}
-        <div className="pt-2">
-          <a
-            className="font-body-md text-[10px] font-bold text-primary hover:text-white transition-colors flex items-center gap-2 tracking-widest"
-            href="#"
-          >
-            VIEW CASE STUDY
-            <span className="material-symbols-outlined text-[13px] group-hover:translate-x-1.5 transition-transform">
-              arrow_forward
-            </span>
-          </a>
-        </div>
+
       </div>
 
       {/* Right Column: Multi-Image Gallery Showcase */}
