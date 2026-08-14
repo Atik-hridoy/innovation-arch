@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Logo } from '@/components/Logo';
 import { CONFIG } from '../lib/config';
+import TwistingRibbon from '@/components/ui/twisting-ribbon';
 
 interface SiteSettings {
   facebook_url: string;
@@ -27,9 +28,12 @@ export function Footer() {
   const mailUrl = settings?.email_address ? `mailto:${settings.email_address}` : "mailto:contact@innovativeark.com";
 
   return (
-    <footer className="w-full py-8 md:py-stack-md flex flex-col md:flex-row justify-between items-center gap-6 px-4 sm:px-margin-edge bg-[#050505] border-t border-white/5 relative z-50">
-      <Logo layout="vertical" />
-      <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-8 md:gap-10">
+    <footer className="w-full py-8 md:py-stack-md flex flex-col md:flex-row justify-between items-center gap-6 px-4 sm:px-margin-edge border-t border-white/5 relative z-50 overflow-hidden">
+      <TwistingRibbon className="absolute inset-0 z-0 pointer-events-none opacity-60" />
+      <div className="relative z-10">
+        <Logo layout="vertical" />
+      </div>
+      <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-8 md:gap-10 relative z-10">
         <a
           className="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors duration-300 flex items-center gap-2 group"
           href={fbUrl}
@@ -71,7 +75,7 @@ export function Footer() {
           Email
         </a>
       </div>
-      <div className="font-label-caps text-label-caps text-on-surface-variant text-center md:text-right opacity-50 hover:opacity-100 transition-opacity duration-300">
+      <div className="font-label-caps text-label-caps text-on-surface-variant text-center md:text-right opacity-50 hover:opacity-100 transition-opacity duration-300 relative z-10">
         © 2026 Innovation Ark. All rights reserved.
       </div>
     </footer>
