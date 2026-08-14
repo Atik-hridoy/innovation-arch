@@ -1,11 +1,11 @@
 @theme {
-  --color-primary-fixed-dim: #ddb7ff;
-  --color-secondary: #adc6ff;
-  --color-secondary-fixed-dim: #adc6ff;
-  --color-on-surface: #e5e2e1;
-  --color-on-surface-variant: #cfc2d6;
-  --color-primary: #ddb7ff;
-  --color-primary-fixed: #f0dbff;
+  --color-primary-fixed-dim: #a1a1aa;
+  --color-secondary: #a1a1aa;
+  --color-secondary-fixed-dim: #a1a1aa;
+  --color-on-surface: #ffffff;
+  --color-on-surface-variant: #888888;
+  --color-primary: #ffffff;
+  --color-primary-fixed: #ffffff;
   
   --spacing-stack-md: 80px;
   --spacing-gutter: 24px;

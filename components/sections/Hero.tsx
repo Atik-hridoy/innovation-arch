@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
+import { MorphText } from '@/components/ui/morph-text';
 
 export function Hero() {
   const headlineRef = useRef<HTMLHeadingElement>(null);
@@ -57,15 +58,19 @@ export function Hero() {
         
         {/* Restored visual hierarchy text left-aligned */}
         <div className="hero-tagline inline-flex opacity-0">
-          <span className="font-mono text-xs uppercase tracking-[0.2em] text-primary bg-primary/10 px-5 py-2.5 rounded-full border border-primary/20 backdrop-blur-md font-semibold">
-            WE DESIGN. WE DEVELOP. WE AUTOMATE.
+          <span className="font-mono text-xs uppercase tracking-[0.2em] text-primary bg-primary/10 px-5 py-2.5 rounded-full border border-primary/20 backdrop-blur-md font-semibold flex items-center justify-center min-w-[200px]">
+            <MorphText
+              words={["WE DESIGN.", "WE DEVELOP.", "WE AUTOMATE."]}
+              fontSize="0.75rem"
+              fontFamily="inherit"
+            />
           </span>
         </div>
         
         <h1 ref={headlineRef} className="opacity-0 font-sans font-extrabold text-4xl md:text-6xl lg:text-7xl text-white uppercase tracking-tighter leading-[0.95] max-w-4xl">
           WE BUILD DIGITAL <br />
           PRODUCTS THAT <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary" style={{ textShadow: '0 0 40px rgba(221, 183, 255, 0.4)' }}>CREATE</span> IMPACT.
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary" style={{ textShadow: '0 0 40px rgba(255, 255, 255, 0.4)' }}>CREATE</span> IMPACT.
         </h1>
         
         <p ref={paraRef} className="opacity-0 text-base md:text-lg text-on-surface-variant max-w-xl leading-relaxed font-normal">
