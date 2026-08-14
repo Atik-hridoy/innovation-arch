@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Logo } from '@/components/Logo';
+import { SpotlightNavbar } from '@/components/ui/spotlight-navbar';
 
 const navItems = ['Work', 'Services', 'Process', 'About', 'Tech'];
 
@@ -12,16 +13,8 @@ export function Header() {
     <>
       <nav className="fixed top-0 w-full z-50 bg-[#050505]/40 backdrop-blur-xl border-b border-white/5 flex justify-between items-center px-4 sm:px-margin-edge py-4 sm:py-6 shadow-none">
         <Logo />
-        <div className="hidden md:flex gap-gutter items-center">
-          {navItems.map((item) => (
-            <a
-              key={item}
-              className="font-body-md text-[14px] uppercase tracking-widest text-on-surface-variant/70 hover:text-on-surface hover:backdrop-brightness-125 transition-all duration-300"
-              href={`#${item.toLowerCase()}`}
-            >
-              {item}
-            </a>
-          ))}
+        <div className="hidden md:flex flex-1 justify-center">
+          <SpotlightNavbar />
         </div>
         <div className="flex items-center gap-4">
           <a
