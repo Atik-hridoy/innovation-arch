@@ -58,10 +58,10 @@ export function Hero() {
         
         {/* Restored visual hierarchy text left-aligned */}
         <div className="hero-tagline inline-flex opacity-0">
-          <span className="font-mono text-xs uppercase tracking-[0.2em] text-primary bg-primary/10 px-5 py-2.5 rounded-full border border-primary/20 backdrop-blur-md font-semibold flex items-center justify-center min-w-[200px]">
+          <span className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.2em] text-primary bg-primary/10 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full border border-primary/20 backdrop-blur-md font-semibold flex items-center justify-center min-w-[180px] sm:min-w-[200px]">
             <MorphText
               words={["WE DESIGN.", "WE DEVELOP.", "WE AUTOMATE."]}
-              fontSize="0.75rem"
+              fontSize="inherit"
               fontFamily="inherit"
             />
           </span>
