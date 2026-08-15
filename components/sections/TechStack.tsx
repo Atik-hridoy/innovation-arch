@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
 import { CylinderCarousel } from '@/components/ui/cylinder-carousel';
 
 const TECH_LOGOS = [
