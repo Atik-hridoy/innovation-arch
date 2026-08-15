@@ -131,14 +131,16 @@ export function TwistingRibbon({
 
     function buildSpine(time: number) {
       const pts = [];
+      const isMobile = window.innerWidth < 768;
+      const mobileScale = isMobile ? 0.4 : 1;
       for (let i = 0; i <= segments; i++) {
         const progress = i / segments;
         pts.push({
           x: progress * width * RIBBON_X_SCALE - width * RIBBON_X_OFFSET,
           y:
             height / 2 +
-            Math.sin(progress * Math.PI * WAVE1_FREQ + time * WAVE1_TIME_SPEED) * WAVE1_AMP +
-            Math.sin(progress * Math.PI * WAVE2_FREQ + time * WAVE2_TIME_SPEED) * WAVE2_AMP,
+            Math.sin(progress * Math.PI * WAVE1_FREQ + time * WAVE1_TIME_SPEED) * (WAVE1_AMP * mobileScale) +
+            Math.sin(progress * Math.PI * WAVE2_FREQ + time * WAVE2_TIME_SPEED) * (WAVE2_AMP * mobileScale),
         });
       }
       return pts;
