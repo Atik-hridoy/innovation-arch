@@ -52,11 +52,8 @@ export function CylinderCarousel({ images, className }: CylinderCarouselProps) {
           return (
             <div
               key={index}
-              className="absolute w-[80px] h-[80px] md:w-[120px] md:h-[120px] flex justify-center items-center rounded-2xl p-4 md:p-6 transition-all duration-300"
+              className="absolute w-[80px] h-[80px] md:w-[120px] md:h-[120px] flex justify-center items-center rounded-2xl p-4 md:p-6 transition-all duration-300 bg-white/80 dark:bg-[rgba(20,20,25,0.8)] border border-black/10 dark:border-white/10 shadow-sm dark:shadow-none backdrop-blur-sm"
               style={{
-                // Removed expensive backdrop-filter for performance
-                background: "rgba(20, 20, 25, 0.8)",
-                border: "1px solid rgba(255, 255, 255, 0.08)",
                 transform: `rotateY(${theta}deg) translateZ(${radius}px)`,
                 backfaceVisibility: "visible", 
               }}
@@ -64,7 +61,6 @@ export function CylinderCarousel({ images, className }: CylinderCarouselProps) {
               <img 
                 src={src} 
                 alt={`Tech Logo ${index}`} 
-                // Removed drop-shadow for performance
                 className="w-full h-full object-contain opacity-70 hover:opacity-100 transition-all duration-300 grayscale hover:grayscale-0"
               />
             </div>

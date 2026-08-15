@@ -3,6 +3,9 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { CONFIG } from '../../lib/config';
+import { Footer } from '@/components/Footer';
+import TwistingRibbon from '@/components/ui/twisting-ribbon';
+import { RadialGlowButton } from '@/components/ui/radial-glow-button';
 
 interface FAQ {
   id: number;
@@ -80,23 +83,25 @@ export function CTA() {
   }, []);
 
   return (
-    <section id="contact" className="relative w-full min-h-screen py-24 lg:py-32 flex items-center justify-center overflow-hidden bg-[#030303] border-t border-white/[0.03] z-10">
+    <section id="contact" className="relative w-full pt-12 sm:pt-16 md:pt-20 pb-8 flex flex-col items-center justify-center overflow-hidden bg-[#040406] z-10">
 
       {/* --- Premium Background Effects --- */}
       <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden">
 
-        {/* Core Spotlight Behind Text */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[40%] w-[100vw] lg:w-[80vw] max-w-[1200px] h-[400px] bg-[#1D9E75]/30 rounded-[100%] blur-[100px] lg:blur-[140px] opacity-100 mix-blend-screen" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[20%] w-[80vw] lg:w-[60vw] max-w-[800px] h-[300px] bg-primary/20 rounded-[100%] blur-[100px] lg:blur-[120px] opacity-80 mix-blend-screen" />
+        {/* 3D Twisting Ribbon Canvas flowing continuously behind Contact & Footer */}
+        <TwistingRibbon className="absolute inset-0 z-0 pointer-events-none opacity-60" />
+
+        {/* Core Spotlight Behind Text - Ultra Bright */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[20%] w-[100vw] lg:w-[80vw] max-w-[1200px] h-[450px] bg-[#1D9E75]/35 rounded-[100%] blur-[100px] lg:blur-[140px] opacity-100 mix-blend-screen" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[10%] w-[80vw] lg:w-[60vw] max-w-[800px] h-[350px] bg-primary/25 rounded-[100%] blur-[100px] lg:blur-[120px] opacity-90 mix-blend-screen" />
         
         {/* Mobile secondary glow behind the form */}
-        <div className="absolute bottom-[10%] left-1/2 -translate-x-1/2 w-[100vw] h-[400px] bg-[#1D9E75]/20 rounded-[100%] blur-[100px] opacity-100 mix-blend-screen lg:hidden" />
+        <div className="absolute bottom-[10%] left-1/2 -translate-x-1/2 w-[100vw] h-[400px] bg-[#1D9E75]/25 rounded-[100%] blur-[100px] opacity-100 mix-blend-screen lg:hidden" />
 
         {/* Outline Typography Watermark - Dribbble Style */}
-        <div className="absolute top-[2%] md:top-[-2%] left-1/2 -translate-x-1/2 text-[25vw] md:text-[14vw] font-black tracking-tighter whitespace-nowrap uppercase select-none pointer-events-none z-0"
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 text-[22vw] md:text-[13vw] font-black tracking-tighter whitespace-nowrap uppercase select-none pointer-events-none z-0 text-transparent"
           style={{
-            color: 'transparent',
-            WebkitTextStroke: '2px rgba(255,255,255,0.05)'
+            WebkitTextStroke: '2px rgba(255, 255, 255, 0.08)'
           }}>
           Contact
         </div>
@@ -105,15 +110,15 @@ export function CTA() {
         <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay z-10 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
       </div>
 
-      <div ref={containerRef} className="relative z-20 w-full max-w-[1400px] mx-auto px-6 sm:px-12 flex flex-col gap-12 lg:gap-20 pt-10">
+      <div ref={containerRef} className="relative z-20 w-full max-w-[1400px] mx-auto px-6 sm:px-12 flex flex-col gap-10 lg:gap-16">
 
         {/* --- Top Section: Context & Info --- */}
         <div className="w-full flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8">
           <div className="space-y-6 max-w-2xl">
             <h2 className="text-5xl sm:text-6xl lg:text-7xl text-white font-extrabold tracking-tighter leading-[1.1] drop-shadow-2xl gsap-fade-up opacity-0">
-              Let's build <br className="hidden sm:block" /><span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white/80 to-white/40">the future.</span>
+              Let's build <br className="hidden sm:block" /><span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white/90 to-white/60">the future.</span>
             </h2>
-            <p className="text-lg sm:text-xl text-white/50 max-w-md leading-relaxed font-light gsap-fade-up opacity-0">
+            <p className="text-lg sm:text-xl text-white/70 max-w-md leading-relaxed font-light gsap-fade-up opacity-0">
               Got a visionary project? Drop us a line. We turn ambitious ideas into digital reality.
             </p>
           </div>
@@ -124,103 +129,106 @@ export function CTA() {
           
           {/* Left Column: Pills & FAQs */}
           <div className="lg:col-span-5 flex flex-col space-y-12">
-            
-
-
             {faqs.length > 0 && (
               <div className="flex flex-col space-y-4">
-                <h3 className="text-xl font-bold text-white/90 border-b border-white/10 pb-4 mb-2">Frequently Asked Questions</h3>
-              <div className="flex flex-col gap-3">
-                {faqs.map((faq) => (
-                  <div key={faq.id} className="bg-white/[0.02] border border-white/[0.05] rounded-2xl overflow-hidden transition-all duration-300">
-                    <button 
-                      onClick={() => setOpenFaqId(openFaqId === faq.id ? null : faq.id)}
-                      className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-white/[0.04] transition-colors group/faq"
-                    >
-                      <span className="font-semibold text-white/90 text-sm group-hover/faq:text-primary transition-colors pr-4">{faq.question}</span>
-                      <span className={`material-symbols-outlined text-primary/50 group-hover/faq:text-primary transition-transform duration-300 flex-shrink-0 ${openFaqId === faq.id ? 'rotate-180 text-primary' : ''}`}>
-                        keyboard_arrow_down
-                      </span>
-                    </button>
-                    <div 
-                      className={`px-6 text-sm text-white/60 font-light overflow-hidden transition-all duration-500 ease-in-out ${openFaqId === faq.id ? 'max-h-96 pb-5 opacity-100' : 'max-h-0 opacity-0'}`}
-                    >
-                      {faq.answer}
+                <h3 className="text-xl font-bold text-white border-b border-white/15 pb-4 mb-2">Frequently Asked Questions</h3>
+                <div className="flex flex-col gap-3">
+                  {faqs.map((faq) => (
+                    <div key={faq.id} className="bg-white/[0.04] hover:bg-white/[0.07] border border-white/10 hover:border-emerald-400/40 rounded-2xl overflow-hidden transition-all duration-300 backdrop-blur-md">
+                      <button 
+                        onClick={() => setOpenFaqId(openFaqId === faq.id ? null : faq.id)}
+                        className="w-full px-6 py-4 flex items-center justify-between text-left transition-colors group/faq cursor-pointer"
+                      >
+                        <span className="font-semibold text-white text-sm group-hover/faq:text-emerald-400 transition-colors pr-4">{faq.question}</span>
+                        <span className={`material-symbols-outlined text-white/60 group-hover/faq:text-emerald-400 transition-transform duration-300 flex-shrink-0 ${openFaqId === faq.id ? 'rotate-180 text-emerald-400' : ''}`}>
+                          keyboard_arrow_down
+                        </span>
+                      </button>
+                      <div 
+                        className={`px-6 text-sm text-white/75 font-light leading-relaxed overflow-hidden transition-all duration-500 ease-in-out ${openFaqId === faq.id ? 'max-h-96 pb-5 opacity-100' : 'max-h-0 opacity-0'}`}
+                      >
+                        {faq.answer}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
 
-        {/* --- Right Column: Premium Form (Takes 7 columns) --- */}
+          {/* --- Right Column: Premium Form (Takes 7 columns) --- */}
           <div className="lg:col-span-7 w-full flex justify-end gsap-fade-up opacity-0">
-          <div className="w-full max-w-2xl bg-gradient-to-br from-white/[0.05] to-white/[0.01] border border-white/[0.08] p-8 sm:p-12 rounded-[2.5rem] backdrop-blur-[40px] shadow-[0_30px_60px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.1)] relative overflow-hidden group">
+            <div className="w-full max-w-2xl bg-[#0a0910]/85 border border-white/15 p-8 sm:p-12 rounded-[2.5rem] backdrop-blur-2xl shadow-[0_30px_70px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.15)] relative overflow-hidden group">
 
-            {/* Hover Glow inside form */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-[#1D9E75]/10 rounded-full blur-[100px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
+              {/* Hover Glow inside form */}
+              <div className="absolute top-0 right-0 w-96 h-96 bg-[#1D9E75]/15 rounded-full blur-[100px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
 
-            <form className="relative z-10 flex flex-col space-y-6" onSubmit={handleSubmit}>
-              
-              {submitSuccess && (
-                <div className="bg-[#1D9E75]/20 border border-[#1D9E75]/50 text-[#1D9E75] px-5 py-3 rounded-xl flex items-center gap-3 text-sm">
-                  <span className="material-symbols-outlined text-[18px]">check_circle</span>
-                  Message sent successfully! We'll get back to you soon.
+              <form className="relative z-10 flex flex-col space-y-6" onSubmit={handleSubmit}>
+                
+                {submitSuccess && (
+                  <div className="bg-[#1D9E75]/25 border border-[#1D9E75]/60 text-emerald-300 px-5 py-3.5 rounded-xl flex items-center gap-3 text-sm font-semibold">
+                    <span className="material-symbols-outlined text-[20px] text-emerald-400">check_circle</span>
+                    Message sent successfully! We'll get back to you soon.
+                  </div>
+                )}
+
+                {submitError && (
+                  <div className="bg-red-500/25 border border-red-500/60 text-red-300 px-5 py-3.5 rounded-xl flex items-center gap-3 text-sm font-semibold">
+                    <span className="material-symbols-outlined text-[20px] text-red-400">error</span>
+                    {submitError}
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div className="flex flex-col space-y-2">
+                    <label htmlFor="name" className="text-[11px] font-bold text-white/60 uppercase tracking-[0.2em] ml-2">Your Name</label>
+                    <input
+                      type="text" id="name" name="name" placeholder="Your Name"
+                      value={name} onChange={e => setName(e.target.value)}
+                      className="w-full bg-white/[0.05] hover:bg-white/[0.08] focus:bg-white/[0.1] border border-white/15 focus:border-emerald-400 text-white placeholder-white/35 py-4 px-5 rounded-2xl outline-none transition-all duration-300 shadow-[inset_0_2px_8px_rgba(0,0,0,0.4)]"
+                      required
+                    />
+                  </div>
+
+                  <div className="flex flex-col space-y-2">
+                    <label htmlFor="email" className="text-[11px] font-bold text-white/60 uppercase tracking-[0.2em] ml-2">Email Address</label>
+                    <input
+                      type="email" id="email" name="email" placeholder="Your Email"
+                      value={email} onChange={e => setEmail(e.target.value)}
+                      className="w-full bg-white/[0.05] hover:bg-white/[0.08] focus:bg-white/[0.1] border border-white/15 focus:border-emerald-400 text-white placeholder-white/35 py-4 px-5 rounded-2xl outline-none transition-all duration-300 shadow-[inset_0_2px_8px_rgba(0,0,0,0.4)]"
+                      required
+                    />
+                  </div>
                 </div>
-              )}
 
-              {submitError && (
-                <div className="bg-red-500/20 border border-red-500/50 text-red-400 px-5 py-3 rounded-xl flex items-center gap-3 text-sm">
-                  <span className="material-symbols-outlined text-[18px]">error</span>
-                  {submitError}
-                </div>
-              )}
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="flex flex-col space-y-2">
-                  <label htmlFor="name" className="text-[11px] font-bold text-white/40 uppercase tracking-[0.2em] ml-2">Your Name</label>
-                  <input
-                    type="text" id="name" name="name" placeholder="Your Name"
-                    value={name} onChange={e => setName(e.target.value)}
-                    className="w-full bg-white/[0.02] hover:bg-white/[0.04] focus:bg-white/[0.06] border border-white/[0.05] focus:border-[#1D9E75]/50 text-white placeholder-white/20 py-4 px-5 rounded-2xl outline-none transition-all duration-300 shadow-[inset_0_2px_10px_rgba(0,0,0,0.2)]"
+                  <label htmlFor="message" className="text-[11px] font-bold text-white/60 uppercase tracking-[0.2em] ml-2">Your Message</label>
+                  <textarea
+                    id="message" name="message" rows={5} placeholder="Tell us about your project..."
+                    value={message} onChange={e => setMessage(e.target.value)}
+                    className="w-full bg-white/[0.05] hover:bg-white/[0.08] focus:bg-white/[0.1] border border-white/15 focus:border-emerald-400 text-white placeholder-white/35 py-4 px-5 rounded-2xl outline-none transition-all duration-300 shadow-[inset_0_2px_8px_rgba(0,0,0,0.4)] resize-none"
                     required
-                  />
+                  ></textarea>
                 </div>
 
-                <div className="flex flex-col space-y-2">
-                  <label htmlFor="email" className="text-[11px] font-bold text-white/40 uppercase tracking-[0.2em] ml-2">Email Address</label>
-                  <input
-                    type="email" id="email" name="email" placeholder="Your Email"
-                    value={email} onChange={e => setEmail(e.target.value)}
-                    className="w-full bg-white/[0.02] hover:bg-white/[0.04] focus:bg-white/[0.06] border border-white/[0.05] focus:border-[#1D9E75]/50 text-white placeholder-white/20 py-4 px-5 rounded-2xl outline-none transition-all duration-300 shadow-[inset_0_2px_10px_rgba(0,0,0,0.2)]"
-                    required
-                  />
+                <div className="pt-2">
+                  <RadialGlowButton
+                    type="submit"
+                    disabled={isSubmitting}
+                    size="lg"
+                    className="w-full justify-center tracking-wider text-sm font-bold uppercase py-4"
+                  >
+                    {isSubmitting ? 'SENDING...' : 'SEND MESSAGE'}
+                    {!isSubmitting && <span className="material-symbols-outlined text-[18px] ml-1">send</span>}
+                  </RadialGlowButton>
                 </div>
-              </div>
-
-              <div className="flex flex-col space-y-2">
-                <label htmlFor="message" className="text-[11px] font-bold text-white/40 uppercase tracking-[0.2em] ml-2">Your Message</label>
-                <textarea
-                  id="message" name="message" rows={5} placeholder="Tell us about your project..."
-                  value={message} onChange={e => setMessage(e.target.value)}
-                  className="w-full bg-white/[0.02] hover:bg-white/[0.04] focus:bg-white/[0.06] border border-white/[0.05] focus:border-[#1D9E75]/50 text-white placeholder-white/20 py-4 px-5 rounded-2xl outline-none transition-all duration-300 shadow-[inset_0_2px_10px_rgba(0,0,0,0.2)] resize-none"
-                  required
-                ></textarea>
-              </div>
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="mt-6 w-full bg-white hover:bg-gray-200 disabled:opacity-50 text-black font-extrabold tracking-wide py-5 rounded-2xl flex justify-center items-center gap-3 transition-all duration-300 group/btn shadow-[0_10px_30px_rgba(255,255,255,0.15)] hover:shadow-[0_15px_40px_rgba(255,255,255,0.25)] hover:-translate-y-1 disabled:hover:translate-y-0"
-              >
-                {isSubmitting ? 'SENDING...' : 'SEND MESSAGE'}
-                {!isSubmitting && <span className="material-symbols-outlined text-[20px] group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform">send</span>}
-              </button>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
+
+        {/* --- Seamless Integrated Footer (No Split) --- */}
+        <Footer />
       </div>
     </section>
   );

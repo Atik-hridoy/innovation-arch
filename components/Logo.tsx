@@ -115,7 +115,7 @@ export function Logo({ className = '', showText = true, layout = 'horizontal' }:
 
       {showText && (
         <div className={`flex flex-col ${isVertical ? 'items-center' : 'items-start'}`}>
-          <span className={`font-sans font-extrabold uppercase bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-white/70 group-hover:to-primary transition-all duration-500 ${
+          <span className={`font-sans font-extrabold uppercase bg-clip-text text-transparent bg-gradient-to-r from-neutral-900 via-neutral-900 to-neutral-700 dark:from-white dark:via-white dark:to-white/70 group-hover:to-primary transition-all duration-500 ${
             isVertical 
               ? 'text-[24px] md:text-[28px] tracking-[0.1em]' 
               : 'text-[17px] tracking-wider animate-typewriter'
@@ -123,7 +123,7 @@ export function Logo({ className = '', showText = true, layout = 'horizontal' }:
             INNOVATION <span className="text-[#00bfff]">ARK</span>
           </span>
           {isVertical && (
-            <span className="font-mono text-[8px] md:text-[9px] tracking-[0.22em] text-on-surface-variant/50 uppercase mt-2">
+            <span className="font-mono text-[8px] md:text-[9px] tracking-[0.22em] text-on-surface-variant/70 uppercase mt-2">
               END-TO-END TECH | WEB & AI BUILDER
             </span>
           )}

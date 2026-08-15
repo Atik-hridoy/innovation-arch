@@ -161,7 +161,7 @@ export function Portfolio() {
   };
 
   return (
-    <section ref={sectionRef} id="work" className="relative py-12 md:py-stack-xl px-4 sm:px-margin-edge z-10 bg-[#070609] overflow-hidden min-h-[100vh] md:min-h-[120vh] flex flex-col justify-center pb-16 md:pb-32">
+    <section ref={sectionRef} id="work" className="relative py-12 md:py-stack-xl px-4 sm:px-margin-edge z-10 bg-white dark:bg-[#070609] overflow-hidden min-h-[100vh] md:min-h-[120vh] flex flex-col justify-center pb-16 md:pb-32 transition-colors duration-400">
       
       {/* Volumetric dynamic image background matching active card's 1st image */}
       <div className="absolute inset-0 z-0 transition-all duration-1000 ease-in-out pointer-events-none">
@@ -169,19 +169,19 @@ export function Portfolio() {
           <img 
             key={currentBgImage}
             src={currentBgImage} 
-            className="w-full h-full object-cover opacity-25 blur-[60px] scale-105 transition-all duration-1000 ease-in-out"
+            className="w-full h-full object-cover opacity-[0.04] dark:opacity-25 blur-[60px] scale-105 transition-all duration-1000 ease-in-out"
             alt="dynamic contextual background"
           />
         )}
-        {/* Soft atmospheric gradient overlay (replaces multiply to let image stand out) */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#070609]/70 via-transparent to-[#070609]/95" />
+        {/* Soft atmospheric gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white/90 dark:from-[#070609]/70 via-white/80 dark:via-transparent to-white/95 dark:to-[#070609]/95 transition-colors duration-400" />
       </div>
 
       {/* Section Header with Nav Buttons */}
       <div className="w-full max-w-7xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6 mb-8 md:mb-16 relative z-10">
         <div className="flex flex-col gap-3 md:gap-6">
-          <span className="font-label-caps text-label-caps text-primary/70 block">FEATURED WORK</span>
-          <h2 ref={headerRef} className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-on-surface leading-[0.95] tracking-tighter font-bold">
+          <span className="font-label-caps text-label-caps text-primary block">FEATURED WORK</span>
+          <h2 ref={headerRef} className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-neutral-900 dark:text-white leading-[0.95] tracking-tighter font-bold">
             Real projects. Real impact.
           </h2>
         </div>
@@ -190,17 +190,17 @@ export function Portfolio() {
         <div className="flex gap-4">
           <button
             onClick={handleScrollLeft}
-            className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-on-surface hover:text-primary hover:border-primary/50 bg-[#0d0d11]/80 backdrop-blur-md transition-all duration-300 active:scale-95 cursor-pointer"
+            className="w-12 h-12 rounded-full border border-black/15 dark:border-white/10 flex items-center justify-center text-neutral-900 dark:text-white hover:text-primary hover:border-primary bg-white dark:bg-[#121118] backdrop-blur-xl transition-all duration-300 active:scale-95 cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.08)] dark:shadow-none hover:shadow-[0_6px_25px_rgba(124,58,237,0.2)]"
             aria-label="Scroll Left"
           >
-            <span className="material-symbols-outlined text-lg">arrow_back</span>
+            <span className="material-symbols-outlined text-xl">arrow_back</span>
           </button>
           <button
             onClick={handleScrollRight}
-            className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-on-surface hover:text-primary hover:border-primary/50 bg-[#0d0d11]/80 backdrop-blur-md transition-all duration-300 active:scale-95 cursor-pointer"
+            className="w-12 h-12 rounded-full border border-black/15 dark:border-white/10 flex items-center justify-center text-neutral-900 dark:text-white hover:text-primary hover:border-primary bg-white dark:bg-[#121118] backdrop-blur-xl transition-all duration-300 active:scale-95 cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.08)] dark:shadow-none hover:shadow-[0_6px_25px_rgba(124,58,237,0.2)]"
             aria-label="Scroll Right"
           >
-            <span className="material-symbols-outlined text-lg">arrow_forward</span>
+            <span className="material-symbols-outlined text-xl">arrow_forward</span>
           </button>
         </div>
       </div>

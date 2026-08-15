@@ -199,13 +199,13 @@ export function Process() {
         {/* Center Spotlight */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] sm:w-[55vw] h-[70vw] sm:h-[55vw] rounded-full bg-radial from-primary/20 via-transparent to-transparent blur-[60px] sm:blur-[110px]" />
 
-        {/* Soft Dark Vignette Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-transparent to-[#050505] opacity-75" />
+        {/* Soft Dark Vignette Overlay - Only in Dark Mode */}
+        <div className="absolute inset-0 hidden dark:block bg-gradient-to-b from-[#050505] via-transparent to-[#050505] opacity-75" />
       </div>
 
       <div className="w-full max-w-7xl mx-auto flex flex-col justify-start items-start gap-4 md:gap-6 mb-8 md:mb-16 relative z-10">
-        <span className="font-label-caps text-label-caps text-primary/70 block">OUR METHODOLOGY</span>
-        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-on-surface leading-[0.95] tracking-tighter max-w-2xl font-bold">
+        <span className="font-label-caps text-label-caps text-primary block">OUR METHODOLOGY</span>
+        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-neutral-900 dark:text-white leading-[0.95] tracking-tighter max-w-2xl font-bold">
           Crafting a precise path from concept to digital excellence.
         </h2>
       </div>
@@ -218,7 +218,8 @@ export function Process() {
           {/* Base Background Path */}
           <path
             d="M 50 100 Q 200 20 350 150 Q 500 280 650 150 Q 800 20 950 100"
-            stroke="rgba(255,255,255,0.05)"
+            stroke="currentColor"
+            className="text-black/10 dark:text-white/5"
             strokeWidth="4"
             strokeLinecap="round"
           />
@@ -266,7 +267,7 @@ export function Process() {
             {/* Circular step node with custom SVG */}
             <div className={`w-14 h-14 rounded-full flex items-center justify-center transition-all duration-500 cursor-pointer relative z-10 ${activeStep === idx
                 ? 'bg-primary/20 border-2 border-primary shadow-[0_0_20px_rgba(221,183,255,0.4)] scale-115'
-                : 'bg-white/5 border border-white/10 hover:border-primary/40'
+                : 'bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 hover:border-primary/40'
               }`}>
               {step.icon}
             </div>
@@ -277,7 +278,7 @@ export function Process() {
               <div className="text-[10px] text-primary uppercase font-mono tracking-widest font-bold bg-primary/10 px-2 py-0.5 rounded border border-primary/20 mb-2">
                 {step.id} / {step.name}
               </div>
-              <h4 className="text-xs font-semibold text-white tracking-wide">{step.title}</h4>
+              <h4 className="text-xs font-semibold text-neutral-900 dark:text-white tracking-wide">{step.title}</h4>
               <p className="text-[10px] text-on-surface-variant/80 mt-1 leading-relaxed max-w-[180px]">
                 {step.description}
               </p>
@@ -296,8 +297,8 @@ export function Process() {
               onClick={() => setActiveStep(idx)}
               className={`rounded-2xl border transition-all duration-500 overflow-hidden cursor-pointer ${
                 isOpen
-                  ? 'border-primary/40 bg-white/[0.03] shadow-[0_10px_30px_rgba(221,183,255,0.08)]'
-                  : 'border-white/8 bg-[#09090c]/70 hover:border-white/15'
+                  ? 'border-primary/40 bg-black/[0.03] dark:bg-white/[0.03] shadow-[0_10px_30px_rgba(221,183,255,0.08)]'
+                  : 'border-black/8 dark:border-white/8 bg-white/70 dark:bg-[#09090c]/70 hover:border-black/15 dark:hover:border-white/15'
               }`}
             >
               {/* Accordion Bar Header */}
@@ -306,20 +307,20 @@ export function Process() {
                   <div className={`p-2.5 rounded-xl border transition-colors shrink-0 ${
                     isOpen
                       ? 'bg-primary/15 border-primary/40 text-primary shadow-[0_0_15px_rgba(221,183,255,0.2)]'
-                      : 'bg-white/5 border-white/10 text-white/40'
+                      : 'bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10 text-neutral-500 dark:text-white/40'
                   }`}>
                     {step.icon}
                   </div>
                   <div>
-                    <span className="text-[8px] font-mono tracking-[0.2em] text-primary/80 uppercase block font-semibold">
+                    <span className="text-[8px] font-mono tracking-[0.2em] text-primary uppercase block font-semibold">
                       {step.id} // {step.name}
                     </span>
-                    <h3 className="text-xs sm:text-sm font-bold text-white tracking-wide">
+                    <h3 className="text-xs sm:text-sm font-bold text-neutral-900 dark:text-white tracking-wide">
                       {step.title}
                     </h3>
                   </div>
                 </div>
-                <div className={`w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/50 transition-transform duration-500 shrink-0 ${
+                <div className={`w-8 h-8 rounded-full border border-black/10 dark:border-white/10 flex items-center justify-center text-neutral-500 dark:text-white/50 transition-transform duration-500 shrink-0 ${
                   isOpen ? 'rotate-180 text-primary border-primary/30 bg-primary/10' : ''
                 }`}>
                   <span className="material-symbols-outlined text-sm">expand_more</span>

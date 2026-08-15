@@ -111,7 +111,7 @@ export function SpotlightNavbar({
                 ref={navRef}
                 className={cn(
                     "relative h-11 rounded-full transition-all duration-300 overflow-hidden",
-                    "border border-white/10 bg-white/5 dark:bg-black/20 backdrop-blur-md shadow-[0_0_15px_rgba(255,255,255,0.05)]"
+                    "border border-black/10 dark:border-white/10 bg-white/80 dark:bg-black/40 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(255,255,255,0.05)]"
                 )}
             >
                 {/* Content */}
@@ -132,12 +132,12 @@ export function SpotlightNavbar({
                                     }
                                 }}
                                 className={cn(
-                                    "px-3 sm:px-4 py-2 text-[11px] sm:text-[14px] font-body-md uppercase tracking-widest transition-colors duration-200 rounded-full",
-                                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 dark:focus-visible:ring-white/30",
+                                    "px-3 sm:px-4 py-2 text-[11px] sm:text-[13px] font-body-md uppercase tracking-wider transition-colors duration-200 rounded-full",
+                                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
                                     // Active vs Inactive Text
                                     activeIndex === idx
-                                        ? "text-black dark:text-white"
-                                        : "text-on-surface-variant/70 hover:text-on-surface"
+                                        ? "text-neutral-950 dark:text-white font-bold"
+                                        : "text-neutral-600 dark:text-on-surface-variant/70 hover:text-neutral-900 dark:hover:text-white"
                                 )}
                             >
                                 {item.label}
@@ -156,7 +156,7 @@ export function SpotlightNavbar({
                         background: `
               radial-gradient(
                 120px circle at var(--spotlight-x) 100%, 
-                var(--spotlight-color, rgba(255,255,255,0.15)) 0%, 
+                var(--spotlight-color, rgba(124,58,237,0.15)) 0%, 
                 transparent 50%
               )
             `
@@ -170,7 +170,7 @@ export function SpotlightNavbar({
                         background: `
                   radial-gradient(
                     60px circle at var(--ambience-x) 0%, 
-                    var(--ambience-color, rgba(255,255,255,1)) 0%, 
+                    var(--ambience-color, rgba(124,58,237,0.9)) 0%, 
                     transparent 100%
                   )
                 `
@@ -181,8 +181,12 @@ export function SpotlightNavbar({
 
             <style jsx>{`
         nav {
-          --spotlight-color: rgba(255,255,255,0.15);
-          --ambience-color: rgba(255,255,255,0.8);
+          --spotlight-color: rgba(124, 58, 237, 0.15);
+          --ambience-color: rgba(124, 58, 237, 0.85);
+        }
+        :global(.dark) nav {
+          --spotlight-color: rgba(255, 255, 255, 0.15);
+          --ambience-color: rgba(221, 183, 255, 0.9);
         }
       `}</style>
         </div>

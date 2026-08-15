@@ -7,13 +7,16 @@ interface SectionStageProps {
   children: ReactNode;
 }
 
-export function SectionStage({ id, className = '', enableFade = true, children }: SectionStageProps) {
+export function SectionStage({ id, className = '', enableFade = false, children }: SectionStageProps) {
   return (
-    <div id={id} className={`lg:sticky lg:top-0 w-full relative ${className}`}>
+    <div id={id} className={`w-full relative ${className}`}>
       {enableFade && (
-        <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-30" />
+        <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-background to-transparent pointer-events-none z-30 transition-colors duration-400" />
       )}
-      {children}
+      <div className="w-full h-full">
+        {children}
+      </div>
     </div>
   );
 }
+
