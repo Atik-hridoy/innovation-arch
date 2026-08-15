@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SectionHeader } from '@/components/ui/SectionHeader';
 
 // Custom Animated SVGs for each process step to replace generic material symbols
 function DiscoverIcon() {
@@ -203,11 +204,12 @@ export function Process() {
         <div className="absolute inset-0 hidden dark:block bg-gradient-to-b from-[#050505] via-transparent to-[#050505] opacity-75" />
       </div>
 
-      <div className="w-full max-w-7xl mx-auto flex flex-col justify-start items-start gap-4 md:gap-6 mb-8 md:mb-16 relative z-10">
-        <span className="font-label-caps text-label-caps text-primary block">OUR METHODOLOGY</span>
-        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-neutral-900 dark:text-white leading-[0.95] tracking-tighter max-w-2xl font-bold">
-          Crafting a precise path from concept to digital excellence.
-        </h2>
+      <div className="w-full max-w-7xl mx-auto">
+        <SectionHeader
+          eyebrow="METHODOLOGY & EXECUTION"
+          title="HOW WE WORK"
+          description="Crafting a precise, iterative path from initial concept to high-impact digital excellence."
+        />
       </div>
 
       {/* ================= DESKTOP LAYOUT (md and up) ================= */}

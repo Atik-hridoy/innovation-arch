@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Project } from '../../data/portfolio';
 import { CONFIG } from '../../lib/config';
 import { ProjectCard } from './ProjectCard';
+import { SectionHeader } from '@/components/ui/SectionHeader';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -178,31 +179,30 @@ export function Portfolio() {
       </div>
 
       {/* Section Header with Nav Buttons */}
-      <div className="w-full max-w-7xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6 mb-8 md:mb-16 relative z-10">
-        <div className="flex flex-col gap-3 md:gap-6">
-          <span className="font-label-caps text-label-caps text-primary block">FEATURED WORK</span>
-          <h2 ref={headerRef} className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-neutral-900 dark:text-white leading-[0.95] tracking-tighter font-bold">
-            Real projects. Real impact.
-          </h2>
-        </div>
-
-        {/* Next/Prev Navigation Buttons */}
-        <div className="flex gap-4">
-          <button
-            onClick={handleScrollLeft}
-            className="w-12 h-12 rounded-full border border-black/15 dark:border-white/10 flex items-center justify-center text-neutral-900 dark:text-white hover:text-primary hover:border-primary bg-white dark:bg-[#121118] backdrop-blur-xl transition-all duration-300 active:scale-95 cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.08)] dark:shadow-none hover:shadow-[0_6px_25px_rgba(124,58,237,0.2)]"
-            aria-label="Scroll Left"
-          >
-            <span className="material-symbols-outlined text-xl">arrow_back</span>
-          </button>
-          <button
-            onClick={handleScrollRight}
-            className="w-12 h-12 rounded-full border border-black/15 dark:border-white/10 flex items-center justify-center text-neutral-900 dark:text-white hover:text-primary hover:border-primary bg-white dark:bg-[#121118] backdrop-blur-xl transition-all duration-300 active:scale-95 cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.08)] dark:shadow-none hover:shadow-[0_6px_25px_rgba(124,58,237,0.2)]"
-            aria-label="Scroll Right"
-          >
-            <span className="material-symbols-outlined text-xl">arrow_forward</span>
-          </button>
-        </div>
+      <div className="w-full max-w-7xl mx-auto">
+        <SectionHeader
+          eyebrow="FEATURED WORK & CASE STUDIES"
+          title="PROVEN DIGITAL IMPACT"
+          description="A selection of high-performance web platforms, mobile applications, and intelligent digital products."
+          action={
+            <div className="flex gap-3">
+              <button
+                onClick={handleScrollLeft}
+                className="w-12 h-12 rounded-full border border-black/15 dark:border-white/10 flex items-center justify-center text-neutral-900 dark:text-white hover:text-primary hover:border-primary bg-white dark:bg-[#121118] backdrop-blur-xl transition-all duration-300 active:scale-95 cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.08)] dark:shadow-none hover:shadow-[0_6px_25px_rgba(124,58,237,0.2)]"
+                aria-label="Scroll Left"
+              >
+                <span className="material-symbols-outlined text-xl">arrow_back</span>
+              </button>
+              <button
+                onClick={handleScrollRight}
+                className="w-12 h-12 rounded-full border border-black/15 dark:border-white/10 flex items-center justify-center text-neutral-900 dark:text-white hover:text-primary hover:border-primary bg-white dark:bg-[#121118] backdrop-blur-xl transition-all duration-300 active:scale-95 cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.08)] dark:shadow-none hover:shadow-[0_6px_25px_rgba(124,58,237,0.2)]"
+                aria-label="Scroll Right"
+              >
+                <span className="material-symbols-outlined text-xl">arrow_forward</span>
+              </button>
+            </div>
+          }
+        />
       </div>
 
       {/* Horizontal Scroll Snap Container */}

@@ -6,6 +6,7 @@ import { MobileIconsRow } from '@/components/services/MobileIconsRow';
 import { ServiceTerminal } from '@/components/services/ServiceTerminal';
 import { SLIDES } from '@/components/services/data';
 import { RadialGlowButton } from '@/components/ui/radial-glow-button';
+import { SectionHeader } from '@/components/ui/SectionHeader';
 
 /* ─── Component ─── */
 
@@ -144,36 +145,31 @@ export function Services() {
       <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 lg:px-20 py-12 md:py-20 lg:py-28">
 
         {/* ── Section Header ── */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between items-center text-center md:text-left gap-4 md:gap-6 mb-8 md:mb-16">
-          <div className="flex flex-col gap-3 items-center md:items-start">
-            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary font-semibold">
-              // WHAT WE BUILD
-            </span>
-            <h2 className="font-sans font-extrabold text-4xl md:text-5xl lg:text-6xl text-neutral-900 dark:text-white uppercase tracking-tighter leading-[0.95]">
-              Our Services
-            </h2>
-          </div>
-
-          {/* ── Tab Pills (Centered on Mobile) ── */}
-          <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 rounded-2xl md:rounded-full border border-black/10 dark:border-white/10 bg-black/[0.03] dark:bg-white/[0.02] backdrop-blur-sm w-full md:w-auto">
-            {SLIDES.map((slide, idx) => (
-              <button
-                key={slide.title}
-                onClick={() => setActiveIndex(idx)}
-                className={`relative px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl md:rounded-full font-mono text-[9px] sm:text-[10px] uppercase tracking-wider font-bold transition-all duration-400 cursor-pointer ${
-                  idx === activeIndex
-                    ? 'text-neutral-900 dark:text-white bg-black/10 dark:bg-white/10 border border-black/15 dark:border-white/15 shadow-md'
-                    : 'text-neutral-500 dark:text-white/40 hover:text-neutral-900 dark:hover:text-white/70 border border-transparent'
-                }`}
-              >
-                {slide.title}
-                {idx === activeIndex && (
-                  <span className="absolute -bottom-px left-1/2 -translate-x-1/2 w-6 h-[2px] rounded-full" style={{ backgroundColor: slide.themeColor }} />
-                )}
-              </button>
-            ))}
-          </div>
-        </div>
+        <SectionHeader
+          eyebrow="SERVICES & CAPABILITIES"
+          title="WHAT WE BUILD"
+          description="High-performance digital products engineered with modern architectures, smooth interactions, and AI intelligence."
+          action={
+            <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 rounded-2xl md:rounded-full border border-black/10 dark:border-white/10 bg-black/[0.03] dark:bg-white/[0.02] backdrop-blur-sm w-full md:w-auto">
+              {SLIDES.map((slide, idx) => (
+                <button
+                  key={slide.title}
+                  onClick={() => setActiveIndex(idx)}
+                  className={`relative px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl md:rounded-full font-mono text-[9px] sm:text-[10px] uppercase tracking-wider font-bold transition-all duration-400 cursor-pointer ${
+                    idx === activeIndex
+                      ? 'text-neutral-900 dark:text-white bg-black/10 dark:bg-white/10 border border-black/15 dark:border-white/15 shadow-md'
+                      : 'text-neutral-500 dark:text-white/40 hover:text-neutral-900 dark:hover:text-white/70 border border-transparent'
+                  }`}
+                >
+                  {slide.title}
+                  {idx === activeIndex && (
+                    <span className="absolute -bottom-px left-1/2 -translate-x-1/2 w-6 h-[2px] rounded-full" style={{ backgroundColor: slide.themeColor }} />
+                  )}
+                </button>
+              ))}
+            </div>
+          }
+        />
 
         {/* ── Bento Grid ── */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">

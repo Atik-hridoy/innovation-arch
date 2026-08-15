@@ -1,6 +1,7 @@
 'use client';
 
 import { CylinderCarousel } from '@/components/ui/cylinder-carousel';
+import { SectionHeader } from '@/components/ui/SectionHeader';
 
 const TECH_LOGOS = [
   'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg',
@@ -30,25 +31,13 @@ export function TechStack() {
     <div id="tech" className="relative z-10 bg-background dark:bg-[#070609] py-10 md:py-20 px-6 md:px-12 lg:px-24 overflow-hidden transition-colors duration-400">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-start lg:items-center gap-8 md:gap-12 lg:gap-24">
         {/* Text Section */}
-        <div className="flex-1 space-y-6 md:space-y-8 z-10 w-full text-left will-change-transform">
-          <div>
-            <p className="text-sm md:text-base tracking-widest text-primary font-mono mb-2 uppercase font-semibold">
-              ENGINEERING ARCHITECTURE
-            </p>
-            <h2 className="text-4xl md:text-6xl font-light tracking-tight text-neutral-900 dark:text-white leading-tight">
-              Innovative <br />
-              <span className="font-semibold">Arc</span>
-            </h2>
-          </div>
-          
-          <div className="space-y-4 md:space-y-6 text-neutral-600 dark:text-[#8c8a93] text-lg max-w-lg leading-relaxed">
-            <p>
-              We are a premium product studio specializing in smooth animations, interactive interfaces, and modern design.
-            </p>
-            <p>
-              Our specialized technology stack empowers us to build high-performance Web Apps, native Mobile Apps, and intelligent AI Agents. We prioritize developer experience and modern aesthetics across all platforms.
-            </p>
-          </div>
+        <div className="flex-1 z-10 w-full text-left will-change-transform">
+          <SectionHeader
+            eyebrow="ENGINEERING ARCHITECTURE"
+            title="MODERN TECH STACK"
+            description="Our specialized technology stack empowers us to build high-performance Web Apps, native Mobile Apps, and intelligent AI Agents with state-of-the-art developer experience and modern aesthetics."
+            className="!mb-0"
+          />
         </div>
 
         {/* Cylinder Carousel Section */}

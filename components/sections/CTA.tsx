@@ -6,6 +6,7 @@ import { CONFIG } from '../../lib/config';
 import { Footer } from '@/components/Footer';
 import TwistingRibbon from '@/components/ui/twisting-ribbon';
 import { RadialGlowButton } from '@/components/ui/radial-glow-button';
+import { SectionHeader } from '@/components/ui/SectionHeader';
 
 interface FAQ {
   id: number;
@@ -113,15 +114,20 @@ export function CTA() {
       <div ref={containerRef} className="relative z-20 w-full max-w-[1400px] mx-auto px-6 sm:px-12 flex flex-col gap-10 lg:gap-16">
 
         {/* --- Top Section: Context & Info --- */}
-        <div className="w-full flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8">
-          <div className="space-y-6 max-w-2xl">
-            <h2 className="text-5xl sm:text-6xl lg:text-7xl text-white font-extrabold tracking-tighter leading-[1.1] drop-shadow-2xl gsap-fade-up opacity-0">
-              Let's build <br className="hidden sm:block" /><span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white/90 to-white/60">the future.</span>
-            </h2>
-            <p className="text-lg sm:text-xl text-white/70 max-w-md leading-relaxed font-light gsap-fade-up opacity-0">
-              Got a visionary project? Drop us a line. We turn ambitious ideas into digital reality.
-            </p>
-          </div>
+        <div className="w-full gsap-fade-up opacity-0">
+          <SectionHeader
+            eyebrow="GET IN TOUCH & COLLABORATE"
+            title={
+              <>
+                LET'S BUILD <br className="hidden sm:block" />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-indigo-300 to-purple-400 dark:from-white dark:via-white/90 dark:to-white/60">
+                  THE FUTURE.
+                </span>
+              </>
+            }
+            description="Got a visionary project? Drop us a line. We turn ambitious ideas into high-impact digital reality."
+            className="!mb-0"
+          />
         </div>
 
         {/* --- Bottom Section: FAQs & Form Grid --- */}
