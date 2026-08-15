@@ -28,9 +28,9 @@ const TECH_LOGOS = [
 export function TechStack() {
   return (
     <div id="tech" className="relative z-10 bg-[#070609] py-20 px-6 md:px-12 lg:px-24 overflow-hidden">
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-24">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-start lg:items-center gap-12 lg:gap-24">
         {/* Text Section */}
-        <div className="flex-1 space-y-8 z-10">
+        <div className="flex-1 space-y-8 z-10 w-full text-left">
           <div>
             <p className="text-sm md:text-base tracking-widest text-[#5c5b5f] font-mono mb-2 uppercase">
               ENGINEERING ARCHITECTURE
