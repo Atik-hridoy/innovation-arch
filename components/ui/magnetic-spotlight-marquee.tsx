@@ -143,7 +143,8 @@ export function MagneticSpotlightMarquee({
       stripBaseTop = marqueeStrip.offsetTop;
       stripHeight = marqueeStrip.offsetHeight;
       
-      stripRestCenterY = config.stripEdgeInset;
+      const isMobile = window.innerWidth < 768;
+      stripRestCenterY = isMobile ? (stripHeight / 2) + 20 : config.stripEdgeInset;
       
       const elements = Array.from(spotlightSection.querySelectorAll('.wake-target')) as HTMLElement[];
       
@@ -168,7 +169,7 @@ export function MagneticSpotlightMarquee({
       contentTopAtRest = isFinite(blockTop) ? blockTop : sectionHeight * 0.4;
       
       if (!hasPointerMoved) {
-        const restY = config.stripEdgeInset - stripHeight / 2;
+        const restY = stripRestCenterY - stripHeight / 2;
         stripTargetY = restY;
         stripCurrentY = restY;
         stripPrevY = restY;
@@ -188,7 +189,7 @@ export function MagneticSpotlightMarquee({
 
     const handlePointerLeave = () => {
       hasPointerMoved = false;
-      stripTargetY = config.stripEdgeInset - stripHeight / 2;
+      stripTargetY = stripRestCenterY - stripHeight / 2;
     };
 
     spotlightSection.addEventListener('mousemove', handlePointerMove);
