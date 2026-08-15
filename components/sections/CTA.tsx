@@ -93,10 +93,10 @@ export function CTA() {
         <div className="absolute bottom-[10%] left-1/2 -translate-x-1/2 w-[100vw] h-[400px] bg-[#1D9E75]/20 rounded-[100%] blur-[100px] opacity-100 mix-blend-screen lg:hidden" />
 
         {/* Outline Typography Watermark - Dribbble Style */}
-        <div className="absolute top-[-2%] left-1/2 -translate-x-1/2 text-[14vw] font-black tracking-tighter whitespace-nowrap uppercase select-none pointer-events-none z-0"
+        <div className="absolute top-[2%] md:top-[-2%] left-1/2 -translate-x-1/2 text-[25vw] md:text-[14vw] font-black tracking-tighter whitespace-nowrap uppercase select-none pointer-events-none z-0"
           style={{
             color: 'transparent',
-            WebkitTextStroke: '2px rgba(255,255,255,0.03)'
+            WebkitTextStroke: '2px rgba(255,255,255,0.05)'
           }}>
           Contact
         </div>
