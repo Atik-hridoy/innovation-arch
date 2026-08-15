@@ -122,11 +122,18 @@ export function ProjectCard({ project, isActive }: ProjectCardProps) {
           {/* Ambient glow in image frame */}
           <div className="absolute inset-0 bg-radial from-primary/10 via-transparent to-transparent pointer-events-none" />
           
-          <img
-            className="w-full h-full object-cover select-none pointer-events-none transform group-hover:scale-[1.01] transition-transform duration-1000 ease-out"
-            src={project.mockups[activeImgIdx]}
-            alt={`${project.title} preview`}
-          />
+          {project.mockups.map((mockup, idx) => (
+            <img
+              key={idx}
+              className={`absolute inset-0 w-full h-full object-cover select-none pointer-events-none transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] ${
+                activeImgIdx === idx 
+                  ? 'opacity-100 blur-0 scale-100 z-10' 
+                  : 'opacity-0 blur-xl scale-105 z-0'
+              }`}
+              src={mockup}
+              alt={`${project.title} preview ${idx + 1}`}
+            />
+          ))}
           
           {/* Top-Left Image Index Badge */}
           <span className="absolute top-4 left-4 font-mono text-[9px] font-bold bg-[#050505]/75 text-primary border border-white/10 px-2.5 py-1 rounded-full backdrop-blur-md select-none">

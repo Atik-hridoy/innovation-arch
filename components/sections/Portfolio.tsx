@@ -4,8 +4,17 @@ import { useState, useEffect, useRef } from 'react';
 import { Project } from '../../data/portfolio';
 import { CONFIG } from '../../lib/config';
 import { ProjectCard } from './ProjectCard';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export function Portfolio() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLHeadingElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeCardIdx, setActiveCardIdx] = useState(0);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -60,6 +69,52 @@ export function Portfolio() {
     fetchProjects();
   }, []);
 
+  // Staggered Scroll Animation
+  useEffect(() => {
+    if (isLoading || projects.length === 0) return;
+
+    const ctx = gsap.context(() => {
+      // 1. Animate Header Text
+      if (headerRef.current) {
+        // Split text roughly by words or characters. For simplicity, we'll just animate the whole header block or use a simple stagger if it has child elements.
+        // Since we want the 'Vengence UI' feel, let's animate the header from bottom.
+        gsap.from(headerRef.current, {
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom',
+            end: 'top center',
+            scrub: 1,
+          },
+          y: 100,
+          opacity: 0,
+          ease: 'sine.out'
+        });
+      }
+
+      // 2. Animate Cards with stagger and center-out delay
+      const validCards = cardsRef.current.filter(Boolean);
+      const middleIndex = Math.floor(validCards.length / 2);
+
+      validCards.forEach((card, index) => {
+        const delayFactor = Math.abs(index - middleIndex) * 0.15;
+        gsap.from(card, {
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom',
+            end: 'center center',
+            scrub: 1.5,
+          },
+          yPercent: 150,
+          autoAlpha: 0,
+          delay: delayFactor,
+          ease: 'sine.out',
+        });
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, [isLoading, projects]);
+
   const currentBgImage = projects[activeCardIdx]?.mockups[0];
 
   // Scroll listener to compute which card is closest to horizontal center
@@ -97,7 +152,7 @@ export function Portfolio() {
   };
 
   return (
-    <section id="work" className="relative py-12 md:py-stack-xl px-4 sm:px-margin-edge z-10 bg-[#070609] overflow-hidden">
+    <section ref={sectionRef} id="work" className="relative py-12 md:py-stack-xl px-4 sm:px-margin-edge z-10 bg-[#070609] overflow-hidden min-h-[120vh] flex flex-col justify-center pb-32">
       
       {/* Volumetric dynamic image background matching active card's 1st image */}
       <div className="absolute inset-0 z-0 transition-all duration-1000 ease-in-out pointer-events-none">
@@ -117,7 +172,7 @@ export function Portfolio() {
       <div className="w-full max-w-7xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6 mb-8 md:mb-16 relative z-10">
         <div className="flex flex-col gap-3 md:gap-6">
           <span className="font-label-caps text-label-caps text-primary/70 block">FEATURED WORK</span>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-on-surface leading-[0.95] tracking-tighter font-bold">
+          <h2 ref={headerRef} className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-on-surface leading-[0.95] tracking-tighter font-bold">
             Real projects. Real impact.
           </h2>
         </div>
@@ -176,37 +231,20 @@ export function Portfolio() {
           </div>
         ) : (
           projects.map((project, idx) => (
-            <ProjectCard 
+            <div 
               key={project.id} 
-              project={project} 
-              isActive={activeCardIdx === idx}
-            />
+              ref={(el) => { cardsRef.current[idx] = el; }}
+              className="shrink-0"
+            >
+              <ProjectCard 
+                project={project} 
+                isActive={activeCardIdx === idx}
+              />
+            </div>
           ))
         )}
       </div>
 
-      {/* Metrics Grid Footer Row */}
-      <div className="scroll-reveal w-full max-w-7xl mx-auto rounded-2xl border border-white/5 bg-white/[0.01] backdrop-blur-md p-4 sm:p-8 grid grid-cols-2 md:grid-cols-5 gap-4 sm:gap-8 mt-8 md:mt-16 items-center relative z-20">
-        <div>
-          <div className="text-[32px] font-extrabold text-white leading-none">10+</div>
-          <div className="text-[9px] uppercase tracking-wider text-on-surface-variant/60 mt-2 font-mono">Projects Delivered</div>
-        </div>
-        <div>
-          <div className="text-[32px] font-extrabold text-white leading-none">5+</div>
-          <div className="text-[9px] uppercase tracking-wider text-on-surface-variant/60 mt-2 font-mono">Happy Clients</div>
-        </div>
-        <div>
-          <div className="text-[32px] font-extrabold text-white leading-none">2+</div>
-          <div className="text-[9px] uppercase tracking-wider text-on-surface-variant/60 mt-2 font-mono">Years of Experience</div>
-        </div>
-        <div>
-          <div className="text-[32px] font-extrabold text-white leading-none">100%</div>
-          <div className="text-[9px] uppercase tracking-wider text-on-surface-variant/60 mt-2 font-mono">Client Satisfaction</div>
-        </div>
-        <div className="col-span-2 md:col-span-1 flex flex-col items-start gap-2 border-l border-white/10 pl-6 h-full justify-center">
-          <span className="font-mono text-[9px] text-on-surface-variant/80 tracking-wide">Trusted by brands and startups worldwide.</span>
-        </div>
-      </div>
     </section>
   );
 }

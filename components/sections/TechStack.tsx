@@ -194,8 +194,8 @@ export function TechStack() {
                   setActiveNode(null);
                 }}
                 className={`px-4 py-2 rounded-xl font-mono text-[10px] uppercase tracking-wider font-bold transition-all duration-300 cursor-pointer ${activeTab === tab.key
-                    ? 'bg-primary/25 border border-primary/50 text-primary shadow-[0_0_20px_rgba(168,85,247,0.35)] scale-105'
-                    : 'text-white/40 hover:text-white/80 border border-transparent'
+                  ? 'bg-primary/25 border border-primary/50 text-primary shadow-[0_0_20px_rgba(168,85,247,0.35)] scale-105'
+                  : 'text-white/40 hover:text-white/80 border border-transparent'
                   }`}
               >
                 {tab.label}
@@ -295,8 +295,8 @@ export function TechStack() {
                   onMouseEnter={() => setActiveNode(node as any)}
                   onClick={() => setActiveNode(node as any)}
                   className={`relative flex items-center justify-between p-4 rounded-2xl border transition-all duration-300 cursor-pointer backdrop-blur-xl group ${isSelected
-                      ? 'border-primary bg-primary/15 shadow-[0_0_30px_rgba(168,85,247,0.3)] scale-105'
-                      : 'border-white/10 bg-[#0a0a10]/80 hover:border-white/25 hover:bg-white/[0.04]'
+                    ? 'border-primary bg-primary/15 shadow-[0_0_30px_rgba(168,85,247,0.3)] scale-105'
+                    : 'border-white/10 bg-[#0a0a10]/80 hover:border-white/25 hover:bg-white/[0.04]'
                     }`}
                 >
                   <div className="flex items-center gap-3.5">
@@ -372,8 +372,8 @@ export function TechStack() {
                   onMouseEnter={() => setActiveNode(node as any)}
                   onClick={() => setActiveNode(node as any)}
                   className={`relative flex items-center justify-between p-4 rounded-2xl border transition-all duration-300 cursor-pointer backdrop-blur-xl group ${isSelected
-                      ? 'border-primary bg-primary/15 shadow-[0_0_30px_rgba(168,85,247,0.3)] scale-105'
-                      : 'border-white/10 bg-[#0a0a10]/80 hover:border-white/25 hover:bg-white/[0.04]'
+                    ? 'border-primary bg-primary/15 shadow-[0_0_30px_rgba(168,85,247,0.3)] scale-105'
+                    : 'border-white/10 bg-[#0a0a10]/80 hover:border-white/25 hover:bg-white/[0.04]'
                     }`}
                 >
                   {/* Metric Pill */}
