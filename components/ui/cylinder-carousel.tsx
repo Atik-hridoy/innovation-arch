@@ -15,20 +15,19 @@ export function CylinderCarousel({ images, className }: CylinderCarouselProps) {
   useEffect(() => {
     if (!cylinderRef.current) return;
     
-    // Rotate the entire cylinder continuously
+    // Rotate the entire cylinder continuously with hardware acceleration
     gsap.to(cylinderRef.current, {
       rotateY: -360,
-      duration: 35, // Smooth slow rotation
+      duration: 35, 
       ease: 'none',
       repeat: -1,
+      force3D: true, // Force GPU acceleration
     });
   }, []);
 
   const faceCount = images.length;
-  // Increase radius for a larger cylinder depending on the number of items
   const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
   const faceWidth = isMobile ? 80 : 120;
-  // A larger offset so they are nicely spaced
   const spacingOffset = isMobile ? 20 : 40; 
   const radius = Math.round((faceWidth / 2) / Math.tan(Math.PI / faceCount)) + spacingOffset;
 
@@ -42,10 +41,10 @@ export function CylinderCarousel({ images, className }: CylinderCarouselProps) {
     >
       <div
         ref={cylinderRef}
-        className="relative flex justify-center items-center"
+        className="relative flex justify-center items-center will-change-transform"
         style={{ 
           transformStyle: "preserve-3d",
-          transform: "rotateX(-5deg)", // Slight tilt to see the depth
+          transform: "rotateX(-5deg)", 
         }}
       >
         {images.map((src, index) => {
@@ -55,10 +54,9 @@ export function CylinderCarousel({ images, className }: CylinderCarouselProps) {
               key={index}
               className="absolute w-[80px] h-[80px] md:w-[120px] md:h-[120px] flex justify-center items-center rounded-2xl p-4 md:p-6 transition-all duration-300"
               style={{
-                background: "rgba(255, 255, 255, 0.02)",
-                backdropFilter: "blur(12px)",
+                // Removed expensive backdrop-filter for performance
+                background: "rgba(20, 20, 25, 0.8)",
                 border: "1px solid rgba(255, 255, 255, 0.08)",
-                boxShadow: "0 10px 30px -10px rgba(0, 0, 0, 0.5)",
                 transform: `rotateY(${theta}deg) translateZ(${radius}px)`,
                 backfaceVisibility: "visible", 
               }}
@@ -66,7 +64,8 @@ export function CylinderCarousel({ images, className }: CylinderCarouselProps) {
               <img 
                 src={src} 
                 alt={`Tech Logo ${index}`} 
-                className="w-full h-full object-contain opacity-70 hover:opacity-100 transition-all duration-300 grayscale hover:grayscale-0 drop-shadow-[0_0_8px_rgba(255,255,255,0.1)]"
+                // Removed drop-shadow for performance
+                className="w-full h-full object-contain opacity-70 hover:opacity-100 transition-all duration-300 grayscale hover:grayscale-0"
               />
             </div>
           );

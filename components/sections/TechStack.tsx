@@ -26,11 +26,35 @@ const TECH_LOGOS = [
 ];
 
 export function TechStack() {
+  const bgTextRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!bgTextRef.current) return;
+    
+    // Infinite marquee animation using GSAP with hardware acceleration
+    gsap.to(bgTextRef.current, {
+      xPercent: -50,
+      ease: "none",
+      duration: 35,
+      repeat: -1,
+      force3D: true, // Force GPU acceleration
+    });
+  }, []);
+
   return (
     <div id="tech" className="relative z-10 bg-[#070609] py-20 px-6 md:px-12 lg:px-24 overflow-hidden">
+      {/* Animated Background Text */}
+      <div className="absolute inset-0 flex items-center overflow-hidden pointer-events-none z-0 opacity-[0.03] select-none">
+        <div 
+          ref={bgTextRef}
+          className="whitespace-nowrap font-sans font-black text-[25vw] md:text-[20vw] leading-none tracking-tighter will-change-transform">
+          ENGINEERING ARCHITECTURE
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-start lg:items-center gap-12 lg:gap-24">
         {/* Text Section */}
-        <div className="flex-1 space-y-8 z-10 w-full text-left">
+        <div className="flex-1 space-y-8 z-10 w-full text-left will-change-transform">
           <div>
             <p className="text-sm md:text-base tracking-widest text-[#5c5b5f] font-mono mb-2 uppercase">
               ENGINEERING ARCHITECTURE
