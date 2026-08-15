@@ -136,15 +136,23 @@ export function MagneticSpotlightMarquee({
     let hasPointerMoved = false;
 
     let targets: { el: HTMLElement; restCenterY: number; currentY: number }[] = [];
-    let rafId: number;
+    let rafId: number | null = null;
+    let isMobile = false;
 
     const measureGeometry = () => {
+      isMobile = window.innerWidth < 768;
+      if (isMobile) {
+        // Reset transforms if transitioning to mobile
+        gsap.set(marqueeStrip, { y: 0 });
+        targets.forEach(t => gsap.set(t.el, { y: 0 }));
+        return;
+      }
+
       sectionHeight = spotlightSection.getBoundingClientRect().height;
       stripBaseTop = marqueeStrip.offsetTop;
       stripHeight = marqueeStrip.offsetHeight;
       
-      const isMobile = window.innerWidth < 768;
-      stripRestCenterY = isMobile ? (stripHeight / 2) + 20 : config.stripEdgeInset;
+      stripRestCenterY = config.stripEdgeInset;
       
       const elements = Array.from(spotlightSection.querySelectorAll('.wake-target')) as HTMLElement[];
       
@@ -169,7 +177,7 @@ export function MagneticSpotlightMarquee({
       contentTopAtRest = isFinite(blockTop) ? blockTop : sectionHeight * 0.4;
       
       if (!hasPointerMoved) {
-        const restY = stripRestCenterY - stripHeight / 2;
+        const restY = config.stripEdgeInset - stripHeight / 2;
         stripTargetY = restY;
         stripCurrentY = restY;
         stripPrevY = restY;
@@ -181,6 +189,7 @@ export function MagneticSpotlightMarquee({
     window.addEventListener('resize', measureGeometry);
 
     const handlePointerMove = (e: MouseEvent) => {
+      if (isMobile) return;
       hasPointerMoved = true;
       const rect = spotlightSection.getBoundingClientRect();
       const pointerY = e.clientY - rect.top;
@@ -188,42 +197,45 @@ export function MagneticSpotlightMarquee({
     };
 
     const handlePointerLeave = () => {
+      if (isMobile) return;
       hasPointerMoved = false;
-      stripTargetY = stripRestCenterY - stripHeight / 2;
+      stripTargetY = config.stripEdgeInset - stripHeight / 2;
     };
 
     spotlightSection.addEventListener('mousemove', handlePointerMove);
     spotlightSection.addEventListener('mouseleave', handlePointerLeave);
 
     const render = () => {
-      stripCurrentY += (stripTargetY - stripCurrentY) * config.stripFollowEase;
-      gsap.set(marqueeStrip, { y: stripCurrentY });
+      if (!isMobile) {
+        stripCurrentY += (stripTargetY - stripCurrentY) * config.stripFollowEase;
+        gsap.set(marqueeStrip, { y: stripCurrentY });
 
-      const stripCenterY = stripBaseTop + stripCurrentY + stripHeight / 2;
-      const stripVelocityY = stripCurrentY - stripPrevY;
-      stripPrevY = stripCurrentY;
+        const stripCenterY = stripBaseTop + stripCurrentY + stripHeight / 2;
+        const stripVelocityY = stripCurrentY - stripPrevY;
+        stripPrevY = stripCurrentY;
 
-      const descentBelowRest = Math.max(0, stripCenterY - stripRestCenterY);
-      const maxRise = Math.max(0, contentTopAtRest - config.risenTopGap);
-      const contentRise = -Math.min(
-        descentBelowRest * config.contentRiseRate,
-        maxRise
-      );
-
-      targets.forEach(line => {
-        const gapToStrip = line.restCenterY - stripCenterY;
-        const reachedLine = stripCenterY + config.liftHeadStart >= line.restCenterY;
-        
-        const wakeInfluence = Math.exp(
-          -(gapToStrip * gapToStrip) / (2 * config.wakeReach * config.wakeReach)
+        const descentBelowRest = Math.max(0, stripCenterY - stripRestCenterY);
+        const maxRise = Math.max(0, contentTopAtRest - config.risenTopGap);
+        const contentRise = -Math.min(
+          descentBelowRest * config.contentRiseRate,
+          maxRise
         );
-        const wakeOffset = stripVelocityY * wakeInfluence * config.wakeStrength;
-        
-        const lineTarget = (reachedLine ? contentRise : 0) + wakeOffset;
-        
-        line.currentY += (lineTarget - line.currentY) * config.lineSettleEase;
-        gsap.set(line.el, { y: line.currentY });
-      });
+
+        targets.forEach(line => {
+          const gapToStrip = line.restCenterY - stripCenterY;
+          const reachedLine = stripCenterY + config.liftHeadStart >= line.restCenterY;
+          
+          const wakeInfluence = Math.exp(
+            -(gapToStrip * gapToStrip) / (2 * config.wakeReach * config.wakeReach)
+          );
+          const wakeOffset = stripVelocityY * wakeInfluence * config.wakeStrength;
+          
+          const lineTarget = (reachedLine ? contentRise : 0) + wakeOffset;
+          
+          line.currentY += (lineTarget - line.currentY) * config.lineSettleEase;
+          gsap.set(line.el, { y: line.currentY });
+        });
+      }
 
       rafId = requestAnimationFrame(render);
     };
@@ -233,7 +245,7 @@ export function MagneticSpotlightMarquee({
       window.removeEventListener('resize', measureGeometry);
       spotlightSection.removeEventListener('mousemove', handlePointerMove);
       spotlightSection.removeEventListener('mouseleave', handlePointerLeave);
-      cancelAnimationFrame(rafId);
+      if (rafId !== null) cancelAnimationFrame(rafId);
     };
   }, []);
 
@@ -241,7 +253,7 @@ export function MagneticSpotlightMarquee({
     <section
       ref={containerRef}
       className={cn(
-        "spotlight relative w-full h-[100vh] min-h-[500px] sm:min-h-[800px] overflow-hidden bg-transparent text-white font-sans",
+        "spotlight relative w-full h-auto sm:h-[100vh] py-16 sm:py-0 min-h-[400px] sm:min-h-[800px] overflow-hidden bg-transparent text-white font-sans flex flex-col justify-center",
         className
       )}
     >
@@ -249,8 +261,7 @@ export function MagneticSpotlightMarquee({
       {/* Marquee Strip */}
       <div 
         ref={marqueeStripRef} 
-        className="spotlight-marquee absolute left-0 w-full z-20 h-[80px] md:h-[140px] pointer-events-none"
-        style={{ top: 0 }} 
+        className="spotlight-marquee relative sm:absolute left-0 w-full z-20 h-[80px] md:h-[140px] pointer-events-none mt-12 sm:mt-0 order-2 sm:order-none"
       >
         <div 
           ref={marqueeTrackRef} 
@@ -272,9 +283,9 @@ export function MagneticSpotlightMarquee({
       {/* Main Content Layout */}
       <div 
         ref={contentWrapperRef}
-        className="spotlight-content-wrapper relative w-full h-full flex flex-col items-center justify-center px-4 sm:px-6 md:px-12 lg:px-24 z-30 pointer-events-none"
+        className="spotlight-content-wrapper relative w-full h-auto sm:h-full flex flex-col items-center justify-center px-4 sm:px-6 md:px-12 lg:px-24 z-30 pointer-events-none order-1 sm:order-none"
       >
-        <div className="flex flex-col items-center text-center gap-3 sm:gap-4 max-w-3xl mb-12 mt-12 sm:mt-0">
+        <div className="flex flex-col items-center text-center gap-3 sm:gap-4 max-w-3xl mb-0 sm:mb-12 mt-0">
           <span className="wake-target font-mono text-[8px] sm:text-[10px] uppercase tracking-[0.2em] sm:tracking-[0.35em] text-primary/80 font-bold">
             // ARCHITECTURAL TECH PIPELINE
           </span>
