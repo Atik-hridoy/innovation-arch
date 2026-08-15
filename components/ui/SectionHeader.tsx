@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { PixelatedImageTrail } from '@/components/ui/pixelated-image-trail';
 
 export interface SectionHeaderProps {
   eyebrow: string;
@@ -9,6 +10,8 @@ export interface SectionHeaderProps {
   align?: 'left' | 'center';
   className?: string;
   action?: React.ReactNode;
+  enableTrail?: boolean;
+  trailImages?: string[];
 }
 
 export function SectionHeader({
@@ -18,37 +21,56 @@ export function SectionHeader({
   align = 'left',
   className = '',
   action,
+  enableTrail = true,
+  trailImages,
 }: SectionHeaderProps) {
   const isCenter = align === 'center';
 
   return (
     <div
-      className={`w-full flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-16 relative z-10 ${
-        isCenter ? 'text-center items-center' : 'text-left items-start'
-      } ${className}`}
+      className={`w-full relative mb-8 md:mb-16 z-10 ${className}`}
     >
-      <div className={`flex flex-col gap-3 md:gap-4 max-w-3xl ${isCenter ? 'items-center' : 'items-start'}`}>
-        {/* Unified Eyebrow Pill */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-violet-500/20 dark:border-primary/20 bg-violet-500/10 dark:bg-primary/10 font-mono text-[10px] sm:text-xs font-semibold tracking-[0.2em] text-violet-700 dark:text-primary uppercase backdrop-blur-md">
-          <span className="w-1.5 h-1.5 rounded-full bg-violet-600 dark:bg-primary animate-pulse" />
-          {eyebrow}
+      {/* Interactive Pixelated Sliced Image Trail Background Canvas */}
+      {enableTrail && (
+        <div className="absolute -inset-4 sm:-inset-8 z-0 overflow-hidden pointer-events-auto rounded-3xl [mask-image:radial-gradient(ellipse_at_center,black_65%,transparent_100%)]">
+          <PixelatedImageTrail
+            images={trailImages}
+            slices={5}
+            spawnThreshold={16}
+            imageSize={120}
+          />
+        </div>
+      )}
+
+      {/* Foreground Header Content */}
+      <div
+        className={`relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6 pointer-events-none ${
+          isCenter ? 'text-center items-center' : 'text-left items-start'
+        }`}
+      >
+        <div className={`flex flex-col gap-3 md:gap-4 max-w-3xl ${isCenter ? 'items-center' : 'items-start'}`}>
+          {/* Unified Eyebrow Pill */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-violet-500/20 dark:border-primary/20 bg-violet-500/10 dark:bg-primary/10 font-mono text-[10px] sm:text-xs font-semibold tracking-[0.2em] text-violet-700 dark:text-primary uppercase backdrop-blur-md pointer-events-auto">
+            <span className="w-1.5 h-1.5 rounded-full bg-violet-600 dark:bg-primary animate-pulse" />
+            {eyebrow}
+          </div>
+
+          {/* Unified Display Title */}
+          <h2 className="font-sans font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-neutral-900 dark:text-white uppercase tracking-tighter leading-[0.95] select-none">
+            {title}
+          </h2>
+
+          {/* Unified Description Subtitle */}
+          {description && (
+            <p className="text-sm sm:text-base md:text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl leading-relaxed font-normal pt-1 select-none">
+              {description}
+            </p>
+          )}
         </div>
 
-        {/* Unified Display Title */}
-        <h2 className="font-sans font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-neutral-900 dark:text-white uppercase tracking-tighter leading-[0.95]">
-          {title}
-        </h2>
-
-        {/* Unified Description Subtitle */}
-        {description && (
-          <p className="text-sm sm:text-base md:text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl leading-relaxed font-normal pt-1">
-            {description}
-          </p>
-        )}
+        {/* Right Side Action (Navigation arrows, filter tabs, etc.) */}
+        {action && <div className="flex items-center gap-4 flex-shrink-0 relative z-20 pointer-events-auto">{action}</div>}
       </div>
-
-      {/* Right Side Action (Navigation arrows, filter tabs, etc.) */}
-      {action && <div className="flex items-center gap-4 flex-shrink-0">{action}</div>}
     </div>
   );
 }
