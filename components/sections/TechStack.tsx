@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
 import { CylinderCarousel } from '@/components/ui/cylinder-carousel';
 
 const TECH_LOGOS = [
@@ -28,35 +26,11 @@ const TECH_LOGOS = [
 ];
 
 export function TechStack() {
-  const bgTextRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!bgTextRef.current) return;
-    
-    // Infinite marquee animation using GSAP with hardware acceleration
-    gsap.to(bgTextRef.current, {
-      xPercent: -50,
-      ease: "none",
-      duration: 35,
-      repeat: -1,
-      force3D: true, // Force GPU acceleration
-    });
-  }, []);
-
   return (
-    <div id="tech" className="relative z-10 bg-[#070609] py-20 px-6 md:px-12 lg:px-24 overflow-hidden">
-      {/* Animated Background Text */}
-      <div className="absolute inset-0 flex items-center overflow-hidden pointer-events-none z-0 opacity-[0.03] select-none">
-        <div 
-          ref={bgTextRef}
-          className="whitespace-nowrap font-sans font-black text-[25vw] md:text-[20vw] leading-none tracking-tighter will-change-transform">
-          ENGINEERING ARCHITECTURE
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-start lg:items-center gap-12 lg:gap-24">
+    <div id="tech" className="relative z-10 bg-[#070609] py-10 md:py-20 px-6 md:px-12 lg:px-24 overflow-hidden">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-start lg:items-center gap-8 md:gap-12 lg:gap-24">
         {/* Text Section */}
-        <div className="flex-1 space-y-8 z-10 w-full text-left will-change-transform">
+        <div className="flex-1 space-y-6 md:space-y-8 z-10 w-full text-left will-change-transform">
           <div>
             <p className="text-sm md:text-base tracking-widest text-[#5c5b5f] font-mono mb-2 uppercase">
               ENGINEERING ARCHITECTURE
@@ -67,7 +41,7 @@ export function TechStack() {
             </h2>
           </div>
           
-          <div className="space-y-6 text-[#8c8a93] text-lg max-w-lg">
+          <div className="space-y-4 md:space-y-6 text-[#8c8a93] text-lg max-w-lg">
             <p>
               We are a premium product studio specializing in smooth animations, interactive interfaces, and modern design.
             </p>
@@ -78,7 +52,7 @@ export function TechStack() {
         </div>
 
         {/* Cylinder Carousel Section */}
-        <div className="flex-1 w-full flex justify-center mt-12 lg:mt-0 relative perspective-[1200px]">
+        <div className="flex-1 w-full flex justify-center mt-2 lg:mt-0 relative perspective-[1200px]">
           {/* Subtle glow behind the carousel */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-purple-600/20 rounded-full blur-[100px] pointer-events-none" />
           

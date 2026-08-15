@@ -34,7 +34,7 @@ export function CylinderCarousel({ images, className }: CylinderCarouselProps) {
   return (
     <div 
       className={cn(
-        "relative w-full flex justify-center items-center overflow-visible py-20 min-h-[400px]", 
+        "relative w-full flex justify-center items-center overflow-visible py-10 md:py-20 min-h-[250px] md:min-h-[400px]", 
         className
       )}
       style={{ perspective: "1500px" }}
