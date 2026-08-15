@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Project } from '../../data/portfolio';
 import { RadialGlowButton } from '@/components/ui/radial-glow-button';
 
@@ -11,72 +11,28 @@ export interface ProjectCardProps {
 
 export function ProjectCard({ project, isActive }: ProjectCardProps) {
   const [activeImgIdx, setActiveImgIdx] = useState(0);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [lightPos, setLightPos] = useState({ x: 0, y: 0 });
-  const isHovered = useRef(false);
 
-  // Auto-looping slideshow ONLY if this card is currently selected/active
-  useEffect(() => {
-    if (!isActive) return;
+  // Pre-calculated 3D rotations for the mockup card stack
+  const rotations = useMemo(() => [3, -2.5, 4.5, -3.5], []);
 
-    const timer = setInterval(() => {
-      if (!isHovered.current) {
-        setActiveImgIdx((prev) => (prev + 1) % project.mockups.length);
-      }
-    }, 3000); // cycle every 3 seconds
-
-    return () => clearInterval(timer);
-  }, [isActive, project.mockups.length]);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    isHovered.current = true;
-    const card = e.currentTarget;
-    const rect = card.getBoundingClientRect();
-    
-    // Relative coordinates
-    const localX = e.clientX - rect.left;
-    const localY = e.clientY - rect.top;
-    
-    setLightPos({ x: localX, y: localY });
-    
-    // Compute 3D tilt angles
-    const x = localX / rect.width;
-    const y = localY / rect.height;
-    
-    const rotateX = (y - 0.5) * -8;
-    const rotateY = (x - 0.5) * 8;
-    
-    setTilt({ x: rotateY, y: rotateX });
+  const handleNextImage = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setActiveImgIdx((prev) => (prev + 1) % project.mockups.length);
   };
 
-  const handleMouseLeave = () => {
-    isHovered.current = false;
-    setTilt({ x: 0, y: 0 });
+  const handlePrevImage = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setActiveImgIdx((prev) => (prev - 1 + project.mockups.length) % project.mockups.length);
   };
 
   return (
     <div
-      className={`w-[85vw] md:w-[75vw] max-w-[1100px] shrink-0 snap-center rounded-3xl border p-6 md:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative overflow-hidden transition-all duration-700 shadow-[0_20px_50px_rgba(0,0,0,0.08)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.8)] group backdrop-blur-md ${
-        isActive ? 'border-primary/30 dark:border-primary/20 bg-white/80 dark:bg-[#0b0a0d]/70' : 'border-black/5 dark:border-white/5 bg-white/40 dark:bg-[#0b0a0d]/40 opacity-70'
+      className={`w-[88vw] md:w-[78vw] max-w-[1120px] shrink-0 snap-center rounded-3xl border p-6 md:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative overflow-hidden transition-all duration-500 shadow-[0_20px_50px_rgba(0,0,0,0.08)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.8)] backdrop-blur-md ${
+        isActive
+          ? 'border-primary/30 dark:border-primary/20 bg-white/80 dark:bg-[#0b0a0d]/70'
+          : 'border-black/5 dark:border-white/5 bg-white/40 dark:bg-[#0b0a0d]/40 opacity-70'
       }`}
-      style={{
-        transform: isActive
-          ? `perspective(1000px) rotateX(${tilt.y}deg) rotateY(${tilt.x}deg) scale(1.002)`
-          : 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)',
-      }}
-      onMouseMove={isActive ? handleMouseMove : undefined}
-      onMouseLeave={handleMouseLeave}
     >
-      {/* Volumetric spotlight glow on mouse move */}
-      {isActive && (
-        <span 
-          className="absolute inset-0 bg-radial pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700" 
-          style={{
-            backgroundImage: `radial-gradient(circle at ${lightPos.x}px ${lightPos.y}px, rgba(124, 58, 237, 0.08) 0%, transparent 60%)`
-          }}
-        />
-      )}
-
       {/* Left Column: Details */}
       <div className="lg:col-span-5 flex flex-col items-start gap-5 relative z-10 order-2 lg:order-1">
         <div>
@@ -123,59 +79,119 @@ export function ProjectCard({ project, isActive }: ProjectCardProps) {
         </div>
       </div>
 
-      {/* Right Column: Multi-Image Gallery Showcase */}
+      {/* Right Column: 3D Image-Shifting Card Stack */}
       <div className="lg:col-span-7 flex flex-col gap-4 relative z-10 order-1 lg:order-2">
-        {/* Main Large Preview Frame */}
-        <div className="w-full aspect-[16/10] rounded-2xl border border-black/10 dark:border-white/10 bg-neutral-100 dark:bg-[#070709] overflow-hidden relative shadow-[0_10px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_10px_30px_rgba(0,0,0,0.6)]">
-          {/* Ambient glow in image frame */}
-          <div className="absolute inset-0 bg-radial from-primary/10 via-transparent to-transparent pointer-events-none" />
-          
-          {project.mockups.map((mockup, idx) => (
-            <img
-              key={idx}
-              className={`absolute inset-0 w-full h-full object-cover select-none pointer-events-none transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] ${
-                activeImgIdx === idx 
-                  ? 'opacity-100 blur-0 scale-100 z-10' 
-                  : 'opacity-0 blur-xl scale-105 z-0'
-              }`}
-              src={mockup}
-              alt={`${project.title} preview ${idx + 1}`}
-            />
-          ))}
-          
-          {/* Top-Left Image Index Badge */}
-          <span className="absolute top-4 left-4 font-mono text-[9px] font-bold bg-white/80 dark:bg-[#050505]/75 text-primary border border-black/10 dark:border-white/10 px-2.5 py-1 rounded-full backdrop-blur-md select-none">
-            PREVIEW 0{activeImgIdx + 1}
-          </span>
-        </div>
+        {/* 3D Perspective Card Stack Area */}
+        <div
+          className="w-full aspect-[16/10] relative rounded-2xl cursor-pointer select-none"
+          style={{ perspective: '1400px' }}
+          onClick={handleNextImage}
+        >
+          {project.mockups.map((mockup, idx) => {
+            const isTop = idx === activeImgIdx;
+            const offset = (idx - activeImgIdx + project.mockups.length) % project.mockups.length;
 
-        {/* Thumbnails Gallery Row */}
-        <div className="flex gap-3 justify-start items-center">
-          {project.mockups.map((mockup, tIdx) => {
-            const isSelected = activeImgIdx === tIdx;
+            let translateX = offset * 18;
+            let translateY = Math.abs(offset) * 8;
+            let translateZ = -100 * offset;
+            let scale = 1 - offset * 0.045;
+            let rotateZ = isTop ? 0 : rotations[idx % rotations.length];
+            let opacity = isTop ? 1 : Math.max(0.3, 0.7 - offset * 0.2);
+            let zIndex = project.mockups.length - offset;
+
+            if (isTop) {
+              translateX = 0;
+              translateY = 0;
+              translateZ = 0;
+              scale = 1;
+              rotateZ = 0;
+              opacity = 1;
+              zIndex = 40;
+            }
+
             return (
-              <button
-                key={tIdx}
-                onClick={() => {
-                  isHovered.current = true;
-                  setActiveImgIdx(tIdx);
+              <div
+                key={idx}
+                className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden border border-black/10 dark:border-white/15 bg-neutral-900 shadow-2xl transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                style={{
+                  transform: `translate3d(${translateX}px, ${translateY}px, ${translateZ}px) rotateZ(${rotateZ}deg) scale(${scale})`,
+                  opacity,
+                  zIndex,
+                  transformStyle: 'preserve-3d',
                 }}
-                className={`w-16 md:w-20 aspect-[16/10] rounded-lg overflow-hidden border transition-all duration-300 cursor-pointer ${
-                  isSelected
-                    ? 'border-primary shadow-[0_0_15px_rgba(124,58,237,0.4)] scale-105 opacity-100'
-                    : 'border-black/10 dark:border-white/10 opacity-40 hover:opacity-80'
-                }`}
               >
                 <img
                   className="w-full h-full object-cover select-none pointer-events-none"
                   src={mockup}
-                  alt="thumbnail"
+                  alt={`${project.title} mockup ${idx + 1}`}
+                  draggable={false}
                 />
-              </button>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+
+                {/* Top-Left Image Index Badge on Active Card */}
+                {isTop && (
+                  <span className="absolute top-4 left-4 font-mono text-[9px] font-bold bg-white/80 dark:bg-[#050505]/80 text-primary border border-black/10 dark:border-white/10 px-3 py-1 rounded-full backdrop-blur-md">
+                    SLIDE 0{activeImgIdx + 1} / 0{project.mockups.length}
+                  </span>
+                )}
+              </div>
             );
           })}
+        </div>
+
+        {/* Gallery Controls & Thumbnails Row */}
+        <div className="flex items-center justify-between gap-4 mt-2">
+          {/* Thumbnails Row */}
+          <div className="flex gap-2.5 items-center">
+            {project.mockups.map((mockup, tIdx) => {
+              const isSelected = activeImgIdx === tIdx;
+              return (
+                <button
+                  key={tIdx}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveImgIdx(tIdx);
+                  }}
+                  className={`w-14 sm:w-18 aspect-[16/10] rounded-lg overflow-hidden border transition-all duration-300 cursor-pointer ${
+                    isSelected
+                      ? 'border-primary shadow-[0_0_12px_rgba(124,58,237,0.5)] scale-105 opacity-100 ring-2 ring-primary/40'
+                      : 'border-black/10 dark:border-white/10 opacity-40 hover:opacity-80'
+                  }`}
+                  aria-label={`View slide ${tIdx + 1}`}
+                >
+                  <img
+                    className="w-full h-full object-cover select-none pointer-events-none"
+                    src={mockup}
+                    alt="thumbnail"
+                  />
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Next / Previous Stack Shifter Controls */}
+          {project.mockups.length > 1 && (
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handlePrevImage}
+                className="w-9 h-9 rounded-full border border-black/10 dark:border-white/10 bg-white/70 dark:bg-white/5 hover:bg-black/5 dark:hover:bg-white/15 text-neutral-900 dark:text-white flex items-center justify-center transition-all cursor-pointer shadow-sm active:scale-95"
+                aria-label="Previous mockup"
+              >
+                <span className="material-symbols-outlined text-base">arrow_back</span>
+              </button>
+              <button
+                onClick={handleNextImage}
+                className="w-9 h-9 rounded-full border border-black/10 dark:border-white/10 bg-white/70 dark:bg-white/5 hover:bg-black/5 dark:hover:bg-white/15 text-neutral-900 dark:text-white flex items-center justify-center transition-all cursor-pointer shadow-sm active:scale-95"
+                aria-label="Next mockup"
+              >
+                <span className="material-symbols-outlined text-base">arrow_forward</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 }
+
+export default ProjectCard;
