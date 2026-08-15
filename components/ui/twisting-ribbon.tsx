@@ -120,8 +120,7 @@ export function TwistingRibbon({
     
     resizeObserver.observe(container);
 
-    // ── Helper functions ────────────────────────────────────────────────
-    function lerpColor(a: number[], b: number[], f: number) {
+    function lerpColor(a: number[], b: number[], f: number): [number, number, number] {
       return [
         Math.round(a[0] + (b[0] - a[0]) * f),
         Math.round(a[1] + (b[1] - a[1]) * f),
@@ -129,12 +128,14 @@ export function TwistingRibbon({
       ];
     }
 
+    const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
+    const effectiveSegments = isMobile ? Math.min(segments, 160) : Math.min(segments, 280);
+
     function buildSpine(time: number) {
       const pts = [];
-      const isMobile = window.innerWidth < 768;
       const mobileScale = isMobile ? 0.4 : 1;
-      for (let i = 0; i <= segments; i++) {
-        const progress = i / segments;
+      for (let i = 0; i <= effectiveSegments; i++) {
+        const progress = i / effectiveSegments;
         pts.push({
           x: progress * width * RIBBON_X_SCALE - width * RIBBON_X_OFFSET,
           y:
@@ -174,9 +175,9 @@ export function TwistingRibbon({
       const tops = [];
       const bots = [];
       const twists = [];
-      for (let i = 0; i <= segments; i++) {
+      for (let i = 0; i <= effectiveSegments; i++) {
         const twist = Math.cos(
-          (i / segments) * Math.PI * twistCycles + time * TWIST_TIME_SPEED
+          (i / effectiveSegments) * Math.PI * twistCycles + time * TWIST_TIME_SPEED
         );
         const w = RIBBON_HALF_W * Math.abs(twist);
         const sign = twist >= 0 ? 1 : -1;
@@ -240,7 +241,7 @@ export function TwistingRibbon({
       const color = isDark ? D_SHADOW_COLOR : L_SHADOW_COLOR;
       const alpha = isDark ? D_SHADOW_ALPHA : L_SHADOW_ALPHA;
       ctx!.fillStyle = `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${alpha})`;
-      for (let i = 0; i < segments; i++) {
+      for (let i = 0; i < effectiveSegments; i++) {
         drawQuad(
           tops[i].x + SHADOW_OFFSET_X,
           tops[i].y + SHADOW_OFFSET_Y,
@@ -264,8 +265,8 @@ export function TwistingRibbon({
       const edgeColor = isDark ? D_EDGE_COLOR : L_EDGE_COLOR;
       const edgeAlpha = isDark ? D_EDGE_ALPHA : L_EDGE_ALPHA;
 
-      for (let i = 0; i < segments; i++) {
-        const [r, g, b] = getRibbonColor(i / segments, twists[i], time, isDark);
+      for (let i = 0; i < effectiveSegments; i++) {
+        const [r, g, b] = getRibbonColor(i / effectiveSegments, twists[i], time, isDark);
         ctx!.fillStyle = `rgb(${r}, ${g}, ${b})`;
         drawQuad(
           tops[i].x,
@@ -294,7 +295,24 @@ export function TwistingRibbon({
       }
     }
 
+    let isVisible = false;
+
+    const intersectionObserver = new IntersectionObserver(
+      ([entry]) => {
+        const wasVisible = isVisible;
+        isVisible = entry.isIntersecting;
+        if (isVisible && !wasVisible) {
+          animationFrameId = requestAnimationFrame(render);
+        }
+      },
+      { rootMargin: '100px' }
+    );
+
+    intersectionObserver.observe(container);
+
     function render() {
+      if (!isVisible) return;
+
       ctx!.clearRect(0, 0, canvas!.width, canvas!.height);
       t += waveSpeed;
 
@@ -311,9 +329,8 @@ export function TwistingRibbon({
       animationFrameId = requestAnimationFrame(render);
     }
 
-    render();
-
     return () => {
+      intersectionObserver.disconnect();
       resizeObserver.disconnect();
       cancelAnimationFrame(animationFrameId);
     };

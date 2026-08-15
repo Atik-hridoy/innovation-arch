@@ -68,16 +68,13 @@ export function Services() {
     >
       {/* ━━━ Background Motion Layer (Boosted Prominence) ━━━ */}
       <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden">
-        {/* ━━━ MOBILE ONLY: 7-Line Alternating Kinetic Text Curtain ━━━ */}
-        <div className="md:hidden absolute inset-0 flex flex-col justify-between py-6 overflow-hidden pointer-events-none opacity-40 z-0">
+        {/* ━━━ MOBILE ONLY: 4-Line Alternating Kinetic Text Curtain (Optimized for 60fps) ━━━ */}
+        <div className="md:hidden absolute inset-0 flex flex-col justify-around py-8 overflow-hidden pointer-events-none opacity-35 z-0">
           {[
             { dir: 'reverse', text: 'AI SYSTEMS • NEURAL ENGINE • COMPILATION • ', stroke: 'rgba(221, 183, 255, 0.4)' },
             { dir: 'normal', text: 'BRAND ARCHITECTURE • CREATIVE DIRECTION • ', stroke: 'rgba(132, 43, 210, 0.4)' },
             { dir: 'reverse', text: 'DIGITAL PRODUCTS • IMMERSIVE WEB • ', stroke: 'rgba(173, 198, 255, 0.4)' },
             { dir: 'normal', text: 'STRATEGY • ARCHITECTURE • ENGINEERING • ', stroke: 'rgba(221, 183, 255, 0.35)' },
-            { dir: 'reverse', text: 'DEPLOYMENT • HIGH PERFORMANCE • ', stroke: 'rgba(132, 43, 210, 0.4)' },
-            { dir: 'normal', text: 'OPTIMIZATION • INTELLIGENCE • SCALING • ', stroke: 'rgba(173, 198, 255, 0.35)' },
-            { dir: 'reverse', text: 'INNOVATION ARCH • FUTURE PROOF • ', stroke: 'rgba(221, 183, 255, 0.4)' },
           ].map((line, idx) => (
             <div key={idx} className="w-full overflow-hidden whitespace-nowrap leading-none">
               <div className={`${line.dir === 'reverse' ? 'animate-marquee-reverse' : 'animate-marquee'} inline-flex whitespace-nowrap`}>
@@ -85,7 +82,7 @@ export function Services() {
                   <span
                     key={i}
                     className="font-sans font-black text-[12vw] tracking-[0.15em] text-transparent uppercase px-2"
-                    style={{ WebkitTextStroke: `1.8px ${line.stroke}` }}
+                    style={{ WebkitTextStroke: `1.5px ${line.stroke}` }}
                   >
                     {line.text}
                   </span>

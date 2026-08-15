@@ -117,25 +117,34 @@ export function Portfolio() {
 
   const currentBgImage = projects[activeCardIdx]?.mockups[0];
 
-  // Scroll listener to compute which card is closest to horizontal center
+  const scrollTicking = useRef(false);
+
+  // RAF-throttled scroll listener to compute which card is closest to horizontal center
   const handleScroll = () => {
-    if (scrollRef.current) {
-      const container = scrollRef.current;
-      const children = container.children;
-      let closestIdx = 0;
-      let minDistance = Infinity;
-      const containerCenter = container.getBoundingClientRect().left + container.offsetWidth / 2;
-      
-      for (let i = 0; i < children.length; i++) {
-        const childRect = children[i].getBoundingClientRect();
-        const childCenter = childRect.left + childRect.width / 2;
-        const distance = Math.abs(childCenter - containerCenter);
-        if (distance < minDistance) {
-          minDistance = distance;
-          closestIdx = i;
+    if (!scrollTicking.current) {
+      scrollTicking.current = true;
+      requestAnimationFrame(() => {
+        if (scrollRef.current) {
+          const container = scrollRef.current;
+          const children = container.children;
+          let closestIdx = 0;
+          let minDistance = Infinity;
+          const containerRect = container.getBoundingClientRect();
+          const containerCenter = containerRect.left + containerRect.width / 2;
+          
+          for (let i = 0; i < children.length; i++) {
+            const childRect = children[i].getBoundingClientRect();
+            const childCenter = childRect.left + childRect.width / 2;
+            const distance = Math.abs(childCenter - containerCenter);
+            if (distance < minDistance) {
+              minDistance = distance;
+              closestIdx = i;
+            }
+          }
+          setActiveCardIdx((prev) => (prev !== closestIdx ? closestIdx : prev));
         }
-      }
-      setActiveCardIdx(closestIdx);
+        scrollTicking.current = false;
+      });
     }
   };
 

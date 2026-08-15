@@ -5,32 +5,56 @@ import gsap from 'gsap';
 import { MorphText } from '@/components/ui/morph-text';
 
 export function Hero() {
+  const headerRef = useRef<HTMLElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const paraRef = useRef<HTMLParagraphElement>(null);
 
-  // Video playlist setup
+  // Video playlist setup - optimized for smooth decode
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoIndex, setVideoIndex] = useState(0);
   const videos = [
     '/images/8523640-hd_1920_1080_25fps.mp4',
-    '/images/5081430-uhd_4096_2160_25fps.mp4'
+    '/images/same_for_websolution_change_th.mp4',
   ];
 
   useEffect(() => {
-    // 1. Text entrance animations
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-    tl.fromTo('.hero-tagline', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.8, delay: 0.2 })
-      .fromTo(headlineRef.current, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.2 }, '-=0.6')
-      .fromTo(paraRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1 }, '-=0.8');
+    // 1. Text entrance animations with GSAP Context
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      tl.fromTo('.hero-tagline', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.8, delay: 0.2 })
+        .fromTo(headlineRef.current, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.2 }, '-=0.6')
+        .fromTo(paraRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1 }, '-=0.8');
+    }, headerRef);
+
+    // 2. Pause video when offscreen to free up GPU decoder completely
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (videoRef.current) {
+          if (entry.isIntersecting) {
+            videoRef.current.play().catch(() => {});
+          } else {
+            videoRef.current.pause();
+          }
+        }
+      },
+      { rootMargin: '50px' }
+    );
+
+    if (headerRef.current) {
+      observer.observe(headerRef.current);
+    }
+
+    return () => {
+      ctx.revert();
+      observer.disconnect();
+    };
   }, []);
 
-  // Guarantee player triggers loading on index change
+  // Safe video playlist cycling
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.load();
-      videoRef.current.play().catch((err) => {
-        console.log('Video play was interrupted or blocked:', err);
-      });
+      videoRef.current.play().catch(() => {});
     }
   }, [videoIndex]);
 
@@ -39,9 +63,9 @@ export function Hero() {
   };
 
   return (
-    <header className="relative w-full min-h-[85vh] sm:min-h-screen flex items-center justify-center pt-[70px] sm:pt-[100px] lg:pt-[120px] pb-12 sm:pb-stack-xl px-4 sm:px-margin-edge overflow-hidden z-10">
+    <header ref={headerRef} className="relative w-full min-h-[85vh] sm:min-h-screen flex items-center justify-center pt-[70px] sm:pt-[100px] lg:pt-[120px] pb-12 sm:pb-stack-xl px-4 sm:px-margin-edge overflow-hidden z-10">
       
-      {/* Background Coding Video Playlist Loop */}
+      {/* Background Coding Video Playlist Loop (GPU Composited) */}
       <div className="absolute inset-0 z-0 opacity-[0.12] pointer-events-none mix-blend-screen overflow-hidden">
         <video
           ref={videoRef}
@@ -50,6 +74,7 @@ export function Hero() {
           autoPlay
           muted
           playsInline
+          preload="metadata"
           onEnded={handleVideoEnded}
         />
       </div>

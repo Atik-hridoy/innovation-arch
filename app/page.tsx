@@ -20,72 +20,95 @@ export default function Home() {
   const cursorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    // 1. Initialize Lenis Smooth Scrolling hooked to GSAP Ticker
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.1,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 1,
     });
 
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
+    lenis.on('scroll', ScrollTrigger.update);
 
-    requestAnimationFrame(raf);
+    const updateLenis = (time: number) => {
+      lenis.raf(time * 1000);
+    };
+
+    gsap.ticker.add(updateLenis);
+    gsap.ticker.lagSmoothing(0);
+
+    // 2. Hardware-accelerated Smooth Cursor Follower (Desktop only)
+    let cursorRafId: number | null = null;
+    const isFinePointer = window.matchMedia('(pointer: fine)').matches;
 
     const cursor = cursorRef.current;
-    let mouseX = 0;
-    let mouseY = 0;
-    let cursorX = 0;
-    let cursorY = 0;
+    let mouseX = -100;
+    let mouseY = -100;
+    let cursorX = -100;
+    let cursorY = -100;
+    let hasMoved = false;
 
     const onMouseMove = (e: MouseEvent) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
-    };
-
-    window.addEventListener('mousemove', onMouseMove);
-
-    const updateCursor = () => {
-      cursorX += (mouseX - cursorX) * 0.1;
-      cursorY += (mouseY - cursorY) * 0.1;
-
-      if (cursor) {
-        cursor.style.left = `${cursorX}px`;
-        cursor.style.top = `${cursorY}px`;
+      if (!hasMoved) {
+        cursorX = mouseX;
+        cursorY = mouseY;
+        hasMoved = true;
       }
-
-      requestAnimationFrame(updateCursor);
     };
 
-    updateCursor();
+    if (isFinePointer && cursor) {
+      window.addEventListener('mousemove', onMouseMove, { passive: true });
 
-    gsap.registerPlugin(ScrollTrigger);
+      const updateCursor = () => {
+        cursorX += (mouseX - cursorX) * 0.15;
+        cursorY += (mouseY - cursorY) * 0.15;
 
-    const animateElements = containerRef.current?.querySelectorAll('.scroll-reveal');
-    if (animateElements) {
-      animateElements.forEach((el) => {
-        gsap.fromTo(
-          el,
-          { opacity: 0, y: 40 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: el,
-              start: 'top 85%',
-              toggleActions: 'play none none none',
-            },
-          }
-        );
-      });
+        cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
+        cursorRafId = requestAnimationFrame(updateCursor);
+      };
+
+      cursorRafId = requestAnimationFrame(updateCursor);
     }
 
+    // 3. Scroll Reveal Animations with GSAP Context
+    const ctx = gsap.context(() => {
+      const animateElements = containerRef.current?.querySelectorAll('.scroll-reveal');
+      if (animateElements && animateElements.length > 0) {
+        animateElements.forEach((el) => {
+          gsap.fromTo(
+            el,
+            { opacity: 0, y: 30 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: el,
+                start: 'top 88%',
+                toggleActions: 'play none none none',
+              },
+            }
+          );
+        });
+      }
+    }, containerRef);
+
     return () => {
+      ctx.revert();
+      gsap.ticker.remove(updateLenis);
       lenis.destroy();
-      window.removeEventListener('mousemove', onMouseMove);
+      if (isFinePointer) {
+        window.removeEventListener('mousemove', onMouseMove);
+      }
+      if (cursorRafId !== null) {
+        cancelAnimationFrame(cursorRafId);
+      }
     };
   }, []);
 

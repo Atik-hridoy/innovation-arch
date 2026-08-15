@@ -131,6 +131,14 @@ export function Process() {
 
         const progressDot = containerRef.current?.querySelector('.process-progress-dot');
 
+        // Precompute path sample points once to avoid expensive getPointAtLength calls on scroll
+        const SAMPLES = 120;
+        const samplePoints: { x: number; y: number }[] = [];
+        for (let i = 0; i <= SAMPLES; i++) {
+          const pt = processPath.getPointAtLength((len * i) / SAMPLES);
+          samplePoints.push({ x: pt.x, y: pt.y });
+        }
+
         gsap.to(processPath, {
           strokeDashoffset: 0,
           ease: 'none',
@@ -140,16 +148,20 @@ export function Process() {
             end: 'bottom 80%',
             scrub: 1,
             onUpdate: (self) => {
-              if (progressDot && processPath) {
-                const currentPoint = processPath.getPointAtLength(len * self.progress);
-                gsap.set(progressDot, {
-                  x: currentPoint.x,
-                  y: currentPoint.y,
-                });
+              if (progressDot) {
+                const idx = Math.min(SAMPLES, Math.max(0, Math.round(self.progress * SAMPLES)));
+                const currentPoint = samplePoints[idx];
+                if (currentPoint) {
+                  gsap.set(progressDot, {
+                    x: currentPoint.x,
+                    y: currentPoint.y,
+                  });
+                }
               }
             }
           },
         });
+
         // Mobile ScrollTrigger: only trigger animation when section reaches upper center / top portion of screen
         const progressLine = containerRef.current?.querySelector('.mobile-progress-line') as HTMLElement;
         ScrollTrigger.create({
