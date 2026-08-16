@@ -324,27 +324,27 @@ export default function Home() {
       <Header />
 
       <main className="relative w-full z-10 bg-background transition-colors duration-400">
-        <SectionStage id="home" className="w-full bg-[#0a0103]">
+        <SectionStage id="home" className="section-card-stage w-full relative z-0 bg-[#0a0103] origin-top will-change-transform">
           <AboutUsScrollytelling />
         </SectionStage>
 
-        <SectionStage id="services" className="w-full bg-background dark:bg-[#050505]">
+        <SectionStage id="services" className="section-card-stage w-full relative z-10 bg-background dark:bg-[#050505] shadow-[0_-35px_70px_rgba(0,0,0,0.98)] rounded-t-[28px] sm:rounded-t-none border-t border-border sm:border-t-0 origin-top will-change-transform">
           <Services />
         </SectionStage>
 
-        <SectionStage id="process" className="w-full bg-background dark:bg-[#050505]">
+        <SectionStage id="process" className="section-card-stage w-full relative z-20 bg-background dark:bg-[#050505] shadow-[0_-35px_70px_rgba(0,0,0,0.98)] rounded-t-[28px] sm:rounded-t-none border-t border-border sm:border-t-0 origin-top will-change-transform">
           <Process />
         </SectionStage>
 
-        <SectionStage id="work" className="w-full bg-background dark:bg-[#050505]">
+        <SectionStage id="work" className="section-card-stage w-full relative z-30 bg-background dark:bg-[#050505] shadow-[0_-35px_70px_rgba(0,0,0,0.98)] rounded-t-[28px] sm:rounded-t-none border-t border-border sm:border-t-0 origin-top will-change-transform">
           <Portfolio />
         </SectionStage>
 
-        <SectionStage id="tech" className="w-full bg-background dark:bg-[#050505]">
+        <SectionStage id="tech" className="section-card-stage w-full relative z-40 bg-background dark:bg-[#050505] shadow-[0_-35px_70px_rgba(0,0,0,0.98)] rounded-t-[28px] sm:rounded-t-none border-t border-border sm:border-t-0 origin-top will-change-transform">
           <TechStack />
         </SectionStage>
 
-        <SectionStage id="contact" className="w-full bg-[#040406]">
+        <SectionStage id="contact" className="section-card-stage w-full relative z-50 bg-slate-50 dark:bg-[#040406] shadow-[0_-35px_70px_rgba(0,0,0,0.98)] rounded-t-[28px] sm:rounded-t-none border-t border-border sm:border-t-0 origin-top will-change-transform">
           <CTA />
         </SectionStage>
       </main>
