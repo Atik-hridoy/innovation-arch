@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { PixelatedImageTrail } from '@/components/ui/pixelated-image-trail';
 
 export interface SectionHeaderProps {
   eyebrow: string;
@@ -21,8 +20,6 @@ export function SectionHeader({
   align = 'left',
   className = '',
   action,
-  enableTrail = true,
-  trailImages,
 }: SectionHeaderProps) {
   const isCenter = align === 'center';
 
@@ -30,17 +27,6 @@ export function SectionHeader({
     <div
       className={`w-full relative mb-8 md:mb-16 z-10 ${className}`}
     >
-      {/* Interactive Pixelated Sliced Image Trail Background Canvas */}
-      {enableTrail && (
-        <div className="absolute -inset-4 sm:-inset-8 z-0 overflow-hidden pointer-events-auto rounded-3xl [mask-image:radial-gradient(ellipse_at_center,black_65%,transparent_100%)]">
-          <PixelatedImageTrail
-            images={trailImages}
-            slices={5}
-            spawnThreshold={16}
-            imageSize={120}
-          />
-        </div>
-      )}
 
       {/* Foreground Header Content */}
       <div

@@ -77,9 +77,9 @@ export function AboutUsScrollytelling() {
     ctx.fillStyle = '#080103';
     ctx.fillRect(0, 0, width, height);
 
-    // Aspect Contain Fit (Responsive Scale for Mobile and Desktop)
+    // Aspect Contain Fit (Responsive Scale & Vertical Split for Mobile vs Desktop)
     const isMobile = width < 768;
-    const scaleFactor = isMobile ? 0.94 : 0.82;
+    const scaleFactor = isMobile ? 0.78 : 0.82;
     const hRatio = width / img.naturalWidth;
     const vRatio = height / img.naturalHeight;
     const ratio = Math.min(hRatio, vRatio) * scaleFactor;
@@ -87,7 +87,8 @@ export function AboutUsScrollytelling() {
     const renderW = img.naturalWidth * ratio;
     const renderH = img.naturalHeight * ratio;
     const renderX = (width - renderW) / 2;
-    const renderY = (height - renderH) / 2;
+    // On mobile portrait, position laptop in upper 40% so text cards in bottom 50% never collide
+    const renderY = isMobile ? height * 0.14 : (height - renderH) / 2;
 
     // Smooth entry transition: canvas opacity builds gracefully as scrolling begins
     const canvasOpacity = Math.min(1, Math.max(0.15, progressVal * 6));
@@ -135,10 +136,10 @@ export function AboutUsScrollytelling() {
     ctx.globalAlpha = 1;
     const gradient = ctx.createRadialGradient(
       width / 2,
-      height / 2,
+      isMobile ? renderY + renderH / 2 : height / 2,
       Math.min(renderW, renderH) * 0.32,
       width / 2,
-      height / 2,
+      isMobile ? renderY + renderH / 2 : height / 2,
       Math.max(width, height) * 0.65
     );
     gradient.addColorStop(0, 'rgba(8, 1, 3, 0)');
@@ -341,17 +342,17 @@ export function AboutUsScrollytelling() {
           </div>
         </div>
 
-        {/* ━━━ PHASE 2: 12% - 28% (INNOVATION ARK BLUEPRINT - RESPONSIVE macOS GLASS CARD) ━━━ */}
+        {/* ━━━ PHASE 2: 12% - 28% (INNOVATION ARK BLUEPRINT - SPLIT-SCREEN MOBILE HUD) ━━━ */}
         <div
-          className="absolute left-3 right-3 sm:right-auto sm:left-6 md:left-10 lg:left-12 xl:left-16 max-w-none sm:max-w-[380px] lg:max-w-[420px] flex flex-col items-start text-left transition-all duration-200 [perspective:1000px] pointer-events-auto"
+          className="absolute bottom-6 sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 left-4 right-4 sm:right-auto sm:left-6 md:left-10 lg:left-12 xl:left-16 max-w-none sm:max-w-[380px] lg:max-w-[420px] flex flex-col items-start text-left transition-all duration-200 pointer-events-auto [perspective:1000px]"
           style={{
             opacity: phase2Opacity,
-            transform: `translateX(${(0.20 - scrollProgress) * 140}px) rotateY(${Math.max(-20, Math.min(20, (0.20 - scrollProgress) * 45))}deg)`,
+            transform: `translateY(${(0.20 - scrollProgress) * 70}px)`,
           }}
         >
-          <div className="w-full relative group p-4 sm:p-6 lg:p-7 rounded-2xl sm:rounded-3xl bg-gradient-to-b from-white/[0.09] via-[#0c0104]/70 to-[#060102]/85 backdrop-blur-3xl backdrop-saturate-[190%] border border-white/[0.16] shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.35),0_25px_50px_rgba(0,0,0,0.85),0_0_20px_rgba(225,29,72,0.12)] overflow-hidden">
+          <div className="w-full relative group p-4 sm:p-6 lg:p-7 rounded-2xl sm:rounded-3xl bg-gradient-to-b from-white/[0.10] via-[#0c0104]/80 to-[#060102]/92 backdrop-blur-3xl backdrop-saturate-[200%] border border-white/[0.18] shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.4),0_25px_50px_rgba(0,0,0,0.9),0_0_20px_rgba(225,29,72,0.12)] overflow-hidden">
             {/* macOS Specular Top Edge Light */}
-            <div className="absolute top-0 inset-x-6 h-[1px] bg-gradient-to-r from-transparent via-white/50 to-transparent pointer-events-none" />
+            <div className="absolute top-0 inset-x-6 h-[1px] bg-gradient-to-r from-transparent via-white/60 to-transparent pointer-events-none" />
             <div className="absolute -top-10 -right-10 w-28 h-28 rounded-full bg-rose-500/10 blur-2xl pointer-events-none" />
 
             <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-rose-300 font-bold mb-1.5 sm:mb-2 block drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
@@ -379,17 +380,17 @@ export function AboutUsScrollytelling() {
           </div>
         </div>
 
-        {/* ━━━ PHASE 3: 28% - 46% (INNOVATION ARK SPATIAL CRAFT - RESPONSIVE macOS GLASS CARD) ━━━ */}
+        {/* ━━━ PHASE 3: 28% - 46% (INNOVATION ARK SPATIAL CRAFT - SPLIT-SCREEN MOBILE HUD) ━━━ */}
         <div
-          className="absolute left-3 right-3 sm:left-auto sm:right-6 md:right-10 lg:right-12 xl:right-16 max-w-none sm:max-w-[380px] lg:max-w-[420px] flex flex-col items-end text-right transition-all duration-200 ml-auto [perspective:1000px] pointer-events-auto"
+          className="absolute bottom-6 sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 left-4 right-4 sm:left-auto sm:right-6 md:right-10 lg:right-12 xl:right-16 max-w-none sm:max-w-[380px] lg:max-w-[420px] flex flex-col items-start sm:items-end text-left sm:text-right transition-all duration-200 ml-auto pointer-events-auto [perspective:1000px]"
           style={{
             opacity: phase3Opacity,
-            transform: `translateX(${(scrollProgress - 0.37) * 140}px) rotateY(${Math.max(-20, Math.min(20, (scrollProgress - 0.37) * -45))}deg)`,
+            transform: `translateY(${(0.37 - scrollProgress) * 70}px)`,
           }}
         >
-          <div className="w-full relative group p-4 sm:p-6 lg:p-7 rounded-2xl sm:rounded-3xl bg-gradient-to-b from-white/[0.09] via-[#0c0104]/70 to-[#060102]/85 backdrop-blur-3xl backdrop-saturate-[190%] border border-white/[0.16] shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.35),0_25px_50px_rgba(0,0,0,0.85),0_0_20px_rgba(225,29,72,0.12)] overflow-hidden flex flex-col items-end">
+          <div className="w-full relative group p-4 sm:p-6 lg:p-7 rounded-2xl sm:rounded-3xl bg-gradient-to-b from-white/[0.10] via-[#0c0104]/80 to-[#060102]/92 backdrop-blur-3xl backdrop-saturate-[200%] border border-white/[0.18] shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.4),0_25px_50px_rgba(0,0,0,0.9),0_0_20px_rgba(225,29,72,0.12)] overflow-hidden flex flex-col items-start sm:items-end">
             {/* macOS Specular Top Edge Light */}
-            <div className="absolute top-0 inset-x-6 h-[1px] bg-gradient-to-r from-transparent via-white/50 to-transparent pointer-events-none" />
+            <div className="absolute top-0 inset-x-6 h-[1px] bg-gradient-to-r from-transparent via-white/60 to-transparent pointer-events-none" />
             <div className="absolute -top-10 -left-10 w-28 h-28 rounded-full bg-rose-500/10 blur-2xl pointer-events-none" />
 
             <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-rose-300 font-bold mb-1.5 sm:mb-2 block drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
@@ -410,24 +411,24 @@ export function AboutUsScrollytelling() {
               We break traditional digital boundaries. Innovation Ark delivers 120 FPS sub-pixel GPU spatial interactions, fluid 3D motion, and memorable experiences that captivate users.
             </p>
 
-            <div className="mt-4 sm:mt-5 flex flex-wrap justify-end gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] font-mono text-rose-200">
+            <div className="mt-4 sm:mt-5 flex flex-wrap justify-start sm:justify-end gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] font-mono text-rose-200">
               <span className="px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full border border-white/[0.15] bg-white/[0.05] backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">120 FPS Motion</span>
               <span className="px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full border border-white/[0.15] bg-white/[0.05] backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">Awwwards-Tier</span>
             </div>
           </div>
         </div>
 
-        {/* ━━━ PHASE 4: 46% - 64% (INNOVATION ARK PERFORMANCE CORE - RESPONSIVE macOS GLASS CARD) ━━━ */}
+        {/* ━━━ PHASE 4: 46% - 64% (INNOVATION ARK PERFORMANCE CORE - SPLIT-SCREEN MOBILE HUD) ━━━ */}
         <div
-          className="absolute left-3 right-3 sm:right-auto sm:left-6 md:left-10 lg:left-12 xl:left-16 max-w-none sm:max-w-[380px] lg:max-w-[420px] flex flex-col items-start text-left transition-all duration-200 pointer-events-auto"
+          className="absolute bottom-6 sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 left-4 right-4 sm:right-auto sm:left-6 md:left-10 lg:left-12 xl:left-16 max-w-none sm:max-w-[380px] lg:max-w-[420px] flex flex-col items-start text-left transition-all duration-200 pointer-events-auto"
           style={{
             opacity: phase4Opacity,
-            transform: `translateY(${(0.55 - scrollProgress) * 90}px) scale(${Math.max(0.9, 1 - Math.abs(0.55 - scrollProgress) * 0.5)})`,
+            transform: `translateY(${(0.55 - scrollProgress) * 70}px)`,
           }}
         >
-          <div className="w-full relative group p-4 sm:p-6 lg:p-7 rounded-2xl sm:rounded-3xl bg-gradient-to-b from-white/[0.09] via-[#0c0104]/70 to-[#060102]/85 backdrop-blur-3xl backdrop-saturate-[190%] border border-white/[0.16] shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.35),0_25px_50px_rgba(0,0,0,0.85),0_0_20px_rgba(225,29,72,0.12)] overflow-hidden">
+          <div className="w-full relative group p-4 sm:p-6 lg:p-7 rounded-2xl sm:rounded-3xl bg-gradient-to-b from-white/[0.10] via-[#0c0104]/80 to-[#060102]/92 backdrop-blur-3xl backdrop-saturate-[200%] border border-white/[0.18] shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.4),0_25px_50px_rgba(0,0,0,0.9),0_0_20px_rgba(225,29,72,0.12)] overflow-hidden">
             {/* macOS Specular Top Edge Light */}
-            <div className="absolute top-0 inset-x-6 h-[1px] bg-gradient-to-r from-transparent via-white/50 to-transparent pointer-events-none" />
+            <div className="absolute top-0 inset-x-6 h-[1px] bg-gradient-to-r from-transparent via-white/60 to-transparent pointer-events-none" />
             <div className="absolute -top-10 -right-10 w-28 h-28 rounded-full bg-rose-500/10 blur-2xl pointer-events-none" />
 
             <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-rose-300 font-bold mb-1.5 sm:mb-2 block drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
@@ -455,17 +456,17 @@ export function AboutUsScrollytelling() {
           </div>
         </div>
 
-        {/* ━━━ PHASE 5: 64% - 80% (INNOVATION ARK AI & AUTOMATION - RESPONSIVE macOS GLASS CARD) ━━━ */}
+        {/* ━━━ PHASE 5: 64% - 80% (INNOVATION ARK AI & AUTOMATION - SPLIT-SCREEN MOBILE HUD) ━━━ */}
         <div
-          className="absolute left-3 right-3 sm:left-auto sm:right-6 md:right-10 lg:right-12 xl:right-16 max-w-none sm:max-w-[380px] lg:max-w-[420px] flex flex-col items-end text-right transition-all duration-200 ml-auto [perspective:1000px] pointer-events-auto"
+          className="absolute bottom-6 sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 left-4 right-4 sm:left-auto sm:right-6 md:right-10 lg:right-12 xl:right-16 max-w-none sm:max-w-[380px] lg:max-w-[420px] flex flex-col items-start sm:items-end text-left sm:text-right transition-all duration-200 ml-auto pointer-events-auto [perspective:1000px]"
           style={{
             opacity: phase5Opacity,
-            transform: `translateX(${(scrollProgress - 0.72) * 140}px) rotateY(${Math.max(-20, Math.min(20, (scrollProgress - 0.72) * -45))}deg)`,
+            transform: `translateY(${(0.72 - scrollProgress) * 70}px)`,
           }}
         >
-          <div className="w-full relative group p-4 sm:p-6 lg:p-7 rounded-2xl sm:rounded-3xl bg-gradient-to-b from-white/[0.09] via-[#0c0104]/70 to-[#060102]/85 backdrop-blur-3xl backdrop-saturate-[190%] border border-white/[0.16] shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.35),0_25px_50px_rgba(0,0,0,0.85),0_0_20px_rgba(225,29,72,0.12)] overflow-hidden flex flex-col items-end">
+          <div className="w-full relative group p-4 sm:p-6 lg:p-7 rounded-2xl sm:rounded-3xl bg-gradient-to-b from-white/[0.10] via-[#0c0104]/80 to-[#060102]/92 backdrop-blur-3xl backdrop-saturate-[200%] border border-white/[0.18] shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.4),0_25px_50px_rgba(0,0,0,0.9),0_0_20px_rgba(225,29,72,0.12)] overflow-hidden flex flex-col items-start sm:items-end">
             {/* macOS Specular Top Edge Light */}
-            <div className="absolute top-0 inset-x-6 h-[1px] bg-gradient-to-r from-transparent via-white/50 to-transparent pointer-events-none" />
+            <div className="absolute top-0 inset-x-6 h-[1px] bg-gradient-to-r from-transparent via-white/60 to-transparent pointer-events-none" />
             <div className="absolute -top-10 -left-10 w-28 h-28 rounded-full bg-rose-500/10 blur-2xl pointer-events-none" />
 
             <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-rose-300 font-bold mb-1.5 sm:mb-2 block drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
@@ -486,7 +487,7 @@ export function AboutUsScrollytelling() {
               We integrate custom AI agents, neural pipelines, and real-time automated workflows directly into your web platforms, giving your enterprise an unfair competitive edge.
             </p>
 
-            <div className="mt-4 sm:mt-5 flex flex-wrap justify-end gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] font-mono text-rose-200">
+            <div className="mt-4 sm:mt-5 flex flex-wrap justify-start sm:justify-end gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] font-mono text-rose-200">
               <span className="px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full border border-white/[0.15] bg-white/[0.05] backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">Agentic Pipelines</span>
               <span className="px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full border border-white/[0.15] bg-white/[0.05] backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">Real-Time Vectors</span>
             </div>
