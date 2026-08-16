@@ -18,10 +18,10 @@ export interface SpotlightNavbarProps {
 
 export function SpotlightNavbar({
     items = [
-        { label: "Work", href: "#work" },
+        { label: "Overview", href: "#home" },
         { label: "Services", href: "#services" },
         { label: "Process", href: "#process" },
-        { label: "About", href: "#about" },
+        { label: "Work", href: "#work" },
         { label: "Tech", href: "#tech" },
     ],
     className,

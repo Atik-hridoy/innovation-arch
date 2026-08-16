@@ -4,9 +4,10 @@ interface LogoProps {
   className?: string;
   showText?: boolean;
   layout?: 'horizontal' | 'vertical';
+  isHero?: boolean;
 }
 
-export function Logo({ className = '', showText = true, layout = 'horizontal' }: LogoProps) {
+export function Logo({ className = '', showText = true, layout = 'horizontal', isHero = false }: LogoProps) {
   const isVertical = layout === 'vertical';
 
   return (
@@ -17,7 +18,7 @@ export function Logo({ className = '', showText = true, layout = 'horizontal' }:
         className={`relative flex items-center justify-center transition-transform duration-500 ease-out ${
           isVertical 
             ? 'w-36 h-36 md:w-44 md:h-44 animate-float-3d' 
-            : 'w-11 h-11 transform group-hover:scale-105'
+            : 'w-10 h-10 transform group-hover:scale-105'
         }`}
         style={{
           perspective: '400px',
@@ -44,22 +45,22 @@ export function Logo({ className = '', showText = true, layout = 'horizontal' }:
 
             {/* Volumetric Gradients */}
             <linearGradient id="gradient-i" x1="40" y1="40" x2="64" y2="140" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#002d62" />
-              <stop offset="50%" stopColor="#004b8d" />
-              <stop offset="100%" stopColor="#001835" />
+              <stop offset="0%" stopColor="#881337" />
+              <stop offset="50%" stopColor="#e11d48" />
+              <stop offset="100%" stopColor="#fb7185" />
             </linearGradient>
 
             <linearGradient id="gradient-a" x1="72" y1="40" x2="164" y2="140" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#efeff3" />
-              <stop offset="30%" stopColor="#b5b5be" />
-              <stop offset="70%" stopColor="#7a7a85" />
-              <stop offset="100%" stopColor="#45454d" />
+              <stop offset="0%" stopColor="#f43f5e" />
+              <stop offset="30%" stopColor="#e11d48" />
+              <stop offset="70%" stopColor="#be123c" />
+              <stop offset="100%" stopColor="#881337" />
             </linearGradient>
 
             <linearGradient id="gradient-wave" x1="90" y1="145" x2="180" y2="35" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#001f4d" />
-              <stop offset="50%" stopColor="#0056b3" />
-              <stop offset="100%" stopColor="#00bfff" />
+              <stop offset="0%" stopColor="#881337" />
+              <stop offset="50%" stopColor="#e11d48" />
+              <stop offset="100%" stopColor="#fda4af" />
             </linearGradient>
           </defs>
 
@@ -101,26 +102,30 @@ export function Logo({ className = '', showText = true, layout = 'horizontal' }:
             />
 
             {/* Wave node circles */}
-            <circle cx="94" cy="135" r="4" fill="#00bfff" />
-            <circle cx="112" cy="140" r="3.5" fill="#0056b3" />
+            <circle cx="94" cy="135" r="4" fill="#fb7185" />
+            <circle cx="112" cy="140" r="3.5" fill="#e11d48" />
 
             {/* Floating digital pixels */}
-            <rect x="164" y="44" width="7" height="7" rx="1" fill="#00bfff" filter="url(#shadow-3d)" />
-            <rect x="174" y="36" width="9" height="9" rx="1.5" fill="#0056b3" filter="url(#shadow-3d)" />
-            <rect x="176" y="50" width="6" height="6" rx="1" fill="#002d62" filter="url(#shadow-3d)" />
-            <rect x="166" y="60" width="8" height="8" rx="1" fill="#efeff3" filter="url(#shadow-3d)" />
+            <rect x="164" y="44" width="7" height="7" rx="1" fill="#fda4af" filter="url(#shadow-3d)" />
+            <rect x="174" y="36" width="9" height="9" rx="1.5" fill="#f43f5e" filter="url(#shadow-3d)" />
+            <rect x="176" y="50" width="6" height="6" rx="1" fill="#881337" filter="url(#shadow-3d)" />
+            <rect x="166" y="60" width="8" height="8" rx="1" fill="#e11d48" filter="url(#shadow-3d)" />
           </g>
         </svg>
       </div>
 
       {showText && (
         <div className={`flex flex-col ${isVertical ? 'items-center' : 'items-start'}`}>
-          <span className={`font-sans font-extrabold uppercase bg-clip-text text-transparent bg-gradient-to-r from-neutral-900 via-neutral-900 to-neutral-700 dark:from-white dark:via-white dark:to-white/70 group-hover:to-primary transition-all duration-500 ${
+          <span className={`font-sans font-extrabold uppercase transition-all duration-500 ${
+            isHero
+              ? 'text-transparent bg-clip-text bg-gradient-to-r from-rose-300 via-rose-400 to-red-500 drop-shadow-[0_2px_10px_rgba(225,29,72,0.4)]'
+              : 'text-transparent bg-clip-text bg-gradient-to-r from-neutral-900 via-neutral-900 to-neutral-700 dark:from-white dark:via-white dark:to-white/70'
+          } ${
             isVertical 
               ? 'text-[24px] md:text-[28px] tracking-[0.1em]' 
-              : 'text-[17px] tracking-wider animate-typewriter'
+              : 'text-[17px] tracking-wider'
           }`}>
-            INNOVATION <span className="text-[#00bfff]">ARK</span>
+            INNOVATION <span className={isHero ? 'text-rose-400' : 'text-[#00bfff]'}>ARK</span>
           </span>
           {isVertical && (
             <span className="font-mono text-[8px] md:text-[9px] tracking-[0.22em] text-on-surface-variant/70 uppercase mt-2">

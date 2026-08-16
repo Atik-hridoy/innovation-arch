@@ -7,7 +7,7 @@ import Lenis from 'lenis';
 import { Header } from '@/components/Header';
 import { GlobalOverlays } from '@/components/GlobalOverlays';
 import { SectionStage } from '@/components/SectionStage';
-import { Hero } from '@/components/sections/Hero';
+import { AboutUsScrollytelling } from '@/components/sections/AboutUsScrollytelling';
 import { Services } from '@/components/sections/Services';
 import { Process } from '@/components/sections/Process';
 import { Portfolio } from '@/components/sections/Portfolio';
@@ -324,8 +324,8 @@ export default function Home() {
       <Header />
 
       <main className="relative w-full z-10 bg-background transition-colors duration-400">
-        <SectionStage id="home" className="w-full min-h-[85vh] sm:min-h-screen bg-background dark:bg-[#050505]">
-          <Hero />
+        <SectionStage id="home" className="w-full bg-[#0a0103]">
+          <AboutUsScrollytelling />
         </SectionStage>
 
         <SectionStage id="services" className="w-full bg-background dark:bg-[#050505]">
