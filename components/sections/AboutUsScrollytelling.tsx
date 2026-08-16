@@ -3,8 +3,13 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { RadialGlowButton } from '@/components/ui/radial-glow-button';
 import { AuroraHeroBg } from '@/components/ui/aurora-hero';
+import { PhaseHero } from './scrollytelling/PhaseHero';
+import { PhaseBlueprint } from './scrollytelling/PhaseBlueprint';
+import { PhaseSpatial } from './scrollytelling/PhaseSpatial';
+import { PhaseSupremacy } from './scrollytelling/PhaseSupremacy';
+import { PhaseNeural } from './scrollytelling/PhaseNeural';
+import { PhaseFinale } from './scrollytelling/PhaseFinale';
 
 const DESKTOP_FRAMES = 240;
 const MOBILE_FRAMES = 300;
@@ -119,11 +124,9 @@ export function AboutUsScrollytelling() {
     const isDarkMode = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
     const bgBaseColor = isDarkMode ? '#080103' : '#0F2027';
 
-    // Deep background
     ctx.fillStyle = bgBaseColor;
     ctx.fillRect(0, 0, width, height);
 
-    // ── STRICT HOOK & FINALE RULE: Unless actively scrolling in scrollytelling phases, NO IMAGE is drawn! ──
     const isHookOrFinale = isMobile
       ? progressVal < 0.08 || progressVal > 0.84
       : progressVal < 0.08 || progressVal > 0.91;
@@ -133,7 +136,6 @@ export function AboutUsScrollytelling() {
       return;
     }
 
-    // Aspect Fit/Cover
     const hRatio = width / img.naturalWidth;
     const vRatio = height / img.naturalHeight;
     const ratio = isMobile
@@ -147,86 +149,72 @@ export function AboutUsScrollytelling() {
 
     ctx.drawImage(img, renderX, renderY, renderW, renderH);
 
-    // ── 4-Sided Edge Feather Gradients ──
-    const featherW = Math.max(80, width * 0.25);
-    const featherH = Math.max(80, height * 0.25);
+    // 4-Sided Edge Feather Gradients
+    const edgeSize = isMobile ? 35 : 70;
+    
+    const gradTop = ctx.createLinearGradient(0, 0, 0, edgeSize);
+    gradTop.addColorStop(0, bgBaseColor);
+    gradTop.addColorStop(1, 'transparent');
+    ctx.fillStyle = gradTop;
+    ctx.fillRect(0, 0, width, edgeSize);
 
-    // Left Edge
-    const leftGrad = ctx.createLinearGradient(0, 0, featherW, 0);
-    leftGrad.addColorStop(0, bgBaseColor);
-    leftGrad.addColorStop(0.35, isDarkMode ? 'rgba(8, 1, 3, 0.7)' : 'rgba(15, 32, 39, 0.7)');
-    leftGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-    ctx.fillStyle = leftGrad;
-    ctx.fillRect(0, 0, featherW, height);
+    const gradBottom = ctx.createLinearGradient(0, height - edgeSize, 0, height);
+    gradBottom.addColorStop(0, 'transparent');
+    gradBottom.addColorStop(1, bgBaseColor);
+    ctx.fillStyle = gradBottom;
+    ctx.fillRect(0, height - edgeSize, width, edgeSize);
 
-    // Right Edge
-    const rightGrad = ctx.createLinearGradient(width - featherW, 0, width, 0);
-    rightGrad.addColorStop(0, 'rgba(0, 0, 0, 0)');
-    rightGrad.addColorStop(0.65, isDarkMode ? 'rgba(8, 1, 3, 0.7)' : 'rgba(15, 32, 39, 0.7)');
-    rightGrad.addColorStop(1, bgBaseColor);
-    ctx.fillStyle = rightGrad;
-    ctx.fillRect(width - featherW, 0, featherW, height);
+    const gradLeft = ctx.createLinearGradient(0, 0, edgeSize, 0);
+    gradLeft.addColorStop(0, bgBaseColor);
+    gradLeft.addColorStop(1, 'transparent');
+    ctx.fillStyle = gradLeft;
+    ctx.fillRect(0, 0, edgeSize, height);
 
-    // Top Edge
-    const topGrad = ctx.createLinearGradient(0, 0, 0, featherH);
-    topGrad.addColorStop(0, bgBaseColor);
-    topGrad.addColorStop(0.35, isDarkMode ? 'rgba(8, 1, 3, 0.7)' : 'rgba(15, 32, 39, 0.7)');
-    topGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-    ctx.fillStyle = topGrad;
-    ctx.fillRect(0, 0, width, featherH);
-
-    // Bottom Edge
-    const bottomGrad = ctx.createLinearGradient(0, height - featherH, 0, height);
-    bottomGrad.addColorStop(0, 'rgba(0, 0, 0, 0)');
-    bottomGrad.addColorStop(0.65, isDarkMode ? 'rgba(8, 1, 3, 0.7)' : 'rgba(15, 32, 39, 0.7)');
-    bottomGrad.addColorStop(1, bgBaseColor);
-    ctx.fillStyle = bottomGrad;
-    ctx.fillRect(0, height - featherH, width, featherH);
-
-    // ── Radial Vignette ──
-    const gradient = ctx.createRadialGradient(
-      width / 2,
-      height / 2,
-      Math.min(width, height) * 0.28,
-      width / 2,
-      height / 2,
-      Math.max(width, height) * 0.68
-    );
-    gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
-    gradient.addColorStop(0.5, isDarkMode ? 'rgba(8, 1, 3, 0.2)' : 'rgba(15, 32, 39, 0.2)');
-    gradient.addColorStop(0.85, isDarkMode ? 'rgba(8, 1, 3, 0.85)' : 'rgba(15, 32, 39, 0.85)');
-    gradient.addColorStop(1, bgBaseColor);
-
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, width, height);
+    const gradRight = ctx.createLinearGradient(width - edgeSize, 0, width, 0);
+    gradRight.addColorStop(0, 'transparent');
+    gradRight.addColorStop(1, bgBaseColor);
+    ctx.fillStyle = gradRight;
+    ctx.fillRect(width - edgeSize, 0, edgeSize, height);
 
     ctx.restore();
   };
 
-  // 3. High-Performance ScrollTrigger Pipeline
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    gsap.registerPlugin(ScrollTrigger);
+  // Helper for zero-re-render phase opacity/transform updates
+  const setPhaseStyle = (
+    ref: React.RefObject<HTMLDivElement | null>,
+    opacity: number,
+    translateY: number,
+    scale: number = 1
+  ) => {
+    if (!ref.current) return;
+    const el = ref.current;
+    el.style.opacity = `${opacity}`;
+    el.style.transform = `translateY(${translateY}px) scale(${scale})`;
+    el.style.pointerEvents = opacity > 0.5 ? 'auto' : 'none';
+  };
 
+  // 3. GSAP Scroll Choreography
+  useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
 
-    const isMobile = window.innerWidth < 768;
-    isMobileDeviceRef.current = isMobile;
-
     const ctx = gsap.context(() => {
+      const isMobileDevice = window.innerWidth < 768;
+      isMobileDeviceRef.current = isMobileDevice;
+
       ScrollTrigger.create({
         trigger: section,
         start: 'top top',
-        end: isMobile ? '+=140%' : '+=525%',
+        end: isMobileDevice ? '+=3200' : '+=4200',
         pin: true,
-        scrub: isMobile ? 0.2 : 0.45,
+        scrub: isMobileDevice ? 0.35 : 0.6,
         anticipatePin: 1,
+        fastScrollEnd: true,
         onUpdate: (self) => {
           const p = self.progress;
-          const isMobileDevice = isMobileDeviceRef.current;
-          let frameIndex = 1;
 
+          // Frame calculation
+          let frameIndex = 1;
           if (isMobileDevice) {
             if (p < 0.08) {
               frameIndex = 1;
@@ -250,72 +238,125 @@ export function AboutUsScrollytelling() {
               );
             } else if (p > 0.74 && p <= 0.90) {
               const reverseProgress = (p - 0.74) / 0.16;
-              frameIndex = Math.min(
-                DESKTOP_FRAMES,
-                Math.max(1, Math.floor((1 - reverseProgress) * (DESKTOP_FRAMES - 1)) + 1)
+              frameIndex = Math.max(
+                1,
+                Math.floor(DESKTOP_FRAMES - reverseProgress * (DESKTOP_FRAMES - 1))
               );
             } else {
               frameIndex = 1;
             }
           }
 
-          if (frameIndex !== currentFrameRef.current || p <= 0.08 || (isMobileDevice ? p >= 0.84 : p >= 0.91)) {
-            currentFrameRef.current = frameIndex;
-            renderFrame(frameIndex, p);
+          currentFrameRef.current = frameIndex;
+          renderFrame(frameIndex, p);
+
+          // Direct DOM phase transforms
+          // Phase 1 (Hero)
+          if (p < 0.08) {
+            const phaseP = Math.min(1, p / 0.08);
+            setPhaseStyle(phase1Ref, 1 - phaseP, -phaseP * 40, 1 - phaseP * 0.05);
+            if (heroAuroraRef.current) heroAuroraRef.current.style.opacity = `${1 - phaseP}`;
+          } else {
+            setPhaseStyle(phase1Ref, 0, -40);
+            if (heroAuroraRef.current) heroAuroraRef.current.style.opacity = '0';
           }
 
-          // Direct DOM updates for butter-smooth 60-120 FPS without React re-renders
-          const phase1Opacity = Math.max(0, 1 - p * 9.5);
-          const phase2Opacity = Math.max(0, 1 - Math.abs(p - 0.20) * 8.5);
-          const phase3Opacity = Math.max(0, 1 - Math.abs(p - 0.37) * 8.5);
-          const phase4Opacity = Math.max(0, 1 - Math.abs(p - 0.55) * 8.5);
-          const phase5Opacity = Math.max(0, 1 - Math.abs(p - 0.72) * 8.5);
-          const phase6Opacity = Math.max(0, Math.min(1, (p - 0.82) * 6.5));
-
-          if (phase1Ref.current) {
-            phase1Ref.current.style.opacity = `${phase1Opacity}`;
-            phase1Ref.current.style.transform = `translateY(${-p * 60}px) scale(${1 - p * 0.1})`;
-            phase1Ref.current.style.pointerEvents = phase1Opacity > 0.1 ? 'auto' : 'none';
+          // Phase 2 (Blueprint)
+          if (isMobileDevice) {
+            if (p >= 0.08 && p < 0.26) {
+              const fadeIn = Math.min(1, (p - 0.08) / 0.05);
+              const fadeOut = Math.min(1, (0.26 - p) / 0.05);
+              const activeP = Math.max(0, Math.min(fadeIn, fadeOut));
+              setPhaseStyle(phase2Ref, activeP, (1 - activeP) * 20);
+            } else {
+              setPhaseStyle(phase2Ref, 0, 20);
+            }
+          } else {
+            if (p >= 0.08 && p < 0.22) {
+              const fadeIn = Math.min(1, (p - 0.08) / 0.04);
+              const fadeOut = Math.min(1, (0.22 - p) / 0.04);
+              const activeP = Math.max(0, Math.min(fadeIn, fadeOut));
+              setPhaseStyle(phase2Ref, activeP, (1 - activeP) * 25);
+            } else {
+              setPhaseStyle(phase2Ref, 0, 25);
+            }
           }
 
-          if (phase2Ref.current) {
-            phase2Ref.current.style.opacity = `${phase2Opacity}`;
-            phase2Ref.current.style.transform = `translateY(${(0.20 - p) * 45}px) scale(${0.96 + Math.min(0.04, phase2Opacity * 0.04)})`;
-            phase2Ref.current.style.pointerEvents = phase2Opacity > 0.1 ? 'auto' : 'none';
+          // Phase 3 (Spatial)
+          if (isMobileDevice) {
+            if (p >= 0.26 && p < 0.44) {
+              const fadeIn = Math.min(1, (p - 0.26) / 0.05);
+              const fadeOut = Math.min(1, (0.44 - p) / 0.05);
+              const activeP = Math.max(0, Math.min(fadeIn, fadeOut));
+              setPhaseStyle(phase3Ref, activeP, (1 - activeP) * 20);
+            } else {
+              setPhaseStyle(phase3Ref, 0, 20);
+            }
+          } else {
+            if (p >= 0.22 && p < 0.38) {
+              const fadeIn = Math.min(1, (p - 0.22) / 0.04);
+              const fadeOut = Math.min(1, (0.38 - p) / 0.04);
+              const activeP = Math.max(0, Math.min(fadeIn, fadeOut));
+              setPhaseStyle(phase3Ref, activeP, (1 - activeP) * 25);
+            } else {
+              setPhaseStyle(phase3Ref, 0, 25);
+            }
           }
 
-          if (phase3Ref.current) {
-            phase3Ref.current.style.opacity = `${phase3Opacity}`;
-            phase3Ref.current.style.transform = `translateY(${(0.37 - p) * 45}px) scale(${0.96 + Math.min(0.04, phase3Opacity * 0.04)})`;
-            phase3Ref.current.style.pointerEvents = phase3Opacity > 0.1 ? 'auto' : 'none';
+          // Phase 4 (Supremacy)
+          if (isMobileDevice) {
+            if (p >= 0.44 && p < 0.62) {
+              const fadeIn = Math.min(1, (p - 0.44) / 0.05);
+              const fadeOut = Math.min(1, (0.62 - p) / 0.05);
+              const activeP = Math.max(0, Math.min(fadeIn, fadeOut));
+              setPhaseStyle(phase4Ref, activeP, (1 - activeP) * 20);
+            } else {
+              setPhaseStyle(phase4Ref, 0, 20);
+            }
+          } else {
+            if (p >= 0.38 && p < 0.54) {
+              const fadeIn = Math.min(1, (p - 0.38) / 0.04);
+              const fadeOut = Math.min(1, (0.54 - p) / 0.04);
+              const activeP = Math.max(0, Math.min(fadeIn, fadeOut));
+              setPhaseStyle(phase4Ref, activeP, (1 - activeP) * 25);
+            } else {
+              setPhaseStyle(phase4Ref, 0, 25);
+            }
           }
 
-          if (phase4Ref.current) {
-            phase4Ref.current.style.opacity = `${phase4Opacity}`;
-            phase4Ref.current.style.transform = `translateY(${(0.55 - p) * 45}px) scale(${0.96 + Math.min(0.04, phase4Opacity * 0.04)})`;
-            phase4Ref.current.style.pointerEvents = phase4Opacity > 0.1 ? 'auto' : 'none';
+          // Phase 5 (Neural AI)
+          if (isMobileDevice) {
+            if (p >= 0.62 && p < 0.80) {
+              const fadeIn = Math.min(1, (p - 0.62) / 0.05);
+              const fadeOut = Math.min(1, (0.80 - p) / 0.05);
+              const activeP = Math.max(0, Math.min(fadeIn, fadeOut));
+              setPhaseStyle(phase5Ref, activeP, (1 - activeP) * 20);
+            } else {
+              setPhaseStyle(phase5Ref, 0, 20);
+            }
+          } else {
+            if (p >= 0.54 && p < 0.72) {
+              const fadeIn = Math.min(1, (p - 0.54) / 0.04);
+              const fadeOut = Math.min(1, (0.72 - p) / 0.04);
+              const activeP = Math.max(0, Math.min(fadeIn, fadeOut));
+              setPhaseStyle(phase5Ref, activeP, (1 - activeP) * 25);
+            } else {
+              setPhaseStyle(phase5Ref, 0, 25);
+            }
           }
 
-          if (phase5Ref.current) {
-            phase5Ref.current.style.opacity = `${phase5Opacity}`;
-            phase5Ref.current.style.transform = `translateY(${(0.72 - p) * 45}px) scale(${0.96 + Math.min(0.04, phase5Opacity * 0.04)})`;
-            phase5Ref.current.style.pointerEvents = phase5Opacity > 0.1 ? 'auto' : 'none';
+          // Phase 6 (Grand Finale)
+          const finaleThreshold = isMobileDevice ? 0.82 : 0.88;
+          if (p >= finaleThreshold) {
+            const finaleProgress = Math.min(1, (p - finaleThreshold) / (1 - finaleThreshold));
+            setPhaseStyle(phase6Ref, finaleProgress, (1 - finaleProgress) * 30);
+            if (finaleBgRef.current) finaleBgRef.current.style.opacity = `${finaleProgress}`;
+          } else {
+            setPhaseStyle(phase6Ref, 0, 30);
+            if (finaleBgRef.current) finaleBgRef.current.style.opacity = '0';
           }
 
-          if (phase6Ref.current) {
-            phase6Ref.current.style.opacity = `${phase6Opacity}`;
-            phase6Ref.current.style.transform = `translateY(${(0.92 - p) * 70}px) scale(${Math.min(1, 0.92 + p * 0.08)})`;
-            phase6Ref.current.style.pointerEvents = phase6Opacity > 0.1 ? 'auto' : 'none';
-          }
-
-          if (heroAuroraRef.current) {
-            heroAuroraRef.current.style.opacity = `${Math.max(0, 1 - p * 8.5)}`;
-          }
-
-          if (finaleBgRef.current) {
-            finaleBgRef.current.style.opacity = `${phase6Opacity}`;
-          }
-
+          // Canvas fade in / out
           if (canvasRef.current) {
             const maxActiveP = isMobileDevice ? 0.84 : 0.90;
             let canvasOpacity = 0;
@@ -362,7 +403,7 @@ export function AboutUsScrollytelling() {
 
       {/* Ambient background glow */}
       <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] sm:w-[75vw] h-[90vw] sm:h-[75vw] max-w-[1000px] max-h-[1000px] rounded-full bg-radial from-emerald-600/20 via-emerald-950/10 to-transparent dark:from-red-600/12 dark:via-rose-950/6 blur-[160px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] sm:w-[75vw] h-[90vw] sm:h-[75vw] max-w-[1000px] max-h-[1000px] rounded-full bg-radial from-emerald-600/20 via-emerald-950/10 to-transparent blur-[160px]" />
       </div>
 
       {/* Hero Aurora Background Layer */}
@@ -383,239 +424,14 @@ export function AboutUsScrollytelling() {
         <div className="absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-b from-transparent via-[#28623A]/50 to-[#28623A] dark:from-transparent dark:via-[#080103]/70 dark:to-[#080103]" />
       </div>
 
-      {/* Content Container */}
+      {/* Modular Phase Content Components */}
       <div className="relative z-10 w-full h-full px-3 sm:px-8 md:px-12 lg:px-16 xl:px-20 pointer-events-none flex items-center">
-        
-        {/* Phase 1: Hero */}
-        <div
-          ref={phase1Ref}
-          className="absolute inset-x-3 sm:inset-x-8 md:inset-x-16 lg:inset-x-24 top-1/2 -translate-y-1/2 flex flex-col items-center text-center transition-all duration-200 pointer-events-auto max-w-5xl mx-auto will-change-transform"
-          style={{ opacity: 1 }}
-        >
-          <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full border border-emerald-500/30 dark:border-rose-500/30 bg-emerald-500/10 dark:bg-rose-500/10 backdrop-blur-md mb-2 sm:mb-6 shadow-[0_0_20px_rgba(52,211,153,0.2)] dark:shadow-[0_0_20px_rgba(225,29,72,0.2)]">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 dark:bg-red-500 animate-pulse" />
-            <span className="font-mono text-[9px] sm:text-xs uppercase tracking-[0.25em] text-emerald-300 dark:text-rose-300 font-semibold">
-              Digital Product Studio
-            </span>
-          </div>
-
-          <h1 className="font-sans font-black text-2xl xs:text-3xl sm:text-6xl md:text-7xl lg:text-8xl uppercase tracking-tighter leading-[0.92] sm:leading-[0.9] text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
-            WE CRAFT <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-200 to-emerald-500 dark:from-red-500 dark:via-rose-300 dark:to-rose-600">
-              TIMELESS
-            </span>{' '}
-            <span className="font-serif italic font-normal lowercase tracking-tight text-emerald-200 dark:text-rose-200">
-              digital
-            </span>{' '}
-            <br />
-            PRODUCTS.
-          </h1>
-
-          <p className="mt-2 sm:mt-6 font-sans text-[11px] xs:text-xs sm:text-lg md:text-xl text-emerald-100/90 dark:text-[#f3d5dc] max-w-2xl font-light leading-relaxed drop-shadow-[0_2px_15px_rgba(0,0,0,0.95)]">
-            Architecting next-generation digital ecosystems, intelligent mobile applications, and high-impact brand identities.
-          </p>
-
-          <div className="mt-4 sm:mt-8 flex items-center justify-center">
-            <a href="#contact" className="pointer-events-auto">
-              <RadialGlowButton
-                size="md"
-                className="px-6 sm:px-8 py-2.5 sm:py-3.5 text-xs sm:text-sm font-semibold tracking-wider uppercase text-white shadow-[0_10px_35px_rgba(40,98,58,0.5)] dark:shadow-[0_10px_35px_rgba(225,29,72,0.5)] active:scale-95 transition-transform"
-              >
-                Initialize Project →
-              </RadialGlowButton>
-            </a>
-          </div>
-
-          <div className="mt-4 sm:mt-10 flex items-center gap-1.5 font-mono text-[9px] sm:text-[11px] text-emerald-300 dark:text-rose-300 uppercase tracking-widest animate-bounce drop-shadow-[0_2px_10px_rgba(0,0,0,1)]">
-            <span className="material-symbols-outlined text-sm sm:text-base">expand_more</span>
-            Scroll to explore
-          </div>
-        </div>
-
-        {/* Phase 2: Blueprint */}
-        <div
-          ref={phase2Ref}
-          className="absolute top-[12%] sm:top-1/2 sm:-translate-y-1/2 left-3 sm:left-6 md:left-10 lg:left-12 xl:left-16 max-w-[245px] xs:max-w-[270px] sm:max-w-[390px] lg:max-w-[430px] flex flex-col items-start text-left transition-all duration-200 pointer-events-none [perspective:1000px] will-change-transform"
-          style={{ opacity: 0 }}
-        >
-          <div className="w-full relative group p-3.5 sm:p-6 lg:p-7 rounded-[24px] sm:rounded-[32px] bg-white/[0.14] dark:bg-white/[0.09] backdrop-blur-3xl border border-white/[0.28] dark:border-white/[0.22] shadow-[0_16px_36px_rgba(0,0,0,0.5),inset_0_1px_1.5px_rgba(255,255,255,0.65),inset_0_-1px_1px_rgba(0,0,0,0.2)] overflow-hidden">
-            <div className="absolute top-0 inset-x-5 h-[1.5px] bg-gradient-to-r from-transparent via-white/80 to-transparent pointer-events-none rounded-full" />
-            <div className="flex items-center justify-between w-full mb-1.5 sm:mb-2.5">
-              <div className="px-2.5 py-0.5 rounded-full bg-white/[0.16] backdrop-blur-xl border border-white/[0.25] flex items-center gap-1.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)]">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 dark:bg-red-400 shadow-[0_0_6px_rgba(52,211,153,0.9)] dark:shadow-[0_0_6px_rgba(248,113,113,0.9)]" />
-                <span className="font-mono text-[8.5px] sm:text-[11px] uppercase tracking-[0.16em] text-white font-bold">
-                  BLUEPRINT
-                </span>
-              </div>
-              <span className="font-mono text-[7.5px] sm:text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/25 border border-emerald-400/30 text-emerald-200 font-semibold">
-                ACTIVE
-              </span>
-            </div>
-            <h2 className="font-sans font-black text-xs sm:text-3xl lg:text-4xl uppercase tracking-tight leading-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.4)]">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-100 to-emerald-300 dark:via-rose-100 dark:to-rose-300">
-                ARCHITECTED FOR
-              </span>{' '}
-              <span className="font-serif italic font-normal lowercase tracking-normal text-emerald-200 dark:text-rose-200 text-sm sm:text-4xl">
-                scale.
-              </span>
-            </h2>
-            <p className="font-sans text-[10.5px] sm:text-sm text-white/90 font-normal leading-relaxed mt-1 sm:mt-3 drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)]">
-              Foundational blueprints—modular design systems, high-throughput microservices, and end-to-end technical roadmaps.
-            </p>
-            <div className="mt-2 sm:mt-4 flex flex-wrap gap-1.5 sm:gap-2 text-[8.5px] sm:text-[11px] font-mono text-white/90">
-              <span className="px-2.5 py-0.5 rounded-full border border-white/[0.2] bg-white/[0.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]">Design Systems</span>
-              <span className="px-2.5 py-0.5 rounded-full border border-white/[0.2] bg-white/[0.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]">Core Mesh</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Phase 3: Spatial */}
-        <div
-          ref={phase3Ref}
-          className="absolute top-[30%] sm:top-1/2 sm:-translate-y-1/2 right-3 sm:right-6 md:right-10 lg:right-12 xl:right-16 max-w-[245px] xs:max-w-[270px] sm:max-w-[390px] lg:max-w-[430px] flex flex-col items-end text-right transition-all duration-200 ml-auto pointer-events-none [perspective:1000px] will-change-transform"
-          style={{ opacity: 0 }}
-        >
-          <div className="w-full relative group p-3.5 sm:p-6 lg:p-7 rounded-[24px] sm:rounded-[32px] bg-white/[0.14] dark:bg-white/[0.09] backdrop-blur-3xl border border-white/[0.28] dark:border-white/[0.22] shadow-[0_16px_36px_rgba(0,0,0,0.5),inset_0_1px_1.5px_rgba(255,255,255,0.65),inset_0_-1px_1px_rgba(0,0,0,0.2)] overflow-hidden flex flex-col items-end">
-            <div className="absolute top-0 inset-x-5 h-[1.5px] bg-gradient-to-r from-transparent via-white/80 to-transparent pointer-events-none rounded-full" />
-            <div className="flex items-center justify-between w-full mb-1.5 sm:mb-2.5">
-              <span className="font-mono text-[7.5px] sm:text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/25 dark:bg-rose-500/25 border border-emerald-400/30 dark:border-rose-400/30 text-emerald-200 dark:text-rose-200 font-semibold">
-                120 FPS
-              </span>
-              <div className="px-2.5 py-0.5 rounded-full bg-white/[0.16] backdrop-blur-xl border border-white/[0.25] flex items-center gap-1.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)]">
-                <span className="font-mono text-[8.5px] sm:text-[11px] uppercase tracking-[0.16em] text-white font-bold">
-                  SPATIAL
-                </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 dark:bg-rose-400 shadow-[0_0_6px_rgba(52,211,153,0.9)] dark:shadow-[0_0_6px_rgba(251,113,133,0.9)]" />
-              </div>
-            </div>
-            <h2 className="font-sans font-black text-xs sm:text-3xl lg:text-4xl uppercase tracking-tight leading-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.4)]">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-100 to-emerald-300 dark:via-rose-100 dark:to-rose-300">
-                EXPERIENCES
-              </span>{' '}
-              <span className="font-serif italic font-normal lowercase tracking-normal text-emerald-200 dark:text-rose-200 text-sm sm:text-4xl">
-                beyond.
-              </span>
-            </h2>
-            <p className="font-sans text-[10.5px] sm:text-sm text-white/90 font-normal leading-relaxed mt-1 sm:mt-3 drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)]">
-              120 FPS sub-pixel GPU spatial interactions, fluid 3D motion, and memorable experiences.
-            </p>
-            <div className="mt-2 sm:mt-4 flex flex-wrap justify-end gap-1.5 sm:gap-2 text-[8.5px] sm:text-[11px] font-mono text-white/90">
-              <span className="px-2.5 py-0.5 rounded-full border border-white/[0.2] bg-white/[0.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]">GPU Accelerated</span>
-              <span className="px-2.5 py-0.5 rounded-full border border-white/[0.2] bg-white/[0.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]">Sub-Pixel</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Phase 4: Supremacy */}
-        <div
-          ref={phase4Ref}
-          className="absolute top-[48%] sm:top-1/2 sm:-translate-y-1/2 left-3 sm:left-6 md:left-10 lg:left-12 xl:left-16 max-w-[245px] xs:max-w-[270px] sm:max-w-[390px] lg:max-w-[430px] flex flex-col items-start text-left transition-all duration-200 pointer-events-none will-change-transform"
-          style={{ opacity: 0 }}
-        >
-          <div className="w-full relative group p-3.5 sm:p-6 lg:p-7 rounded-[24px] sm:rounded-[32px] bg-white/[0.14] dark:bg-white/[0.09] backdrop-blur-3xl border border-white/[0.28] dark:border-white/[0.22] shadow-[0_16px_36px_rgba(0,0,0,0.5),inset_0_1px_1.5px_rgba(255,255,255,0.65),inset_0_-1px_1px_rgba(0,0,0,0.2)] overflow-hidden">
-            <div className="absolute top-0 inset-x-5 h-[1.5px] bg-gradient-to-r from-transparent via-white/80 to-transparent pointer-events-none rounded-full" />
-            <div className="flex items-center justify-between w-full mb-1.5 sm:mb-2.5">
-              <div className="px-2.5 py-0.5 rounded-full bg-white/[0.16] backdrop-blur-xl border border-white/[0.25] flex items-center gap-1.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)]">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.9)]" />
-                <span className="font-mono text-[8.5px] sm:text-[11px] uppercase tracking-[0.16em] text-white font-bold">
-                  SUPREMACY
-                </span>
-              </div>
-              <span className="font-mono text-[7.5px] sm:text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/25 border border-emerald-400/30 text-emerald-200 font-semibold">
-                0.4ms EDGE
-              </span>
-            </div>
-            <h2 className="font-sans font-black text-xs sm:text-3xl lg:text-4xl uppercase tracking-tight leading-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.4)]">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-100 to-emerald-300 dark:via-rose-100 dark:to-rose-300">
-                ENGINEERED FOR
-              </span>{' '}
-              <span className="font-serif italic font-normal lowercase tracking-normal text-emerald-200 dark:text-rose-200 text-sm sm:text-4xl">
-                speed.
-              </span>
-            </h2>
-            <p className="font-sans text-[10.5px] sm:text-sm text-white/90 font-normal leading-relaxed mt-1 sm:mt-3 drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)]">
-              Powered by Next.js Turbopack, distributed edge networks, and sub-millisecond execution.
-            </p>
-            <div className="mt-2 sm:mt-4 flex flex-wrap gap-1.5 sm:gap-2 text-[8.5px] sm:text-[11px] font-mono text-white/90">
-              <span className="px-2.5 py-0.5 rounded-full border border-white/[0.2] bg-white/[0.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]">Turbopack</span>
-              <span className="px-2.5 py-0.5 rounded-full border border-white/[0.2] bg-white/[0.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]">0.4ms Latency</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Phase 5: Neural AI */}
-        <div
-          ref={phase5Ref}
-          className="absolute top-[66%] sm:top-1/2 sm:-translate-y-1/2 right-3 sm:right-6 md:right-10 lg:right-12 xl:right-16 max-w-[245px] xs:max-w-[270px] sm:max-w-[390px] lg:max-w-[430px] flex flex-col items-end text-right transition-all duration-200 ml-auto pointer-events-none will-change-transform"
-          style={{ opacity: 0 }}
-        >
-          <div className="w-full relative group p-3.5 sm:p-6 lg:p-7 rounded-[24px] sm:rounded-[32px] bg-white/[0.14] dark:bg-white/[0.09] backdrop-blur-3xl border border-white/[0.28] dark:border-white/[0.22] shadow-[0_16px_36px_rgba(0,0,0,0.5),inset_0_1px_1.5px_rgba(255,255,255,0.65),inset_0_-1px_1px_rgba(0,0,0,0.2)] overflow-hidden flex flex-col items-end">
-            <div className="absolute top-0 inset-x-5 h-[1.5px] bg-gradient-to-r from-transparent via-white/80 to-transparent pointer-events-none rounded-full" />
-            <div className="flex items-center justify-between w-full mb-1.5 sm:mb-2.5">
-              <span className="font-mono text-[7.5px] sm:text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/25 dark:bg-rose-500/25 border border-emerald-400/30 dark:border-rose-400/30 text-emerald-200 dark:text-rose-200 font-semibold">
-                NEURAL
-              </span>
-              <div className="px-2.5 py-0.5 rounded-full bg-white/[0.16] backdrop-blur-xl border border-white/[0.25] flex items-center gap-1.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)]">
-                <span className="font-mono text-[8.5px] sm:text-[11px] uppercase tracking-[0.16em] text-white font-bold">
-                  AI CORE
-                </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 dark:bg-rose-400 shadow-[0_0_6px_rgba(52,211,153,0.9)] dark:shadow-[0_0_6px_rgba(251,113,133,0.9)]" />
-              </div>
-            </div>
-            <h2 className="font-sans font-black text-xs sm:text-3xl lg:text-4xl uppercase tracking-tight leading-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.4)]">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-100 to-emerald-300 dark:via-rose-100 dark:to-rose-300">
-                INTELLIGENT
-              </span>{' '}
-              <span className="font-serif italic font-normal lowercase tracking-normal text-emerald-200 dark:text-rose-200 text-sm sm:text-4xl">
-                evolution.
-              </span>
-            </h2>
-            <p className="font-sans text-[10.5px] sm:text-sm text-white/90 font-normal leading-relaxed mt-1 sm:mt-3 drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)]">
-              Custom AI agents, neural pipelines, and real-time automated workflows giving your enterprise an unfair edge.
-            </p>
-
-            <div className="mt-2 sm:mt-4 flex flex-wrap justify-end gap-1.5 sm:gap-2 text-[8.5px] sm:text-[11px] font-mono text-white/90">
-              <span className="px-2.5 py-0.5 rounded-full border border-white/[0.2] bg-white/[0.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]">AI Agents</span>
-              <span className="px-2.5 py-0.5 rounded-full border border-white/[0.2] bg-white/[0.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]">Neural Stream</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Phase 6: Grand Finale */}
-        <div
-          ref={phase6Ref}
-          className="absolute inset-x-3 sm:inset-x-8 md:inset-x-16 lg:inset-x-24 top-1/2 -translate-y-1/2 flex flex-col items-center text-center transition-all duration-300 pointer-events-none max-w-5xl mx-auto will-change-transform"
-          style={{ opacity: 0 }}
-        >
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full border border-emerald-500/30 dark:border-red-500/30 bg-emerald-950/85 dark:bg-[#160206]/85 font-mono text-[9px] sm:text-xs text-emerald-300 dark:text-rose-300 uppercase tracking-[0.2em] mb-2.5 sm:mb-4 backdrop-blur-md">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            DEPLOYMENT GATEWAY READY
-          </div>
-
-          <h2 className="font-sans font-black text-2xl sm:text-5xl md:text-7xl lg:text-8xl uppercase tracking-tighter leading-[0.94] text-emerald-200 dark:text-rose-300 drop-shadow-[0_30px_70px_rgba(0,0,0,1)] max-w-5xl">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-600 dark:from-red-500 dark:via-rose-400 dark:to-rose-600 drop-shadow-[0_10px_30px_rgba(52,211,153,0.5)] dark:drop-shadow-[0_10px_30px_rgba(225,29,72,0.5)]">
-              PARTNER WITH
-            </span>
-            <br />
-            <span className="font-serif italic font-normal lowercase tracking-normal text-emerald-300 dark:text-rose-300 text-3xl sm:text-6xl md:text-8xl lg:text-9xl drop-shadow-[0_20px_50px_rgba(40,98,58,0.6)] dark:drop-shadow-[0_20px_50px_rgba(225,29,72,0.6)]">
-              innovation ark.
-            </span>
-          </h2>
-
-          <p className="font-sans text-[11px] sm:text-base md:text-lg text-emerald-100 dark:text-rose-100 font-normal tracking-wide mt-2.5 sm:mt-6 max-w-xl leading-relaxed drop-shadow-[0_4px_20px_rgba(0,0,0,1)] px-1 antialiased">
-            Transform your vision into an industry-defining digital powerhouse. Let&apos;s build your next high-performance platform together.
-          </p>
-
-          <div className="mt-4 sm:mt-8 flex justify-center">
-            <a href="#contact" className="pointer-events-auto">
-              <RadialGlowButton size="sm" className="font-sans font-bold text-xs sm:text-sm tracking-wider uppercase !min-w-[180px] sm:!min-w-[220px] !h-[42px] sm:!h-[52px] !px-6 sm:!px-8 !bg-gradient-to-r !from-[#0F2027] !to-[#28623A] dark:!from-red-600 dark:!to-rose-900 shadow-[0_0_30px_rgba(52,211,153,0.5)] dark:shadow-[0_0_30px_rgba(225,29,72,0.6)] border border-emerald-500/40 dark:border-red-500/40 text-emerald-100 dark:text-rose-100 whitespace-nowrap">
-                Start Your Project
-                <span className="material-symbols-outlined text-sm sm:text-base ml-1.5">arrow_forward</span>
-              </RadialGlowButton>
-            </a>
-          </div>
-        </div>
-
+        <PhaseHero ref={phase1Ref} />
+        <PhaseBlueprint ref={phase2Ref} />
+        <PhaseSpatial ref={phase3Ref} />
+        <PhaseSupremacy ref={phase4Ref} />
+        <PhaseNeural ref={phase5Ref} />
+        <PhaseFinale ref={phase6Ref} />
       </div>
     </section>
   );
