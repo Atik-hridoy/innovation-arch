@@ -107,6 +107,16 @@ export function AboutUsScrollytelling() {
     ctx.fillStyle = '#080103';
     ctx.fillRect(0, 0, width, height);
 
+    // ── STRICT HOOK & FINALE RULE: Unless actively scrolling in scrollytelling phases, NO IMAGE is drawn! ──
+    const isHookOrFinale = isMobile
+      ? progressVal < 0.08 || progressVal > 0.84
+      : progressVal < 0.08 || progressVal > 0.91;
+
+    if (isHookOrFinale) {
+      ctx.restore();
+      return;
+    }
+
     // Aspect Fit/Cover: On desktop, cover edge-to-edge (1.02x) to eliminate all rectangular borders completely.
     // On mobile, scale to fill portrait height cleanly.
     const hRatio = width / img.naturalWidth;
@@ -198,25 +208,35 @@ export function AboutUsScrollytelling() {
         onUpdate: (self) => {
           const p = self.progress;
           setScrollProgress(p);
-          const isMobile = window.innerWidth < 768;
+          const isMobileDevice = window.innerWidth < 768;
           let frameIndex = 1;
 
-          if (isMobile) {
-            frameIndex = Math.min(
-              MOBILE_FRAMES,
-              Math.max(1, Math.floor(p * (MOBILE_FRAMES - 1)) + 1)
-            );
+          if (isMobileDevice) {
+            // Mobile: Straight forward sequence (Phases 2 to 5)
+            if (p < 0.08) {
+              frameIndex = 1;
+            } else if (p <= 0.84) {
+              const forwardProgress = (p - 0.08) / 0.76;
+              frameIndex = Math.min(
+                MOBILE_FRAMES,
+                Math.max(1, Math.floor(forwardProgress * (MOBILE_FRAMES - 1)) + 1)
+              );
+            } else {
+              frameIndex = MOBILE_FRAMES;
+            }
           } else {
+            // Web/Desktop: Forward playback (0.08 to 0.74) + Smooth Reverse Closure (0.74 to 0.90)
             if (p <= 0.08) {
               frameIndex = 1;
-            } else if (p > 0.08 && p <= 0.76) {
-              const forwardProgress = (p - 0.08) / 0.68;
+            } else if (p > 0.08 && p <= 0.74) {
+              const forwardProgress = (p - 0.08) / 0.66;
               frameIndex = Math.min(
                 DESKTOP_FRAMES,
                 Math.max(1, Math.floor(forwardProgress * (DESKTOP_FRAMES - 1)) + 1)
               );
-            } else if (p > 0.76 && p <= 0.93) {
-              const reverseProgress = (p - 0.76) / 0.17;
+            } else if (p > 0.74 && p <= 0.90) {
+              // Smooth Reverse Frame Playback: Laptop reverses and closes smoothly
+              const reverseProgress = (p - 0.74) / 0.16;
               frameIndex = Math.min(
                 DESKTOP_FRAMES,
                 Math.max(1, Math.floor((1 - reverseProgress) * (DESKTOP_FRAMES - 1)) + 1)
@@ -226,7 +246,7 @@ export function AboutUsScrollytelling() {
             }
           }
 
-          if (frameIndex !== currentFrameRef.current) {
+          if (frameIndex !== currentFrameRef.current || p <= 0.08 || (isMobileDevice ? p >= 0.84 : p >= 0.91)) {
             currentFrameRef.current = frameIndex;
             renderFrame(frameIndex, p);
           }
@@ -260,6 +280,15 @@ export function AboutUsScrollytelling() {
   const phase5Opacity = Math.max(0, 1 - Math.abs(scrollProgress - 0.72) * 8.5);
   const phase6Opacity = Math.max(0, Math.min(1, (scrollProgress - 0.82) * 6.5));
 
+  // Canvas Image Visibility: Only visible during active middle scrollytelling phases
+  let canvasOpacity = 0;
+  const maxActiveP = isMobileDevice ? 0.84 : 0.90;
+  if (scrollProgress >= 0.06 && scrollProgress <= maxActiveP) {
+    const fadeIn = Math.min(1, (scrollProgress - 0.06) / 0.05);
+    const fadeOut = Math.min(1, (maxActiveP - scrollProgress) / 0.05);
+    canvasOpacity = Math.max(0, Math.min(fadeIn, fadeOut));
+  }
+
   return (
     <section
       ref={sectionRef}
@@ -268,7 +297,10 @@ export function AboutUsScrollytelling() {
     >
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full object-contain pointer-events-none z-[2]"
+        className="absolute inset-0 w-full h-full object-contain pointer-events-none z-[2] transition-opacity duration-200"
+        style={{
+          opacity: canvasOpacity,
+        }}
       />
 
       <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
