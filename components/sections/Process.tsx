@@ -129,7 +129,7 @@ export function Process() {
     const ctx = gsap.context(() => {
       const processPath = containerRef.current?.querySelector('.process-path') as SVGPathElement;
       if (processPath) {
-        const len = processPath.getTotalLength();
+        const len = processPath.getTotalLength() || 1100;
         gsap.set(processPath, { strokeDasharray: len, strokeDashoffset: len });
 
         const progressDot = containerRef.current?.querySelector('.process-progress-dot');
@@ -140,42 +140,59 @@ export function Process() {
           scrollTrigger: {
             trigger: containerRef.current,
             start: 'top 70%',
-            end: 'bottom 80%',
-            scrub: 1,
+            end: 'bottom 70%',
+            scrub: 0.5,
+            invalidateOnRefresh: true,
             onUpdate: (self) => {
               if (progressDot && processPath) {
                 const currentPoint = processPath.getPointAtLength(len * self.progress);
-                gsap.set(progressDot, {
-                  x: currentPoint.x,
-                  y: currentPoint.y,
-                });
+                if (currentPoint) {
+                  gsap.set(progressDot, {
+                    x: currentPoint.x,
+                    y: currentPoint.y,
+                  });
+                }
               }
-            }
+              const stepIndex = Math.min(
+                steps.length - 1,
+                Math.floor(self.progress * steps.length)
+              );
+              setActiveStep(stepIndex);
+            },
           },
         });
 
-        // Mobile ScrollTrigger: only trigger animation when section reaches upper center / top portion of screen
+        // Mobile ScrollTrigger: progressively fill line height and update active step
+        const mobileContainer = containerRef.current?.querySelector('.mobile-process-container');
         const progressLine = containerRef.current?.querySelector('.mobile-progress-line') as HTMLElement;
-        ScrollTrigger.create({
-          trigger: '.mobile-process-container',
-          start: 'top 30%',
-          end: 'bottom 30%',
-          scrub: 0.3,
-          onUpdate: (self) => {
-            if (progressLine) {
+        if (mobileContainer && progressLine) {
+          ScrollTrigger.create({
+            trigger: mobileContainer,
+            start: 'top 60%',
+            end: 'bottom 40%',
+            scrub: 0.3,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
               progressLine.style.height = `${self.progress * 100}%`;
-            }
-            const stepIndex = Math.min(
-              steps.length - 1,
-              Math.floor(self.progress * steps.length)
-            );
-            setActiveStep(stepIndex);
-          },
-        });
+              const stepIndex = Math.min(
+                steps.length - 1,
+                Math.floor(self.progress * steps.length)
+              );
+              setActiveStep(stepIndex);
+            },
+          });
+        }
       }
     }, containerRef);
 
-    return () => ctx.revert();
+    const timer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 600);
+
+    return () => {
+      ctx.revert();
+      clearTimeout(timer);
+    };
   }, []);
 
   return (
