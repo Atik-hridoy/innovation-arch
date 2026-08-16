@@ -323,28 +323,28 @@ export default function Home() {
       <GlobalOverlays />
       <Header />
 
-      <main className="relative w-full z-10 bg-background transition-colors duration-400">
-        <SectionStage id="home" className="w-full bg-[#0a0103]">
+      <main className="relative w-full z-10 bg-background dark:bg-[#080103] transition-colors duration-400">
+        <SectionStage id="home" className="w-full bg-[#080103]">
           <AboutUsScrollytelling />
         </SectionStage>
 
-        <SectionStage id="services" className="w-full bg-background dark:bg-[#050505]">
+        <SectionStage id="services" className="w-full bg-background dark:bg-[#080103]">
           <Services />
         </SectionStage>
 
-        <SectionStage id="process" className="w-full bg-background dark:bg-[#050505]">
+        <SectionStage id="process" className="w-full bg-background dark:bg-[#080103]">
           <Process />
         </SectionStage>
 
-        <SectionStage id="work" className="w-full bg-background dark:bg-[#050505]">
+        <SectionStage id="work" className="w-full bg-background dark:bg-[#080103]">
           <Portfolio />
         </SectionStage>
 
-        <SectionStage id="tech" className="w-full bg-background dark:bg-[#050505]">
+        <SectionStage id="tech" className="w-full bg-background dark:bg-[#080103]">
           <TechStack />
         </SectionStage>
 
-        <SectionStage id="contact" className="w-full bg-slate-50 dark:bg-[#040406]">
+        <SectionStage id="contact" className="w-full bg-slate-50 dark:bg-[#080103]">
           <CTA />
         </SectionStage>
       </main>

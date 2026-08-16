@@ -28,11 +28,11 @@ export function Footer() {
   const mailUrl = settings?.email_address ? `mailto:${settings.email_address}` : "mailto:contact@innovativeark.com";
 
   return (
-    <div className="w-full pt-16 pb-8 md:pb-12 flex flex-col md:flex-row justify-between items-center gap-6 px-4 sm:px-margin-edge border-t border-slate-200 dark:border-white/15 relative z-20 overflow-hidden transition-colors duration-400">
+    <div className="w-full pt-16 pb-8 md:pb-12 flex flex-col md:flex-row justify-between items-center gap-6 px-4 sm:px-margin-edge border-t-0 md:border-t border-slate-200 dark:border-white/15 relative z-20 overflow-hidden transition-colors duration-400">
       
-      {/* Mobile Rainbow Ribbon Glow directly in Footer */}
-      <div className="md:hidden absolute inset-0 pointer-events-none z-0 overflow-hidden opacity-75">
-        <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[120vw] h-[250px] bg-gradient-to-r from-red-500/25 via-purple-600/30 to-emerald-500/25 rounded-full blur-[70px] mix-blend-screen" />
+      {/* 3D Twisting Ribbon Canvas Wave directly inside Footer on Phone View */}
+      <div className="md:hidden absolute inset-0 pointer-events-none z-0 overflow-hidden">
+        <TwistingRibbon className="w-full h-full opacity-65 dark:opacity-85" />
       </div>
 
       <div className="relative z-10">

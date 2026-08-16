@@ -92,11 +92,6 @@ export function CTA() {
         {/* 3D Twisting Ribbon Canvas flowing continuously behind Contact & Footer */}
         <TwistingRibbon className="absolute inset-0 z-0 pointer-events-none opacity-40 dark:opacity-75" />
 
-        {/* Dedicated Phone View Rainbow Glow in the Footer / Contact Area */}
-        <div className="md:hidden absolute -bottom-8 inset-x-0 h-[360px] pointer-events-none z-0 overflow-hidden opacity-90">
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[120vw] h-[300px] bg-gradient-to-r from-red-500/25 via-purple-600/30 to-emerald-500/25 rounded-full blur-[80px] mix-blend-screen" />
-        </div>
-
         {/* Core Spotlight Behind Text - Ultra Bright */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[20%] w-[100vw] lg:w-[80vw] max-w-[1200px] h-[450px] bg-[#1D9E75]/20 dark:bg-[#1D9E75]/40 rounded-[100%] blur-[100px] lg:blur-[140px] opacity-100 mix-blend-screen" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[10%] w-[80vw] lg:w-[60vw] max-w-[800px] h-[350px] bg-primary/15 dark:bg-primary/30 rounded-[100%] blur-[100px] lg:blur-[120px] opacity-90 mix-blend-screen" />
