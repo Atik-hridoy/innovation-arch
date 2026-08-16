@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { Logo } from '@/components/Logo';
 import { SpotlightNavbar } from '@/components/ui/spotlight-navbar';
-import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { RadialGlowButton } from '@/components/ui/radial-glow-button';
 
 const navItems = [
@@ -17,12 +16,26 @@ const navItems = [
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isPastHero, setIsPastHero] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      // The hero scrollytelling section pins for 750% viewport height
-      const heroThreshold = window.innerHeight * 7.2;
-      setIsPastHero(window.scrollY > heroThreshold);
+      // Calculate real-time smooth scroll percentage across page
+      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const currentScroll = window.scrollY;
+      const progress = totalScroll > 0 ? (currentScroll / totalScroll) * 100 : 0;
+      setScrollProgress(Math.min(100, Math.max(0, progress)));
+
+      // Detect 2nd section (#services) dynamically on all screen sizes
+      const servicesSection = document.getElementById('services');
+      if (servicesSection) {
+        const rect = servicesSection.getBoundingClientRect();
+        setIsPastHero(rect.top <= window.innerHeight * 0.75);
+      } else {
+        const isMobile = window.innerWidth < 768;
+        const threshold = window.innerHeight * (isMobile ? 1.1 : 4.5);
+        setIsPastHero(window.scrollY > threshold);
+      }
     };
 
     handleScroll();
@@ -33,12 +46,20 @@ export function Header() {
   return (
     <>
       <nav
-        className={`fixed top-0 w-full z-50 flex justify-between items-center px-4 sm:px-margin-edge py-3.5 sm:py-5 shadow-none transition-all duration-500 ${
+        className={`fixed top-0 w-full z-50 flex justify-between items-center px-4 sm:px-margin-edge py-3.5 sm:py-4 transition-all duration-500 ${
           isPastHero
-            ? 'bg-background/80 dark:bg-[#050505]/40 backdrop-blur-xl border-b border-black/5 dark:border-white/5'
+            ? 'bg-white/85 dark:bg-[#070104]/85 backdrop-blur-2xl border-b border-black/5 dark:border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.35)]'
             : 'bg-transparent backdrop-blur-none border-b border-transparent'
         }`}
       >
+        {/* Real-time Smooth Scroll Indicator Bar */}
+        <div className="absolute bottom-0 inset-x-0 h-[2px] bg-transparent overflow-hidden pointer-events-none">
+          <div
+            className="h-full bg-gradient-to-r from-red-500 via-rose-400 to-emerald-400 shadow-[0_0_10px_rgba(225,29,72,0.8)] transition-all duration-75 ease-out"
+            style={{ width: `${scrollProgress}%` }}
+          />
+        </div>
+
         <Logo isHero={!isPastHero} />
 
         {/* Center Navbar: Hidden on Hero, smoothly transitions in after passing hero */}
@@ -60,7 +81,6 @@ export function Header() {
               : 'opacity-0 translate-y-2 pointer-events-none'
           }`}
         >
-          <ThemeToggle />
           <a
             className="hidden sm:inline-block"
             href="#contact"
@@ -98,14 +118,10 @@ export function Header() {
             </a>
           ))}
 
-          <div className="flex items-center gap-4 mt-4">
-            <ThemeToggle showLabel />
-          </div>
-
           <a
             href="#contact"
             onClick={() => setMobileMenuOpen(false)}
-            className="mt-2"
+            className="mt-4"
           >
             <RadialGlowButton size="md" className="font-semibold text-sm tracking-wider">
               Let's Talk

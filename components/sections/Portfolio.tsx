@@ -174,6 +174,14 @@ export function Portfolio() {
             alt="dynamic contextual background"
           />
         )}
+
+        {/* Mobile Dedicated Green Gradient Ambient Background */}
+        <div className="md:hidden absolute inset-0 z-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-1/4 -left-1/4 w-[110vw] h-[110vw] rounded-full bg-gradient-to-tr from-emerald-500/25 via-teal-600/20 to-transparent blur-[70px] mix-blend-screen" />
+          <div className="absolute bottom-1/4 -right-1/4 w-[100vw] h-[100vw] rounded-full bg-gradient-to-bl from-green-500/20 via-emerald-700/15 to-transparent blur-[80px] mix-blend-screen" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] rounded-full bg-radial from-emerald-500/20 via-teal-900/10 to-transparent blur-[65px]" />
+        </div>
+
         {/* Clean background on mobile, subtle vignette on larger screens */}
         <div className="absolute inset-0 hidden sm:block bg-gradient-to-b from-white/90 dark:from-[#070609]/70 via-white/80 dark:via-transparent to-white/95 dark:to-[#070609]/95 transition-colors duration-400" />
       </div>

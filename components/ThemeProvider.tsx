@@ -18,17 +18,20 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setMounted(true);
-    // Read persisted theme or system preference
-    const savedTheme = localStorage.getItem('theme') as Theme | null;
-    if (savedTheme === 'dark' || savedTheme === 'light') {
-      setThemeState(savedTheme);
-      applyThemeClass(savedTheme);
-    } else {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const initialTheme = prefersDark ? 'dark' : 'light';
-      setThemeState(initialTheme);
-      applyThemeClass(initialTheme);
-    }
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    
+    const updateThemeFromSystem = (e?: MediaQueryListEvent | MediaQueryList) => {
+      const prefersDark = e ? e.matches : mediaQuery.matches;
+      const activeTheme: Theme = prefersDark ? 'dark' : 'light';
+      setThemeState(activeTheme);
+      applyThemeClass(activeTheme);
+    };
+
+    updateThemeFromSystem(mediaQuery);
+
+    mediaQuery.addEventListener('change', updateThemeFromSystem);
+    return () => mediaQuery.removeEventListener('change', updateThemeFromSystem);
   }, []);
 
   const applyThemeClass = (newTheme: Theme) => {
