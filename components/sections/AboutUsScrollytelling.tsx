@@ -107,11 +107,11 @@ export function AboutUsScrollytelling() {
     ctx.fillStyle = '#080103';
     ctx.fillRect(0, 0, width, height);
 
-    // Aspect Fit: Scale portrait image gracefully on mobile (Slightly smaller for breathing room)
+    // Aspect Fit: Scale portrait image to fill the mobile screen height gracefully (No empty vertical void)
     const hRatio = width / img.naturalWidth;
     const vRatio = height / img.naturalHeight;
     const ratio = isMobile
-      ? Math.min(hRatio * 0.88, vRatio * 0.78)
+      ? (height / img.naturalHeight) * 0.96
       : Math.min(hRatio, vRatio) * 0.82;
 
     const renderW = img.naturalWidth * ratio;
