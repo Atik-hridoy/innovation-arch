@@ -30,6 +30,31 @@ export function AuroraHeroBg({ className, ...props }: AuroraHeroProps) {
           inset: 0;
           --stripes: repeating-linear-gradient(
             115deg, 
+            rgba(15,32,39,0.85) 0%, 
+            rgba(15,32,39,0.85) 8%, 
+            transparent 12%, 
+            transparent 15%, 
+            rgba(15,32,39,0.85) 20%
+          );
+          --rainbow: repeating-linear-gradient(
+            115deg, 
+            #0F2027 10%, 
+            #163629 16%, 
+            #28623A 22%, 
+            #34d399 28%, 
+            #10b981 34%,
+            #28623A 40%
+          );
+          background-image: var(--stripes), var(--rainbow);
+          background-size: 300%, 200%;
+          background-position: 50% 50%, 50% 50%;
+          filter: var(--bg-filter);
+          mask-image: radial-gradient(ellipse at 50% 40%, black 50%, transparent 80%);
+          -webkit-mask-image: radial-gradient(ellipse at 50% 40%, black 50%, transparent 80%);
+        }
+        :global(.dark) .aurora-hero-bg {
+          --stripes: repeating-linear-gradient(
+            115deg, 
             rgba(8,1,3,0.9) 0%, 
             rgba(8,1,3,0.9) 8%, 
             transparent 12%, 
@@ -45,12 +70,6 @@ export function AuroraHeroBg({ className, ...props }: AuroraHeroProps) {
             #fda4af 34%,
             #e11d48 40%
           );
-          background-image: var(--stripes), var(--rainbow);
-          background-size: 300%, 200%;
-          background-position: 50% 50%, 50% 50%;
-          filter: var(--bg-filter);
-          mask-image: radial-gradient(ellipse at 50% 40%, black 50%, transparent 80%);
-          -webkit-mask-image: radial-gradient(ellipse at 50% 40%, black 50%, transparent 80%);
         }
         .aurora-hero-bg::after {
           content: "";

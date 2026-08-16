@@ -103,8 +103,12 @@ export function AboutUsScrollytelling() {
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
 
-    // Deep obsidian background
-    ctx.fillStyle = '#080103';
+    // Dynamic background matching current mode
+    const isDarkMode = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
+    const bgBaseColor = isDarkMode ? '#080103' : '#0F2027';
+
+    // Deep background
+    ctx.fillStyle = bgBaseColor;
     ctx.fillRect(0, 0, width, height);
 
     // ── STRICT HOOK & FINALE RULE: Unless actively scrolling in scrollytelling phases, NO IMAGE is drawn! ──
@@ -138,33 +142,33 @@ export function AboutUsScrollytelling() {
 
     // Left Edge Feather
     const leftGrad = ctx.createLinearGradient(0, 0, featherW, 0);
-    leftGrad.addColorStop(0, '#080103');
-    leftGrad.addColorStop(0.35, 'rgba(8, 1, 3, 0.7)');
-    leftGrad.addColorStop(1, 'rgba(8, 1, 3, 0)');
+    leftGrad.addColorStop(0, bgBaseColor);
+    leftGrad.addColorStop(0.35, isDarkMode ? 'rgba(8, 1, 3, 0.7)' : 'rgba(15, 32, 39, 0.7)');
+    leftGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
     ctx.fillStyle = leftGrad;
     ctx.fillRect(0, 0, featherW, height);
 
     // Right Edge Feather
     const rightGrad = ctx.createLinearGradient(width - featherW, 0, width, 0);
-    rightGrad.addColorStop(0, 'rgba(8, 1, 3, 0)');
-    rightGrad.addColorStop(0.65, 'rgba(8, 1, 3, 0.7)');
-    rightGrad.addColorStop(1, '#080103');
+    rightGrad.addColorStop(0, 'rgba(0, 0, 0, 0)');
+    rightGrad.addColorStop(0.65, isDarkMode ? 'rgba(8, 1, 3, 0.7)' : 'rgba(15, 32, 39, 0.7)');
+    rightGrad.addColorStop(1, bgBaseColor);
     ctx.fillStyle = rightGrad;
     ctx.fillRect(width - featherW, 0, featherW, height);
 
     // Top Edge Feather
     const topGrad = ctx.createLinearGradient(0, 0, 0, featherH);
-    topGrad.addColorStop(0, '#080103');
-    topGrad.addColorStop(0.35, 'rgba(8, 1, 3, 0.7)');
-    topGrad.addColorStop(1, 'rgba(8, 1, 3, 0)');
+    topGrad.addColorStop(0, bgBaseColor);
+    topGrad.addColorStop(0.35, isDarkMode ? 'rgba(8, 1, 3, 0.7)' : 'rgba(15, 32, 39, 0.7)');
+    topGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
     ctx.fillStyle = topGrad;
     ctx.fillRect(0, 0, width, featherH);
 
     // Bottom Edge Feather
     const bottomGrad = ctx.createLinearGradient(0, height - featherH, 0, height);
-    bottomGrad.addColorStop(0, 'rgba(8, 1, 3, 0)');
-    bottomGrad.addColorStop(0.65, 'rgba(8, 1, 3, 0.7)');
-    bottomGrad.addColorStop(1, '#080103');
+    bottomGrad.addColorStop(0, 'rgba(0, 0, 0, 0)');
+    bottomGrad.addColorStop(0.65, isDarkMode ? 'rgba(8, 1, 3, 0.7)' : 'rgba(15, 32, 39, 0.7)');
+    bottomGrad.addColorStop(1, bgBaseColor);
     ctx.fillStyle = bottomGrad;
     ctx.fillRect(0, height - featherH, width, featherH);
 
@@ -177,10 +181,10 @@ export function AboutUsScrollytelling() {
       height / 2,
       Math.max(width, height) * 0.68
     );
-    gradient.addColorStop(0, 'rgba(8, 1, 3, 0)');
-    gradient.addColorStop(0.5, 'rgba(8, 1, 3, 0.2)');
-    gradient.addColorStop(0.85, 'rgba(8, 1, 3, 0.85)');
-    gradient.addColorStop(1, '#080103');
+    gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
+    gradient.addColorStop(0.5, isDarkMode ? 'rgba(8, 1, 3, 0.2)' : 'rgba(15, 32, 39, 0.2)');
+    gradient.addColorStop(0.85, isDarkMode ? 'rgba(8, 1, 3, 0.85)' : 'rgba(15, 32, 39, 0.85)');
+    gradient.addColorStop(1, bgBaseColor);
 
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, width, height);
@@ -304,7 +308,7 @@ export function AboutUsScrollytelling() {
       />
 
       <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] sm:w-[75vw] h-[90vw] sm:h-[75vw] max-w-[1000px] max-h-[1000px] rounded-full bg-radial from-red-600/12 via-rose-950/6 to-transparent blur-[160px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] sm:w-[75vw] h-[90vw] sm:h-[75vw] max-w-[1000px] max-h-[1000px] rounded-full bg-radial from-emerald-600/20 via-emerald-950/10 to-transparent dark:from-red-600/12 dark:via-rose-950/6 blur-[160px]" />
       </div>
 
       <div
@@ -316,15 +320,15 @@ export function AboutUsScrollytelling() {
         <AuroraHeroBg />
       </div>
 
-      {/* ── Phase 6 Grand Finale Background: Clean Dark-to-Light Gradient (Darkish on top -> Pure Light/White at bottom) ── */}
+      {/* ── Phase 6 Grand Finale Background: Clean Dark-to-Light Gradient ── */}
       <div
-        className="absolute inset-0 z-[4] pointer-events-none transition-opacity duration-300 bg-gradient-to-b from-[#080103] via-[#1a040b] via-rose-950/40 via-rose-200/30 to-white dark:from-[#080103] dark:via-[#140207] dark:to-[#080103]"
+        className="absolute inset-0 z-[4] pointer-events-none transition-opacity duration-300 bg-gradient-to-b from-[#0F2027] via-[#163629] to-[#28623A] dark:from-[#080103] dark:via-[#140207] dark:to-[#080103]"
         style={{
           opacity: phase6Opacity,
         }}
       >
-        {/* Soft bottom ambient glow to ensure a crystal-clean white merge into Services */}
-        <div className="absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-b from-transparent via-white/70 to-white dark:from-transparent dark:via-[#080103]/70 dark:to-[#080103]" />
+        {/* Soft bottom ambient glow to ensure a crystal-clean merge into Services */}
+        <div className="absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-b from-transparent via-[#28623A]/50 to-[#28623A] dark:from-transparent dark:via-[#080103]/70 dark:to-[#080103]" />
       </div>
 
       <div className="relative z-10 w-full h-full px-3 sm:px-8 md:px-12 lg:px-16 xl:px-20 pointer-events-none flex items-center">
@@ -335,26 +339,26 @@ export function AboutUsScrollytelling() {
             transform: `translateY(${-scrollProgress * 60}px) scale(${1 - scrollProgress * 0.1})`,
           }}
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full border border-rose-500/30 bg-rose-500/10 backdrop-blur-md mb-2 sm:mb-6 shadow-[0_0_20px_rgba(225,29,72,0.2)]">
-            <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-            <span className="font-mono text-[9px] sm:text-xs uppercase tracking-[0.25em] text-rose-300 font-semibold">
+          <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full border border-emerald-500/30 dark:border-rose-500/30 bg-emerald-500/10 dark:bg-rose-500/10 backdrop-blur-md mb-2 sm:mb-6 shadow-[0_0_20px_rgba(52,211,153,0.2)] dark:shadow-[0_0_20px_rgba(225,29,72,0.2)]">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 dark:bg-red-500 animate-pulse" />
+            <span className="font-mono text-[9px] sm:text-xs uppercase tracking-[0.25em] text-emerald-300 dark:text-rose-300 font-semibold">
               Digital Product Studio
             </span>
           </div>
 
-          <h1 className="font-sans font-black text-2xl xs:text-3xl sm:text-6xl md:text-7xl lg:text-8xl uppercase tracking-tighter leading-[0.92] sm:leading-[0.9] text-[#fff0f2] drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
+          <h1 className="font-sans font-black text-2xl xs:text-3xl sm:text-6xl md:text-7xl lg:text-8xl uppercase tracking-tighter leading-[0.92] sm:leading-[0.9] text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
             WE CRAFT <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-300 to-rose-600">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-200 to-emerald-500 dark:from-red-500 dark:via-rose-300 dark:to-rose-600">
               TIMELESS
             </span>{' '}
-            <span className="font-serif italic font-normal lowercase tracking-tight text-rose-200">
+            <span className="font-serif italic font-normal lowercase tracking-tight text-emerald-200 dark:text-rose-200">
               digital
             </span>{' '}
             <br />
             PRODUCTS.
           </h1>
 
-          <p className="mt-2 sm:mt-6 font-sans text-[11px] xs:text-xs sm:text-lg md:text-xl text-[#f3d5dc] max-w-2xl font-light leading-relaxed drop-shadow-[0_2px_15px_rgba(0,0,0,0.95)]">
+          <p className="mt-2 sm:mt-6 font-sans text-[11px] xs:text-xs sm:text-lg md:text-xl text-emerald-100/90 dark:text-[#f3d5dc] max-w-2xl font-light leading-relaxed drop-shadow-[0_2px_15px_rgba(0,0,0,0.95)]">
             Architecting next-generation digital ecosystems, intelligent mobile applications, and high-impact brand identities.
           </p>
 
@@ -362,14 +366,14 @@ export function AboutUsScrollytelling() {
             <a href="#contact" className="pointer-events-auto">
               <RadialGlowButton
                 size="md"
-                className="px-6 sm:px-8 py-2.5 sm:py-3.5 text-xs sm:text-sm font-semibold tracking-wider uppercase text-white shadow-[0_10px_35px_rgba(225,29,72,0.5)] active:scale-95 transition-transform"
+                className="px-6 sm:px-8 py-2.5 sm:py-3.5 text-xs sm:text-sm font-semibold tracking-wider uppercase text-white shadow-[0_10px_35px_rgba(40,98,58,0.5)] dark:shadow-[0_10px_35px_rgba(225,29,72,0.5)] active:scale-95 transition-transform"
               >
                 Initialize Project →
               </RadialGlowButton>
             </a>
           </div>
 
-          <div className="mt-4 sm:mt-10 flex items-center gap-1.5 font-mono text-[9px] sm:text-[11px] text-rose-300 uppercase tracking-widest animate-bounce drop-shadow-[0_2px_10px_rgba(0,0,0,1)]">
+          <div className="mt-4 sm:mt-10 flex items-center gap-1.5 font-mono text-[9px] sm:text-[11px] text-emerald-300 dark:text-rose-300 uppercase tracking-widest animate-bounce drop-shadow-[0_2px_10px_rgba(0,0,0,1)]">
             <span className="material-symbols-outlined text-sm sm:text-base">expand_more</span>
             Scroll to explore
           </div>
@@ -386,7 +390,7 @@ export function AboutUsScrollytelling() {
             <div className="absolute top-0 inset-x-5 h-[1.5px] bg-gradient-to-r from-transparent via-white/80 to-transparent pointer-events-none rounded-full" />
             <div className="flex items-center justify-between w-full mb-1.5 sm:mb-2.5">
               <div className="px-2.5 py-0.5 rounded-full bg-white/[0.16] backdrop-blur-xl border border-white/[0.25] flex items-center gap-1.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)]">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-400 shadow-[0_0_6px_rgba(248,113,113,0.9)]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 dark:bg-red-400 shadow-[0_0_6px_rgba(52,211,153,0.9)] dark:shadow-[0_0_6px_rgba(248,113,113,0.9)]" />
                 <span className="font-mono text-[8.5px] sm:text-[11px] uppercase tracking-[0.16em] text-white font-bold">
                   BLUEPRINT
                 </span>
@@ -396,10 +400,10 @@ export function AboutUsScrollytelling() {
               </span>
             </div>
             <h2 className="font-sans font-black text-xs sm:text-3xl lg:text-4xl uppercase tracking-tight leading-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.4)]">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-rose-100 to-rose-300">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-100 to-emerald-300 dark:via-rose-100 dark:to-rose-300">
                 ARCHITECTED FOR
               </span>{' '}
-              <span className="font-serif italic font-normal lowercase tracking-normal text-rose-200 text-sm sm:text-4xl">
+              <span className="font-serif italic font-normal lowercase tracking-normal text-emerald-200 dark:text-rose-200 text-sm sm:text-4xl">
                 scale.
               </span>
             </h2>
@@ -423,21 +427,21 @@ export function AboutUsScrollytelling() {
           <div className="w-full relative group p-3.5 sm:p-6 lg:p-7 rounded-[24px] sm:rounded-[32px] bg-white/[0.14] dark:bg-white/[0.09] backdrop-blur-3xl border border-white/[0.28] dark:border-white/[0.22] shadow-[0_16px_36px_rgba(0,0,0,0.5),inset_0_1px_1.5px_rgba(255,255,255,0.65),inset_0_-1px_1px_rgba(0,0,0,0.2)] overflow-hidden flex flex-col items-end">
             <div className="absolute top-0 inset-x-5 h-[1.5px] bg-gradient-to-r from-transparent via-white/80 to-transparent pointer-events-none rounded-full" />
             <div className="flex items-center justify-between w-full mb-1.5 sm:mb-2.5">
-              <span className="font-mono text-[7.5px] sm:text-[9px] px-2 py-0.5 rounded-full bg-rose-500/25 border border-rose-400/30 text-rose-200 font-semibold">
+              <span className="font-mono text-[7.5px] sm:text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/25 dark:bg-rose-500/25 border border-emerald-400/30 dark:border-rose-400/30 text-emerald-200 dark:text-rose-200 font-semibold">
                 120 FPS
               </span>
               <div className="px-2.5 py-0.5 rounded-full bg-white/[0.16] backdrop-blur-xl border border-white/[0.25] flex items-center gap-1.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)]">
                 <span className="font-mono text-[8.5px] sm:text-[11px] uppercase tracking-[0.16em] text-white font-bold">
                   SPATIAL
                 </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-rose-400 shadow-[0_0_6px_rgba(251,113,133,0.9)]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 dark:bg-rose-400 shadow-[0_0_6px_rgba(52,211,153,0.9)] dark:shadow-[0_0_6px_rgba(251,113,133,0.9)]" />
               </div>
             </div>
             <h2 className="font-sans font-black text-xs sm:text-3xl lg:text-4xl uppercase tracking-tight leading-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.4)]">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-rose-100 to-rose-300">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-100 to-emerald-300 dark:via-rose-100 dark:to-rose-300">
                 EXPERIENCES
               </span>{' '}
-              <span className="font-serif italic font-normal lowercase tracking-normal text-rose-200 text-sm sm:text-4xl">
+              <span className="font-serif italic font-normal lowercase tracking-normal text-emerald-200 dark:text-rose-200 text-sm sm:text-4xl">
                 beyond.
               </span>
             </h2>
@@ -472,10 +476,10 @@ export function AboutUsScrollytelling() {
               </span>
             </div>
             <h2 className="font-sans font-black text-xs sm:text-3xl lg:text-4xl uppercase tracking-tight leading-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.4)]">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-rose-100 to-rose-300">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-100 to-emerald-300 dark:via-rose-100 dark:to-rose-300">
                 ENGINEERED FOR
               </span>{' '}
-              <span className="font-serif italic font-normal lowercase tracking-normal text-rose-200 text-sm sm:text-4xl">
+              <span className="font-serif italic font-normal lowercase tracking-normal text-emerald-200 dark:text-rose-200 text-sm sm:text-4xl">
                 speed.
               </span>
             </h2>
@@ -499,21 +503,21 @@ export function AboutUsScrollytelling() {
           <div className="w-full relative group p-3.5 sm:p-6 lg:p-7 rounded-[24px] sm:rounded-[32px] bg-white/[0.14] dark:bg-white/[0.09] backdrop-blur-3xl border border-white/[0.28] dark:border-white/[0.22] shadow-[0_16px_36px_rgba(0,0,0,0.5),inset_0_1px_1.5px_rgba(255,255,255,0.65),inset_0_-1px_1px_rgba(0,0,0,0.2)] overflow-hidden flex flex-col items-end">
             <div className="absolute top-0 inset-x-5 h-[1.5px] bg-gradient-to-r from-transparent via-white/80 to-transparent pointer-events-none rounded-full" />
             <div className="flex items-center justify-between w-full mb-1.5 sm:mb-2.5">
-              <span className="font-mono text-[7.5px] sm:text-[9px] px-2 py-0.5 rounded-full bg-rose-500/25 border border-rose-400/30 text-rose-200 font-semibold">
+              <span className="font-mono text-[7.5px] sm:text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/25 dark:bg-rose-500/25 border border-emerald-400/30 dark:border-rose-400/30 text-emerald-200 dark:text-rose-200 font-semibold">
                 NEURAL
               </span>
               <div className="px-2.5 py-0.5 rounded-full bg-white/[0.16] backdrop-blur-xl border border-white/[0.25] flex items-center gap-1.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)]">
                 <span className="font-mono text-[8.5px] sm:text-[11px] uppercase tracking-[0.16em] text-white font-bold">
                   AI CORE
                 </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-rose-400 shadow-[0_0_6px_rgba(251,113,133,0.9)]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 dark:bg-rose-400 shadow-[0_0_6px_rgba(52,211,153,0.9)] dark:shadow-[0_0_6px_rgba(251,113,133,0.9)]" />
               </div>
             </div>
             <h2 className="font-sans font-black text-xs sm:text-3xl lg:text-4xl uppercase tracking-tight leading-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.4)]">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-rose-100 to-rose-300">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-100 to-emerald-300 dark:via-rose-100 dark:to-rose-300">
                 INTELLIGENT
               </span>{' '}
-              <span className="font-serif italic font-normal lowercase tracking-normal text-rose-200 text-sm sm:text-4xl">
+              <span className="font-serif italic font-normal lowercase tracking-normal text-emerald-200 dark:text-rose-200 text-sm sm:text-4xl">
                 evolution.
               </span>
             </h2>
@@ -536,29 +540,29 @@ export function AboutUsScrollytelling() {
             transform: `translateY(${(0.92 - scrollProgress) * 70}px) scale(${Math.min(1, 0.92 + scrollProgress * 0.08)})`,
           }}
         >
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full border border-red-500/30 bg-[#160206]/85 font-mono text-[9px] sm:text-xs text-rose-300 uppercase tracking-[0.2em] mb-2.5 sm:mb-4 backdrop-blur-md">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full border border-emerald-500/30 dark:border-red-500/30 bg-emerald-950/85 dark:bg-[#160206]/85 font-mono text-[9px] sm:text-xs text-emerald-300 dark:text-rose-300 uppercase tracking-[0.2em] mb-2.5 sm:mb-4 backdrop-blur-md">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
             DEPLOYMENT GATEWAY READY
           </div>
 
-          <h2 className="font-sans font-black text-2xl sm:text-5xl md:text-7xl lg:text-8xl uppercase tracking-tighter leading-[0.94] text-rose-300 drop-shadow-[0_30px_70px_rgba(0,0,0,1)] max-w-5xl">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-400 to-rose-600 drop-shadow-[0_10px_30px_rgba(225,29,72,0.5)]">
+          <h2 className="font-sans font-black text-2xl sm:text-5xl md:text-7xl lg:text-8xl uppercase tracking-tighter leading-[0.94] text-emerald-200 dark:text-rose-300 drop-shadow-[0_30px_70px_rgba(0,0,0,1)] max-w-5xl">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-600 dark:from-red-500 dark:via-rose-400 dark:to-rose-600 drop-shadow-[0_10px_30px_rgba(52,211,153,0.5)] dark:drop-shadow-[0_10px_30px_rgba(225,29,72,0.5)]">
               PARTNER WITH
             </span>
             <br />
-            <span className="font-serif italic font-normal lowercase tracking-normal text-rose-300 text-3xl sm:text-6xl md:text-8xl lg:text-9xl drop-shadow-[0_20px_50px_rgba(225,29,72,0.6)]">
+            <span className="font-serif italic font-normal lowercase tracking-normal text-emerald-300 dark:text-rose-300 text-3xl sm:text-6xl md:text-8xl lg:text-9xl drop-shadow-[0_20px_50px_rgba(40,98,58,0.6)] dark:drop-shadow-[0_20px_50px_rgba(225,29,72,0.6)]">
               innovation ark.
             </span>
           </h2>
 
-          <p className="font-sans text-[11px] sm:text-base md:text-lg text-rose-100 font-normal tracking-wide mt-2.5 sm:mt-6 max-w-xl leading-relaxed drop-shadow-[0_4px_20px_rgba(0,0,0,1)] px-1 antialiased">
+          <p className="font-sans text-[11px] sm:text-base md:text-lg text-emerald-100 dark:text-rose-100 font-normal tracking-wide mt-2.5 sm:mt-6 max-w-xl leading-relaxed drop-shadow-[0_4px_20px_rgba(0,0,0,1)] px-1 antialiased">
             Transform your vision into an industry-defining digital powerhouse. Let&apos;s build your next high-performance platform together.
           </p>
 
           {/* 1 Clean High-Impact CTA Button */}
           <div className="mt-4 sm:mt-8 flex justify-center">
             <a href="#contact">
-              <RadialGlowButton size="sm" className="font-sans font-bold text-xs sm:text-sm tracking-wider uppercase !min-w-[180px] sm:!min-w-[220px] !h-[42px] sm:!h-[52px] !px-6 sm:!px-8 !bg-gradient-to-r !from-red-600 !to-rose-900 shadow-[0_0_30px_rgba(225,29,72,0.6)] border border-red-500/40 text-rose-100 whitespace-nowrap">
+              <RadialGlowButton size="sm" className="font-sans font-bold text-xs sm:text-sm tracking-wider uppercase !min-w-[180px] sm:!min-w-[220px] !h-[42px] sm:!h-[52px] !px-6 sm:!px-8 !bg-gradient-to-r !from-[#0F2027] !to-[#28623A] dark:!from-red-600 dark:!to-rose-900 shadow-[0_0_30px_rgba(52,211,153,0.5)] dark:shadow-[0_0_30px_rgba(225,29,72,0.6)] border border-emerald-500/40 dark:border-red-500/40 text-emerald-100 dark:text-rose-100 whitespace-nowrap">
                 Start Your Project
                 <span className="material-symbols-outlined text-sm sm:text-base ml-1.5">arrow_forward</span>
               </RadialGlowButton>

@@ -37,7 +37,7 @@ export function ThemeToggle({ className = '', showLabel = false }: ThemeTogglePr
       className={`group relative flex items-center gap-2 p-2 rounded-full border transition-all duration-300 cursor-pointer ${
         isDark
           ? 'border-white/15 bg-white/[0.04] hover:bg-white/[0.08] hover:border-primary/40 text-white shadow-[0_0_15px_rgba(221,183,255,0.08)]'
-          : 'border-black/10 bg-black/[0.04] hover:bg-black/[0.08] hover:border-indigo-500/40 text-neutral-900 shadow-[0_2px_10px_rgba(0,0,0,0.04)]'
+          : 'border-emerald-500/30 bg-emerald-950/40 hover:bg-emerald-900/50 hover:border-emerald-400/60 text-emerald-300 shadow-[0_0_15px_rgba(52,211,153,0.15)]'
       } ${className}`}
     >
       <div className="relative w-5 h-5 flex items-center justify-center overflow-hidden">
@@ -46,7 +46,7 @@ export function ThemeToggle({ className = '', showLabel = false }: ThemeTogglePr
           className={`w-4 h-4 transition-all duration-500 transform absolute ${
             isDark
               ? 'rotate-90 scale-0 opacity-0'
-              : 'rotate-0 scale-100 opacity-100 text-amber-500'
+              : 'rotate-0 scale-100 opacity-100 text-emerald-400'
           }`}
           viewBox="0 0 24 24"
           fill="none"

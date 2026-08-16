@@ -162,7 +162,7 @@ export function Portfolio() {
   };
 
   return (
-    <section ref={sectionRef} id="work" className="relative py-12 md:py-stack-xl px-4 sm:px-margin-edge z-10 bg-white dark:bg-[#070609] overflow-hidden min-h-[100vh] md:min-h-[120vh] flex flex-col justify-center pb-16 md:pb-32 transition-colors duration-400">
+    <section ref={sectionRef} id="work" className="relative py-12 md:py-stack-xl px-4 sm:px-margin-edge z-10 bg-transparent dark:bg-[#070609] overflow-hidden min-h-[100vh] md:min-h-[120vh] flex flex-col justify-center pb-16 md:pb-32 transition-colors duration-400">
       
       {/* Volumetric dynamic image background matching active card's 1st image */}
       <div className="absolute inset-0 z-0 transition-all duration-1000 ease-in-out pointer-events-none">
@@ -175,15 +175,15 @@ export function Portfolio() {
           />
         )}
 
-        {/* Mobile Dedicated Green Gradient Ambient Background */}
-        <div className="md:hidden absolute inset-0 z-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-1/4 -left-1/4 w-[110vw] h-[110vw] rounded-full bg-gradient-to-tr from-emerald-500/25 via-teal-600/20 to-transparent blur-[70px] mix-blend-screen" />
-          <div className="absolute bottom-1/4 -right-1/4 w-[100vw] h-[100vw] rounded-full bg-gradient-to-bl from-green-500/20 via-emerald-700/15 to-transparent blur-[80px] mix-blend-screen" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] rounded-full bg-radial from-emerald-500/20 via-teal-900/10 to-transparent blur-[65px]" />
+        {/* Dedicated Emerald Depth Green Gradient Ambient Background on Web and Mobile */}
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-1/4 -left-1/4 w-[110vw] h-[110vw] rounded-full bg-gradient-to-tr from-emerald-600/35 via-teal-700/25 to-transparent blur-[90px] mix-blend-screen" />
+          <div className="absolute bottom-1/4 -right-1/4 w-[100vw] h-[100vw] rounded-full bg-gradient-to-bl from-[#28623A]/40 via-emerald-800/25 to-transparent blur-[100px] mix-blend-screen" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] h-[85vw] rounded-full bg-radial from-emerald-500/25 via-[#163629]/20 to-transparent blur-[80px]" />
         </div>
 
-        {/* Clean background on mobile, subtle vignette on larger screens */}
-        <div className="absolute inset-0 hidden sm:block bg-gradient-to-b from-white/90 dark:from-[#070609]/70 via-white/80 dark:via-transparent to-white/95 dark:to-[#070609]/95 transition-colors duration-400" />
+        {/* Subtle dark mode vignette */}
+        <div className="absolute inset-0 hidden sm:block bg-transparent dark:bg-gradient-to-b dark:from-[#070609]/70 dark:to-[#070609]/95 transition-colors duration-400" />
       </div>
 
       {/* Section Header with Nav Buttons */}
@@ -196,14 +196,14 @@ export function Portfolio() {
             <div className="flex gap-3">
               <button
                 onClick={handleScrollLeft}
-                className="w-12 h-12 rounded-full border border-black/15 dark:border-white/10 flex items-center justify-center text-neutral-900 dark:text-white hover:text-primary hover:border-primary bg-white dark:bg-[#121118] backdrop-blur-xl transition-all duration-300 active:scale-95 cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.08)] dark:shadow-none hover:shadow-[0_6px_25px_rgba(124,58,237,0.2)]"
+                className="w-12 h-12 rounded-full border border-emerald-500/20 dark:border-white/10 flex items-center justify-center text-white hover:text-emerald-400 hover:border-emerald-400 bg-emerald-950/60 dark:bg-[#121118] backdrop-blur-xl transition-all duration-300 active:scale-95 cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.2)] dark:shadow-none hover:shadow-[0_6px_25px_rgba(52,211,153,0.3)]"
                 aria-label="Scroll Left"
               >
                 <span className="material-symbols-outlined text-xl">arrow_back</span>
               </button>
               <button
                 onClick={handleScrollRight}
-                className="w-12 h-12 rounded-full border border-black/15 dark:border-white/10 flex items-center justify-center text-neutral-900 dark:text-white hover:text-primary hover:border-primary bg-white dark:bg-[#121118] backdrop-blur-xl transition-all duration-300 active:scale-95 cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.08)] dark:shadow-none hover:shadow-[0_6px_25px_rgba(124,58,237,0.2)]"
+                className="w-12 h-12 rounded-full border border-emerald-500/20 dark:border-white/10 flex items-center justify-center text-white hover:text-emerald-400 hover:border-emerald-400 bg-emerald-950/60 dark:bg-[#121118] backdrop-blur-xl transition-all duration-300 active:scale-95 cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.2)] dark:shadow-none hover:shadow-[0_6px_25px_rgba(52,211,153,0.3)]"
                 aria-label="Scroll Right"
               >
                 <span className="material-symbols-outlined text-xl">arrow_forward</span>

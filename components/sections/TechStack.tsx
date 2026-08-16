@@ -28,7 +28,7 @@ const TECH_LOGOS = [
 
 export function TechStack() {
   return (
-    <div id="tech" className="relative z-10 bg-background dark:bg-[#070609] py-10 md:py-20 px-6 md:px-12 lg:px-24 overflow-hidden transition-colors duration-400">
+    <div id="tech" className="relative z-10 bg-transparent dark:bg-[#070609] py-10 md:py-20 px-6 md:px-12 lg:px-24 overflow-hidden transition-colors duration-400">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-start lg:items-center gap-8 md:gap-12 lg:gap-24">
         {/* Text Section */}
         <div className="flex-1 z-10 w-full text-left will-change-transform">
@@ -43,7 +43,7 @@ export function TechStack() {
         {/* Cylinder Carousel Section */}
         <div className="flex-1 w-full flex justify-center mt-2 lg:mt-0 relative perspective-[1200px]">
           {/* Subtle glow behind the carousel */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-purple-600/15 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-emerald-500/20 dark:bg-purple-600/15 rounded-full blur-[100px] pointer-events-none" />
           
           <CylinderCarousel 
             images={TECH_LOGOS} 

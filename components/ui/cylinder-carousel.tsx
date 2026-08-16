@@ -52,7 +52,7 @@ export function CylinderCarousel({ images, className }: CylinderCarouselProps) {
           return (
             <div
               key={index}
-              className="absolute w-[80px] h-[80px] md:w-[120px] md:h-[120px] flex justify-center items-center rounded-2xl p-4 md:p-6 transition-all duration-300 bg-white/80 dark:bg-[rgba(20,20,25,0.8)] border border-black/10 dark:border-white/10 shadow-sm dark:shadow-none backdrop-blur-sm"
+              className="absolute w-[80px] h-[80px] md:w-[120px] md:h-[120px] flex justify-center items-center rounded-2xl p-4 md:p-6 transition-all duration-300 bg-emerald-950/70 dark:bg-[rgba(20,20,25,0.8)] border border-emerald-500/20 dark:border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.3)] dark:shadow-none backdrop-blur-sm"
               style={{
                 transform: `rotateY(${theta}deg) translateZ(${radius}px)`,
                 backfaceVisibility: "visible", 

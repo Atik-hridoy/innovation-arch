@@ -65,14 +65,14 @@ export function Header() {
       <nav
         className={`fixed top-0 w-full z-50 flex justify-between items-center px-4 sm:px-margin-edge py-3.5 sm:py-4 transition-all duration-500 ${
           isPastHero
-            ? 'bg-white/85 dark:bg-[#070104]/85 backdrop-blur-2xl border-b border-black/5 dark:border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.35)]'
+            ? 'bg-emerald-950/85 dark:bg-[#070104]/85 backdrop-blur-2xl border-b border-emerald-500/20 dark:border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.35)]'
             : 'bg-transparent backdrop-blur-none border-b border-transparent'
         }`}
       >
         {/* Real-time Smooth Scroll Indicator Bar (Mobile Only - Hidden on Web) */}
         <div className="md:hidden absolute bottom-0 inset-x-0 h-[2px] bg-transparent overflow-hidden pointer-events-none">
           <div
-            className="h-full bg-gradient-to-r from-red-500 via-rose-400 to-emerald-400 shadow-[0_0_10px_rgba(225,29,72,0.8)] transition-all duration-75 ease-out"
+            className="h-full bg-gradient-to-r from-emerald-600 via-emerald-400 to-teal-300 dark:from-red-500 dark:via-rose-400 dark:to-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.8)] transition-all duration-75 ease-out"
             style={{ width: `${scrollProgress}%` }}
           />
         </div>
@@ -123,7 +123,7 @@ export function Header() {
       </nav>
 
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-[45] bg-background/95 dark:bg-[#050505]/95 backdrop-blur-2xl flex flex-col items-center justify-center gap-6 md:hidden animate-[fadeSlideIn_0.25s_ease-out]">
+        <div className="fixed inset-0 z-[45] bg-emerald-950/95 dark:bg-[#050505]/95 backdrop-blur-2xl flex flex-col items-center justify-center gap-6 md:hidden animate-[fadeSlideIn_0.25s_ease-out]">
           {navItems.map((item) => (
             <a
               key={item.label}

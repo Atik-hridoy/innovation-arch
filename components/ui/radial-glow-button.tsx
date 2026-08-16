@@ -51,11 +51,11 @@ export function RadialGlowButton({
           --cut: 1px;
           --bg: radial-gradient(
             var(--rg-spread-x) var(--rg-spread-y) at var(--rg-pos-x) var(--rg-pos-y),
-            var(--rg-color-1) var(--rg-stop-1),
-            var(--rg-color-2) var(--rg-stop-2),
-            var(--rg-color-3) var(--rg-stop-3),
-            var(--rg-color-4) var(--rg-stop-4),
-            var(--rg-color-5) var(--rg-stop-5)
+            rgba(40, 98, 58, 0.7) var(--rg-stop-1),
+            rgba(22, 54, 41, 0.65) var(--rg-stop-2),
+            rgba(15, 32, 39, 0.6) var(--rg-stop-3),
+            rgba(52, 211, 153, 0.4) var(--rg-stop-4),
+            rgba(15, 32, 39, 0.5) var(--rg-stop-5)
           );
           
           position: relative;
@@ -65,12 +65,14 @@ export function RadialGlowButton({
           font-weight: 600;
           color: rgba(255, 255, 255, 0.98);
           background: var(--bg);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
           cursor: pointer;
           text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
           overflow: hidden;
           -webkit-font-smoothing: antialiased;
           -webkit-tap-highlight-color: transparent;
-          box-shadow: 0 10px 30px -10px rgba(124, 58, 237, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+          box-shadow: 0 10px 30px -10px rgba(52, 211, 153, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
           transition: 
             transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
             box-shadow 0.3s ease,
@@ -81,13 +83,25 @@ export function RadialGlowButton({
             --rg-stop-1 .75s, --rg-stop-2 .75s, --rg-stop-3 .75s, --rg-stop-4 .75s, --rg-stop-5 .75s;
         }
 
+        .dark .rg-button {
+          --bg: radial-gradient(
+            var(--rg-spread-x) var(--rg-spread-y) at var(--rg-pos-x) var(--rg-pos-y),
+            var(--rg-color-1) var(--rg-stop-1),
+            var(--rg-color-2) var(--rg-stop-2),
+            var(--rg-color-3) var(--rg-stop-3),
+            var(--rg-color-4) var(--rg-stop-4),
+            var(--rg-color-5) var(--rg-stop-5)
+          );
+          box-shadow: 0 10px 30px -10px rgba(124, 58, 237, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
         .rg-button::before {
           content: '';
           position: absolute;
           inset: 0;
           padding: 1px;
           border-radius: inherit;
-          background-image: linear-gradient(var(--rg-border-angle), var(--rg-border-color-1), var(--rg-border-color-2));
+          background-image: linear-gradient(var(--rg-border-angle), rgba(52, 211, 153, 0.6), rgba(255, 255, 255, 0.15));
           mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
           mask-composite: exclude;
           pointer-events: none;

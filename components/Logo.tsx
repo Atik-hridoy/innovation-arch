@@ -118,14 +118,14 @@ export function Logo({ className = '', showText = true, layout = 'horizontal', i
         <div className={`flex flex-col ${isVertical ? 'items-center' : 'items-start'}`}>
           <span className={`font-sans font-extrabold uppercase transition-all duration-500 ${
             isHero
-              ? 'text-transparent bg-clip-text bg-gradient-to-r from-rose-300 via-rose-400 to-red-500 drop-shadow-[0_2px_10px_rgba(225,29,72,0.4)]'
-              : 'text-transparent bg-clip-text bg-gradient-to-r from-neutral-900 via-neutral-900 to-neutral-700 dark:from-white dark:via-white dark:to-white/70'
+              ? 'text-transparent bg-clip-text bg-gradient-to-r from-emerald-200 via-emerald-300 to-teal-400 dark:from-rose-300 dark:via-rose-400 dark:to-red-500 drop-shadow-[0_2px_10px_rgba(52,211,153,0.4)]'
+              : 'text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-white/80 dark:from-white dark:via-white dark:to-white/70'
           } ${
             isVertical 
               ? 'text-[24px] md:text-[28px] tracking-[0.1em]' 
               : 'text-[17px] tracking-wider'
           }`}>
-            INNOVATION <span className={isHero ? 'text-rose-400' : 'text-[#00bfff]'}>ARK</span>
+            INNOVATION <span className={isHero ? 'text-emerald-300 dark:text-rose-400' : 'text-emerald-400 dark:text-[#00bfff]'}>ARK</span>
           </span>
           {isVertical && (
             <span className="font-mono text-[8px] md:text-[9px] tracking-[0.22em] text-on-surface-variant/70 uppercase mt-2">

@@ -27,32 +27,32 @@ export function ProjectCard({ project, isActive }: ProjectCardProps) {
 
   return (
     <div
-      className={`w-[88vw] md:w-[78vw] max-w-[1120px] shrink-0 snap-center rounded-3xl border p-6 md:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative overflow-hidden transition-all duration-500 shadow-[0_20px_50px_rgba(0,0,0,0.08)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.8)] backdrop-blur-md ${
+      className={`w-[88vw] md:w-[78vw] max-w-[1120px] shrink-0 snap-center rounded-3xl border p-6 md:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative overflow-hidden transition-all duration-500 shadow-[0_20px_50px_rgba(0,0,0,0.25)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.8)] backdrop-blur-md ${
         isActive
-          ? 'border-primary/30 dark:border-primary/20 bg-white/80 dark:bg-[#0b0a0d]/70'
-          : 'border-black/5 dark:border-white/5 bg-white/40 dark:bg-[#0b0a0d]/40 opacity-70'
+          ? 'border-emerald-500/30 dark:border-primary/20 bg-emerald-950/60 dark:bg-[#0b0a0d]/70'
+          : 'border-emerald-500/15 dark:border-white/5 bg-emerald-950/30 dark:bg-[#0b0a0d]/40 opacity-70'
       }`}
     >
       {/* Left Column: Details */}
       <div className="lg:col-span-5 flex flex-col items-start gap-5 relative z-10 order-2 lg:order-1">
         <div>
-          <span className="font-mono text-[9px] uppercase tracking-widest text-primary font-semibold mb-2 block">
+          <span className="font-mono text-[9px] uppercase tracking-widest text-emerald-300 dark:text-primary font-semibold mb-2 block">
             {project.subtitle}
           </span>
-          <h3 className="font-sans font-extrabold text-2xl md:text-4xl text-neutral-900 dark:text-white tracking-tight leading-none mb-3">
+          <h3 className="font-sans font-extrabold text-2xl md:text-4xl text-white tracking-tight leading-none mb-3">
             {project.title}
           </h3>
-          <p className="text-xs md:text-sm text-neutral-600 dark:text-on-surface-variant leading-relaxed max-w-md">
+          <p className="text-xs md:text-sm text-emerald-100/80 dark:text-on-surface-variant leading-relaxed max-w-md">
             {project.description}
           </p>
         </div>
 
         {/* Metrics */}
-        <div className="border-t border-black/10 dark:border-white/10 pt-3 w-full">
-          <div className="text-xl md:text-2xl font-extrabold text-neutral-900 dark:text-white leading-none">
+        <div className="border-t border-emerald-500/20 dark:border-white/10 pt-3 w-full">
+          <div className="text-xl md:text-2xl font-extrabold text-white leading-none">
             {project.metrics.value}
           </div>
-          <div className="text-[9px] uppercase tracking-wider text-neutral-500 dark:text-on-surface-variant/50 mt-1 font-mono">
+          <div className="text-[9px] uppercase tracking-wider text-emerald-300/60 dark:text-on-surface-variant/50 mt-1 font-mono">
             {project.metrics.label}
           </div>
         </div>
@@ -63,7 +63,7 @@ export function ProjectCard({ project, isActive }: ProjectCardProps) {
             {project.tags.map((tag) => (
               <span
                 key={tag}
-                className="font-label-caps text-[8px] font-semibold text-primary px-2.5 py-1 rounded-full bg-primary/10 border border-primary/20"
+                className="font-label-caps text-[8px] font-semibold text-emerald-300 dark:text-primary px-2.5 py-1 rounded-full bg-emerald-500/15 dark:bg-primary/10 border border-emerald-500/30 dark:border-primary/20"
               >
                 {tag}
               </span>
@@ -130,7 +130,7 @@ export function ProjectCard({ project, isActive }: ProjectCardProps) {
 
                 {/* Top-Left Image Index Badge on Active Card */}
                 {isTop && (
-                  <span className="absolute top-4 left-4 font-mono text-[9px] font-bold bg-white/80 dark:bg-[#050505]/80 text-primary border border-black/10 dark:border-white/10 px-3 py-1 rounded-full backdrop-blur-md">
+                  <span className="absolute top-4 left-4 font-mono text-[9px] font-bold bg-emerald-950/80 dark:bg-[#050505]/80 text-emerald-300 dark:text-primary border border-emerald-500/30 dark:border-white/10 px-3 py-1 rounded-full backdrop-blur-md">
                     SLIDE 0{activeImgIdx + 1} / 0{project.mockups.length}
                   </span>
                 )}
@@ -154,8 +154,8 @@ export function ProjectCard({ project, isActive }: ProjectCardProps) {
                   }}
                   className={`w-14 sm:w-18 aspect-[16/10] rounded-lg overflow-hidden border transition-all duration-300 cursor-pointer ${
                     isSelected
-                      ? 'border-primary shadow-[0_0_12px_rgba(124,58,237,0.5)] scale-105 opacity-100 ring-2 ring-primary/40'
-                      : 'border-black/10 dark:border-white/10 opacity-40 hover:opacity-80'
+                      ? 'border-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.5)] scale-105 opacity-100 ring-2 ring-emerald-400/40'
+                      : 'border-emerald-500/20 dark:border-white/10 opacity-40 hover:opacity-80'
                   }`}
                   aria-label={`View slide ${tIdx + 1}`}
                 >
@@ -174,14 +174,14 @@ export function ProjectCard({ project, isActive }: ProjectCardProps) {
             <div className="flex items-center gap-2">
               <button
                 onClick={handlePrevImage}
-                className="w-9 h-9 rounded-full border border-black/10 dark:border-white/10 bg-white/70 dark:bg-white/5 hover:bg-black/5 dark:hover:bg-white/15 text-neutral-900 dark:text-white flex items-center justify-center transition-all cursor-pointer shadow-sm active:scale-95"
+                className="w-9 h-9 rounded-full border border-emerald-500/20 dark:border-white/10 bg-emerald-950/70 dark:bg-white/5 hover:bg-emerald-900/60 dark:hover:bg-white/15 text-white flex items-center justify-center transition-all cursor-pointer shadow-sm active:scale-95"
                 aria-label="Previous mockup"
               >
                 <span className="material-symbols-outlined text-base">arrow_back</span>
               </button>
               <button
                 onClick={handleNextImage}
-                className="w-9 h-9 rounded-full border border-black/10 dark:border-white/10 bg-white/70 dark:bg-white/5 hover:bg-black/5 dark:hover:bg-white/15 text-neutral-900 dark:text-white flex items-center justify-center transition-all cursor-pointer shadow-sm active:scale-95"
+                className="w-9 h-9 rounded-full border border-emerald-500/20 dark:border-white/10 bg-emerald-950/70 dark:bg-white/5 hover:bg-emerald-900/60 dark:hover:bg-white/15 text-white flex items-center justify-center transition-all cursor-pointer shadow-sm active:scale-95"
                 aria-label="Next mockup"
               >
                 <span className="material-symbols-outlined text-base">arrow_forward</span>

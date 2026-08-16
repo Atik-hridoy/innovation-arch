@@ -1,20 +1,35 @@
 /* Glassmorphism utilities */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  border-left: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(15, 32, 39, 0.35);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.glass-card {
+  background: rgba(15, 32, 39, 0.3);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .btn-ghost-glass {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(10px);
+  background: rgba(15, 32, 39, 0.3);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   transition: all 0.4s ease;
 }
 
 .btn-ghost-glass:hover {
+  background: linear-gradient(135deg, rgba(40, 98, 58, 0.3), rgba(15, 32, 39, 0.4));
+  box-shadow: 0 0 25px rgba(52, 211, 153, 0.4);
+  border-color: rgba(52, 211, 153, 0.4);
+}
+
+.dark .btn-ghost-glass:hover {
   background: linear-gradient(135deg, rgba(221, 183, 255, 0.2), rgba(173, 198, 255, 0.2));
   box-shadow: 0 0 25px rgba(221, 183, 255, 0.5);
   border-color: rgba(221, 183, 255, 0.5);
@@ -32,7 +47,7 @@
   left: 0;
   width: 32px;
   height: 32px;
-  border: 1px solid rgba(221, 183, 255, 0.5);
+  border: 1px solid rgba(52, 211, 153, 0.6);
   border-radius: 50%;
   pointer-events: none;
   transform: translate3d(-50%, -50%, 0);
@@ -41,6 +56,10 @@
   z-index: 9999;
   mix-blend-mode: screen;
   backface-visibility: hidden;
+}
+
+.dark .cursor-follower {
+  border: 1px solid rgba(221, 183, 255, 0.5);
 }
 
 /* Lenis scroll setup */

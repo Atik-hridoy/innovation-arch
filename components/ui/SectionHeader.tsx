@@ -36,19 +36,19 @@ export function SectionHeader({
       >
         <div className={`flex flex-col gap-3 md:gap-4 max-w-3xl ${isCenter ? 'items-center' : 'items-start'}`}>
           {/* Unified Eyebrow Pill */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-violet-500/20 dark:border-primary/20 bg-violet-500/10 dark:bg-primary/10 font-mono text-[10px] sm:text-xs font-semibold tracking-[0.2em] text-violet-700 dark:text-primary uppercase backdrop-blur-md pointer-events-auto">
-            <span className="w-1.5 h-1.5 rounded-full bg-violet-600 dark:bg-primary animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-emerald-500/30 dark:border-primary/20 bg-emerald-500/10 dark:bg-primary/10 font-mono text-[10px] sm:text-xs font-semibold tracking-[0.2em] text-emerald-300 dark:text-primary uppercase backdrop-blur-md pointer-events-auto">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 dark:bg-primary animate-pulse" />
             {eyebrow}
           </div>
 
           {/* Unified Display Title */}
-          <h2 className="font-sans font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-neutral-900 dark:text-white uppercase tracking-tighter leading-[0.95] select-none">
+          <h2 className="font-sans font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white uppercase tracking-tighter leading-[0.95] select-none">
             {title}
           </h2>
 
           {/* Unified Description Subtitle */}
           {description && (
-            <p className="text-sm sm:text-base md:text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl leading-relaxed font-normal pt-1 select-none">
+            <p className="text-sm sm:text-base md:text-lg text-emerald-100/80 dark:text-neutral-300 max-w-2xl leading-relaxed font-normal pt-1 select-none">
               {description}
             </p>
           )}

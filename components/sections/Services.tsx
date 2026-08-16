@@ -150,15 +150,15 @@ export function Services() {
           title="WHAT WE BUILD"
           description="High-performance digital products engineered with modern architectures, smooth interactions, and AI intelligence."
           action={
-            <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 rounded-2xl md:rounded-full border border-black/10 dark:border-white/10 bg-black/[0.03] dark:bg-white/[0.02] backdrop-blur-sm w-full md:w-auto">
+            <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 rounded-2xl md:rounded-full border border-white/10 dark:border-white/10 bg-emerald-950/40 dark:bg-white/[0.02] backdrop-blur-xl w-full md:w-auto">
               {SLIDES.map((slide, idx) => (
                 <button
                   key={slide.title}
                   onClick={() => setActiveIndex(idx)}
                   className={`relative px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl md:rounded-full font-mono text-[9px] sm:text-[10px] uppercase tracking-wider font-bold transition-all duration-400 cursor-pointer ${
                     idx === activeIndex
-                      ? 'text-neutral-900 dark:text-white bg-black/10 dark:bg-white/10 border border-black/15 dark:border-white/15 shadow-md'
-                      : 'text-neutral-500 dark:text-white/40 hover:text-neutral-900 dark:hover:text-white/70 border border-transparent'
+                      ? 'text-white bg-white/15 dark:bg-white/10 border border-white/20 dark:border-white/15 shadow-md backdrop-blur-md'
+                      : 'text-emerald-200/60 dark:text-white/40 hover:text-white dark:hover:text-white/70 border border-transparent'
                   }`}
                 >
                   {slide.title}
@@ -175,11 +175,11 @@ export function Services() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
 
           {/* ▎ Main Feature Card (Large, spans 7 cols) */}
-          <div className="lg:col-span-7 relative rounded-[20px] sm:rounded-[28px] border border-black/10 dark:border-white/10 bg-white/70 dark:bg-[#0a0a0c]/40 backdrop-blur-md overflow-hidden min-h-[280px] sm:min-h-[380px] flex flex-col justify-between p-5 sm:p-7 md:p-9 group shadow-[0_20px_50px_rgba(0,0,0,0.06)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.6)] transition-colors duration-400">
+          <div className="lg:col-span-7 relative rounded-[20px] sm:rounded-[28px] border border-white/15 dark:border-white/10 bg-emerald-950/35 dark:bg-[#0a0a0c]/40 backdrop-blur-2xl overflow-hidden min-h-[280px] sm:min-h-[380px] flex flex-col justify-between p-5 sm:p-7 md:p-9 group shadow-[0_20px_50px_rgba(0,0,0,0.25)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.6)] transition-colors duration-400">
             {/* Card bg image */}
             <div className="absolute inset-0 z-0 opacity-15 dark:opacity-25 mix-blend-luminosity">
               <img src={active.image} alt={active.title} className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-background dark:from-[#0a0a0c] via-background/60 dark:via-[#0a0a0c]/60 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0F2027] dark:from-[#0a0a0c] via-[#0F2027]/60 dark:via-[#0a0a0c]/60 to-transparent" />
             </div>
 
             {/* Top badge row */}
@@ -195,10 +195,10 @@ export function Services() {
 
             {/* Title + Desc */}
             <div className="relative z-10 mt-auto flex flex-col gap-3">
-              <h3 className="svc-hero-title font-sans font-extrabold text-2xl sm:text-4xl md:text-5xl lg:text-[3.2rem] text-neutral-900 dark:text-white uppercase tracking-tighter leading-[0.95]">
+              <h3 className="svc-hero-title font-sans font-extrabold text-2xl sm:text-4xl md:text-5xl lg:text-[3.2rem] text-white uppercase tracking-tighter leading-[0.95]">
                 {active.title}
               </h3>
-              <p className="svc-hero-desc text-xs sm:text-sm md:text-base text-neutral-600 dark:text-white/60 leading-relaxed max-w-lg">
+              <p className="svc-hero-desc text-xs sm:text-sm md:text-base text-emerald-100/80 dark:text-white/60 leading-relaxed max-w-lg">
                 {active.desc}
               </p>
               <div className="flex items-center gap-6 mt-1">
@@ -210,7 +210,7 @@ export function Services() {
                   Explore Service
                   <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
                 </RadialGlowButton>
-                <span className="font-mono text-[9px] text-neutral-400 dark:text-white/25 uppercase tracking-wider hidden md:inline">0{activeIndex + 1} / 0{SLIDES.length}</span>
+                <span className="font-mono text-[9px] text-emerald-300/50 dark:text-white/25 uppercase tracking-wider hidden md:inline">0{activeIndex + 1} / 0{SLIDES.length}</span>
               </div>
             </div>
           </div>
@@ -219,13 +219,13 @@ export function Services() {
           <div className="lg:col-span-5 flex flex-col gap-4">
 
             {/* Code Terminal / Facilities Card */}
-            <div className="relative rounded-[24px] border border-black/10 dark:border-white/10 bg-white/70 dark:bg-[#08080a]/50 backdrop-blur-md p-5 sm:p-6 flex-1 overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.06)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.6)] transition-colors duration-400">
+            <div className="relative rounded-[24px] border border-white/15 dark:border-white/10 bg-emerald-950/35 dark:bg-[#08080a]/50 backdrop-blur-2xl p-5 sm:p-6 flex-1 overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.25)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.6)] transition-colors duration-400">
               {/* Terminal Header */}
-              <div className="flex items-center gap-2 mb-4 pb-3 border-b border-black/5 dark:border-white/5">
+              <div className="flex items-center gap-2 mb-4 pb-3 border-b border-white/10 dark:border-white/5">
                 <span className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
                 <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
                 <span className="w-2.5 h-2.5 rounded-full bg-green-500/60" />
-                <span className="ml-auto font-mono text-[8px] text-neutral-500 dark:text-white/30 uppercase tracking-wider">
+                <span className="ml-auto font-mono text-[8px] text-emerald-300/70 dark:text-white/30 uppercase tracking-wider">
                   {expanded ? `${active.title.toLowerCase()} // deliverables` : `${active.title.toLowerCase()}.tsx`}
                 </span>
               </div>
@@ -235,26 +235,26 @@ export function Services() {
                 <div className="flex flex-col gap-1.5 font-mono text-[11px] leading-relaxed">
                   {snippets.slice(0, visibleLines).map((line, i) => (
                     <div key={i} className="svc-code-line flex gap-3" style={{ animation: 'fadeSlideIn 0.3s ease-out' }}>
-                      <span className="text-neutral-400 dark:text-white/15 select-none w-5 text-right shrink-0">{i + 1}</span>
-                      <span className="text-neutral-700 dark:text-white/50 whitespace-pre">{line}</span>
+                      <span className="text-emerald-300/40 dark:text-white/15 select-none w-5 text-right shrink-0">{i + 1}</span>
+                      <span className="text-emerald-100/80 dark:text-white/50 whitespace-pre">{line}</span>
                     </div>
                   ))}
                   {visibleLines < snippets.length && (
                     <div className="flex gap-3">
-                      <span className="text-neutral-400 dark:text-white/15 select-none w-5 text-right shrink-0">{visibleLines + 1}</span>
+                      <span className="text-emerald-300/40 dark:text-white/15 select-none w-5 text-right shrink-0">{visibleLines + 1}</span>
                       <span className="inline-block w-[7px] h-[14px] bg-primary/70 animate-pulse" />
                     </div>
                   )}
                 </div>
               ) : (
                 <div className="flex flex-col gap-2.5">
-                  <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-neutral-400 dark:text-white/25 font-bold mb-1">
+                  <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-emerald-300/60 dark:text-white/25 font-bold mb-1">
                     {active.title} // WHAT YOU GET
                   </span>
                   {active.facilities.slice(0, visibleFacilities).map((item, i) => (
                     <div
                       key={i}
-                      className="flex items-start gap-3 p-3 rounded-xl border border-black/5 dark:border-white/5 bg-black/[0.02] dark:bg-white/[0.015] hover:bg-black/[0.04] dark:hover:bg-white/[0.04] hover:border-black/10 dark:hover:border-white/10 transition-all duration-300 group/fac"
+                      className="flex items-start gap-3 p-3 rounded-xl border border-white/10 dark:border-white/5 bg-white/[0.04] dark:bg-white/[0.015] hover:bg-white/[0.08] dark:hover:bg-white/[0.04] hover:border-white/20 dark:hover:border-white/10 backdrop-blur-md transition-all duration-300 group/fac"
                       style={{ animation: 'fadeSlideIn 0.35s ease-out' }}
                     >
                       <span
@@ -267,7 +267,7 @@ export function Services() {
                       >
                         {String(i + 1).padStart(2, '0')}
                       </span>
-                      <span className="text-[12px] text-neutral-700 dark:text-white/55 leading-relaxed pt-0.5 group-hover/fac:text-neutral-900 dark:group-hover/fac:text-white/80 transition-colors duration-300">
+                      <span className="text-[12px] text-emerald-100/90 dark:text-white/55 leading-relaxed pt-0.5 group-hover/fac:text-white dark:group-hover/fac:text-white/80 transition-colors duration-300">
                         {item}
                       </span>
                     </div>
@@ -280,14 +280,14 @@ export function Services() {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setActiveIndex((p) => (p - 1 + SLIDES.length) % SLIDES.length)}
-                className="flex-1 h-14 rounded-2xl border border-black/8 dark:border-white/8 bg-black/[0.02] dark:bg-white/[0.02] hover:bg-black/[0.06] dark:hover:bg-white/[0.06] hover:border-black/15 dark:hover:border-white/15 flex items-center justify-center text-neutral-600 dark:text-white/40 hover:text-neutral-900 dark:hover:text-white transition-all duration-300 cursor-pointer"
+                className="flex-1 h-14 rounded-2xl border border-white/15 dark:border-white/8 bg-emerald-950/40 dark:bg-white/[0.02] hover:bg-emerald-900/50 dark:hover:bg-white/[0.06] hover:border-emerald-400/40 dark:hover:border-white/15 flex items-center justify-center text-white/70 dark:text-white/40 hover:text-white dark:hover:text-white backdrop-blur-xl transition-all duration-300 cursor-pointer"
                 aria-label="Previous Service"
               >
                 <span className="material-symbols-outlined text-xl">arrow_back</span>
               </button>
               <button
                 onClick={() => setActiveIndex((p) => (p + 1) % SLIDES.length)}
-                className="flex-1 h-14 rounded-2xl border border-black/8 dark:border-white/8 bg-black/[0.02] dark:bg-white/[0.02] hover:bg-black/[0.06] dark:hover:bg-white/[0.06] hover:border-black/15 dark:hover:border-white/15 flex items-center justify-center text-neutral-600 dark:text-white/40 hover:text-neutral-900 dark:hover:text-white transition-all duration-300 cursor-pointer"
+                className="flex-1 h-14 rounded-2xl border border-white/15 dark:border-white/8 bg-emerald-950/40 dark:bg-white/[0.02] hover:bg-emerald-900/50 dark:hover:bg-white/[0.06] hover:border-emerald-400/40 dark:hover:border-white/15 flex items-center justify-center text-white/70 dark:text-white/40 hover:text-white dark:hover:text-white backdrop-blur-xl transition-all duration-300 cursor-pointer"
                 aria-label="Next Service"
               >
                 <span className="material-symbols-outlined text-xl">arrow_forward</span>
@@ -295,7 +295,7 @@ export function Services() {
             </div>
           </div>
 
-          {/* ▎ Bottom Row: Feature Spec Cards (Desktop: 4 Cards; Mobile: 1 Row of Pure Icons) */}
+          {/* ▎ Bottom Row: Feature Spec Cards */}
           <div className="col-span-1 lg:col-span-12 mt-2">
             {/* MOBILE ONLY: Single Row of 4 Pure Icons */}
             <MobileIconsRow features={active.features} themeColor={themeColor} />
@@ -305,15 +305,15 @@ export function Services() {
               {active.features.map((feat) => (
                 <div
                   key={feat.title}
-                  className="rounded-[20px] border border-black/6 dark:border-white/6 bg-white/70 dark:bg-[#08080a]/50 backdrop-blur-md p-5 flex flex-col gap-3 hover:bg-black/[0.02] dark:hover:bg-white/[0.03] hover:border-black/12 dark:hover:border-white/12 transition-all duration-300 relative overflow-hidden group shadow-sm dark:shadow-none"
+                  className="rounded-[20px] border border-white/12 dark:border-white/6 bg-emerald-950/35 dark:bg-[#08080a]/50 backdrop-blur-2xl p-5 flex flex-col gap-3 hover:bg-emerald-900/40 dark:hover:bg-white/[0.03] hover:border-emerald-400/40 dark:hover:border-white/12 transition-all duration-300 relative overflow-hidden group shadow-sm dark:shadow-none"
                 >
                   <div className="absolute top-0 left-0 w-full h-[1px]" style={{ background: `linear-gradient(90deg, transparent, ${themeColor}30, transparent)` }} />
                   <div className="flex items-center justify-between">
                     <span className="material-symbols-outlined text-lg" style={{ color: themeColor }}>{feat.icon}</span>
-                    <span className="font-mono text-[7px] uppercase tracking-widest text-neutral-400 dark:text-white/20 font-bold">{feat.spec}</span>
+                    <span className="font-mono text-[7px] uppercase tracking-widest text-emerald-300/50 dark:text-white/20 font-bold">{feat.spec}</span>
                   </div>
-                  <span className="font-sans font-bold text-[13px] text-neutral-900 dark:text-white tracking-tight leading-tight">{feat.title}</span>
-                  <span className="font-mono text-[10px] text-neutral-600 dark:text-white/40 leading-snug">{feat.desc}</span>
+                  <span className="font-sans font-bold text-[13px] text-white tracking-tight leading-tight">{feat.title}</span>
+                  <span className="font-mono text-[10px] text-emerald-100/70 dark:text-white/40 leading-snug">{feat.desc}</span>
                 </div>
               ))}
             </div>

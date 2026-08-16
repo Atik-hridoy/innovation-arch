@@ -74,15 +74,15 @@ export function TwistingRibbon({
     const TWIST_TIME_SPEED = 0.5;
 
     // ── Color palette ─────────────────────────────────────────────────────
-    // Light Mode Colors (defaults)
-    const L_COLOR_FACE = lightColors?.face ? hexToRgb(lightColors.face) : [255, 60, 10];
-    const L_COLOR_FOLD_A = lightColors?.foldA ? hexToRgb(lightColors.foldA) : [180, 255, 0];
-    const L_COLOR_FOLD_B = lightColors?.foldB ? hexToRgb(lightColors.foldB) : [60, 80, 255];
-    const L_COLOR_FOLD_C = lightColors?.foldC ? hexToRgb(lightColors.foldC) : [0, 220, 255];
-    const L_SHADOW_COLOR = [80, 60, 40];
-    const L_SHADOW_ALPHA = 14 / 255;
-    const L_EDGE_COLOR = [0, 0, 0];
-    const L_EDGE_ALPHA = 22 / 255;
+    // Light Mode Colors (Emerald Depth Defaults)
+    const L_COLOR_FACE = lightColors?.face ? hexToRgb(lightColors.face) : [40, 98, 58];
+    const L_COLOR_FOLD_A = lightColors?.foldA ? hexToRgb(lightColors.foldA) : [52, 211, 153];
+    const L_COLOR_FOLD_B = lightColors?.foldB ? hexToRgb(lightColors.foldB) : [15, 32, 39];
+    const L_COLOR_FOLD_C = lightColors?.foldC ? hexToRgb(lightColors.foldC) : [16, 185, 129];
+    const L_SHADOW_COLOR = [10, 20, 15];
+    const L_SHADOW_ALPHA = 40 / 255;
+    const L_EDGE_COLOR = [52, 211, 153];
+    const L_EDGE_ALPHA = 40 / 255;
 
     // Dark Mode Colors (Restore original vibrant colors for dark mode)
     const D_COLOR_FACE = darkColors?.face ? hexToRgb(darkColors.face) : [255, 60, 10];
