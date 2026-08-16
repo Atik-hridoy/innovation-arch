@@ -327,10 +327,20 @@ export function AboutUsScrollytelling() {
         <AuroraHeroBg />
       </div>
 
+      {/* ── Fullscreen Finale Color Gradient Cover Overlay (Fades in on Phase 6 for 8K Text Legibility) ── */}
+      <div
+        className="absolute inset-0 z-[4] pointer-events-none transition-opacity duration-300 bg-gradient-to-b from-[#140207] via-[#090103] to-[#040001]"
+        style={{
+          opacity: phase6Opacity,
+        }}
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(225,29,72,0.22)_0%,rgba(13,1,4,0.88)_60%,#040001_100%)]" />
+      </div>
+
       {/* ── Seamless Floating Editorial Typography & Chat Bubble Ecosystem (RESPONSIVE FULL VIEWPORT) ── */}
       <div className="relative z-10 w-full h-full px-3 sm:px-8 md:px-12 lg:px-16 xl:px-20 pointer-events-none flex items-center">
 
-        {/* ━━━ PHASE 1: 0% - 12% (INNOVATION ARK FLAGSHIP HOOK - PROPORTIONAL MOBILE FONTS & 1-LINE BUTTONS) ━━━ */}
+        {/* ━━━ PHASE 1: 0% - 12% (INNOVATION ARK FLAGSHIP HOOK - 1 CLEAN CTA BUTTON) ━━━ */}
         <div
           className="absolute inset-x-3 sm:inset-x-8 md:inset-x-16 lg:inset-x-24 top-1/2 -translate-y-1/2 flex flex-col items-center text-center transition-all duration-200 pointer-events-auto [perspective:1000px] max-w-5xl mx-auto"
           style={{
@@ -359,27 +369,18 @@ export function AboutUsScrollytelling() {
             We architect world-class web platforms, bespoke software ecosystems, and high-performance digital products that scale businesses globally.
           </p>
 
-          {/* Single-Row 1-Line Buttons for Phone View */}
-          <div className="mt-4 sm:mt-8 flex flex-row items-center justify-center gap-2 sm:gap-4 w-full sm:w-auto">
-            <a href="#contact" className="flex-1 sm:flex-none">
-              <RadialGlowButton size="sm" className="w-full sm:w-auto font-sans font-bold text-[10px] sm:text-xs tracking-wider uppercase !min-w-0 sm:!min-w-[190px] !h-[38px] sm:!h-[48px] !px-3 sm:!px-6 !bg-gradient-to-r !from-red-600 !to-rose-900 shadow-[0_0_20px_rgba(225,29,72,0.5)] border border-red-500/40 text-rose-100 whitespace-nowrap">
+          {/* 1 Clean High-Impact CTA Button */}
+          <div className="mt-4 sm:mt-8 flex justify-center">
+            <a href="#contact">
+              <RadialGlowButton size="sm" className="font-sans font-bold text-[11px] sm:text-xs tracking-wider uppercase !min-w-[170px] sm:!min-w-[200px] !h-[40px] sm:!h-[48px] !px-6 sm:!px-7 !bg-gradient-to-r !from-red-600 !to-rose-900 shadow-[0_0_25px_rgba(225,29,72,0.5)] border border-red-500/40 text-rose-100">
                 Initialize Project
-                <span className="material-symbols-outlined text-sm sm:text-base ml-1">arrow_forward</span>
+                <span className="material-symbols-outlined text-sm sm:text-base ml-1.5">arrow_forward</span>
               </RadialGlowButton>
-            </a>
-            <a
-              href="#work"
-              className="flex-1 sm:flex-none text-center justify-center px-3 sm:px-6 h-[38px] sm:h-[48px] font-sans text-[10px] sm:text-xs uppercase tracking-wider text-rose-200 hover:text-rose-100 transition-colors flex items-center gap-1 group border border-red-500/30 hover:border-red-400/60 bg-[#160206]/85 backdrop-blur-md rounded-full shadow-md whitespace-nowrap"
-            >
-              Roster
-              <span className="material-symbols-outlined text-xs group-hover:translate-x-1 transition-transform text-rose-400">
-                east
-              </span>
             </a>
           </div>
 
           {/* Scroll Cue */}
-          <div className="mt-4 sm:mt-12 flex items-center gap-1.5 font-mono text-[9px] sm:text-[11px] text-rose-300 uppercase tracking-widest animate-bounce drop-shadow-[0_2px_10px_rgba(0,0,0,1)]">
+          <div className="mt-4 sm:mt-10 flex items-center gap-1.5 font-mono text-[9px] sm:text-[11px] text-rose-300 uppercase tracking-widest animate-bounce drop-shadow-[0_2px_10px_rgba(0,0,0,1)]">
             <span className="material-symbols-outlined text-sm sm:text-base">expand_more</span>
             Scroll to explore
           </div>
@@ -563,7 +564,7 @@ export function AboutUsScrollytelling() {
           </div>
         </div>
 
-        {/* ━━━ PHASE 6: 84% - 100% (GRAND FINALE - PROPORTIONAL MOBILE FONTS & 1-LINE BUTTONS) ━━━ */}
+        {/* ━━━ PHASE 6: 84% - 100% (GRAND FINALE - 1 CLEAN HIGH-IMPACT CTA BUTTON ON GRADIENT COVER) ━━━ */}
         <div
           className="absolute inset-x-3 sm:inset-x-8 md:inset-x-16 lg:inset-x-24 top-1/2 -translate-y-1/2 flex flex-col items-center text-center transition-all duration-300 pointer-events-auto max-w-5xl mx-auto"
           style={{
@@ -577,7 +578,7 @@ export function AboutUsScrollytelling() {
           </div>
 
           <h2 className="font-sans font-black text-2xl sm:text-5xl md:text-7xl lg:text-8xl uppercase tracking-tighter leading-[0.94] text-rose-300 drop-shadow-[0_30px_70px_rgba(0,0,0,1)] max-w-5xl">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-400 to-rose-600">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-400 to-rose-600 drop-shadow-[0_10px_30px_rgba(225,29,72,0.5)]">
               PARTNER WITH
             </span>
             <br />
@@ -590,22 +591,13 @@ export function AboutUsScrollytelling() {
             Transform your vision into an industry-defining digital powerhouse. Let&apos;s build your next high-performance platform together.
           </p>
 
-          {/* Single-Row 1-Line Buttons for Phone View */}
-          <div className="mt-4 sm:mt-8 flex flex-row items-center justify-center gap-2 sm:gap-4 w-full sm:w-auto">
-            <a href="#contact" className="flex-1 sm:flex-none">
-              <RadialGlowButton size="sm" className="w-full sm:w-auto font-sans font-bold text-[10px] sm:text-xs tracking-wider uppercase !min-w-0 sm:!min-w-[200px] !h-[38px] sm:!h-[50px] !px-3 sm:!px-6 !bg-gradient-to-r !from-red-600 !to-rose-900 shadow-[0_0_25px_rgba(225,29,72,0.5)] border border-red-500/40 text-rose-100 whitespace-nowrap">
-                Deploy System →
-                <span className="material-symbols-outlined text-sm sm:text-base ml-1">arrow_forward</span>
+          {/* 1 Clean High-Impact CTA Button */}
+          <div className="mt-4 sm:mt-8 flex justify-center">
+            <a href="#contact">
+              <RadialGlowButton size="sm" className="font-sans font-bold text-xs sm:text-sm tracking-wider uppercase !min-w-[180px] sm:!min-w-[220px] !h-[42px] sm:!h-[52px] !px-6 sm:!px-8 !bg-gradient-to-r !from-red-600 !to-rose-900 shadow-[0_0_30px_rgba(225,29,72,0.6)] border border-red-500/40 text-rose-100 whitespace-nowrap">
+                Start Your Project
+                <span className="material-symbols-outlined text-sm sm:text-base ml-1.5">arrow_forward</span>
               </RadialGlowButton>
-            </a>
-            <a
-              href="#work"
-              className="flex-1 sm:flex-none text-center justify-center px-3 sm:px-7 h-[38px] sm:h-[50px] font-sans text-[10px] sm:text-xs uppercase tracking-wider text-rose-200 hover:text-rose-100 transition-colors flex items-center gap-1 group border border-red-500/30 hover:border-red-400/60 bg-[#160206]/85 backdrop-blur-md rounded-full shadow-md whitespace-nowrap"
-            >
-              Systems
-              <span className="material-symbols-outlined text-xs group-hover:translate-x-1 transition-transform text-rose-400">
-                east
-              </span>
             </a>
           </div>
         </div>
