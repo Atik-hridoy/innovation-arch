@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Project } from '../../data/portfolio';
 import { CONFIG } from '../../lib/config';
 import { ProjectCard } from './ProjectCard';
@@ -31,7 +31,6 @@ export function Portfolio() {
         const data = await res.json();
         if (data && data.length > 0) {
           const mappedProjects: Project[] = data.map((apiProj: any) => {
-            // Collect all non-null mockups
             const mockups = [
               apiProj.mockup_1, 
               apiProj.mockup_2, 
@@ -39,7 +38,6 @@ export function Portfolio() {
               apiProj.mockup_4
             ].filter(Boolean);
             
-            // Fallback image if none uploaded
             if (mockups.length === 0) mockups.push(CONFIG.FALLBACK_IMAGE);
 
             return {
@@ -75,10 +73,7 @@ export function Portfolio() {
     if (isLoading || projects.length === 0) return;
 
     const ctx = gsap.context(() => {
-      // 1. Animate Header Text
       if (headerRef.current) {
-        // Split text roughly by words or characters. For simplicity, we'll just animate the whole header block or use a simple stagger if it has child elements.
-        // Since we want the 'Vengence UI' feel, let's animate the header from bottom.
         gsap.from(headerRef.current, {
           scrollTrigger: {
             trigger: sectionRef.current,
@@ -86,29 +81,24 @@ export function Portfolio() {
             end: 'top center',
             scrub: 1,
           },
-          y: 100,
+          y: 60,
           opacity: 0,
-          ease: 'sine.out'
+          ease: 'power2.out'
         });
       }
 
-      // 2. Animate Cards with stagger and center-out delay
       const validCards = cardsRef.current.filter(Boolean);
-      const middleIndex = Math.floor(validCards.length / 2);
-
       validCards.forEach((card, index) => {
-        const delayFactor = Math.abs(index - middleIndex) * 0.15;
         gsap.from(card, {
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top bottom',
+            start: 'top 85%',
             end: 'center center',
-            scrub: 1.5,
+            scrub: 1,
           },
-          yPercent: 150,
-          autoAlpha: 0,
-          delay: delayFactor,
-          ease: 'sine.out',
+          y: 40,
+          opacity: 0.4,
+          ease: 'power2.out',
         });
       });
     }, sectionRef);
@@ -117,37 +107,36 @@ export function Portfolio() {
   }, [isLoading, projects]);
 
   const currentBgImage = projects[activeCardIdx]?.mockups[0];
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const scrollTicking = useRef(false);
-
-  // RAF-throttled scroll listener to compute which card is closest to horizontal center
-  const handleScroll = () => {
-    if (!scrollTicking.current) {
-      scrollTicking.current = true;
-      requestAnimationFrame(() => {
-        if (scrollRef.current) {
-          const container = scrollRef.current;
-          const children = container.children;
-          let closestIdx = 0;
-          let minDistance = Infinity;
-          const containerRect = container.getBoundingClientRect();
-          const containerCenter = containerRect.left + containerRect.width / 2;
-          
-          for (let i = 0; i < children.length; i++) {
-            const childRect = children[i].getBoundingClientRect();
-            const childCenter = childRect.left + childRect.width / 2;
-            const distance = Math.abs(childCenter - containerCenter);
-            if (distance < minDistance) {
-              minDistance = distance;
-              closestIdx = i;
-            }
-          }
-          setActiveCardIdx((prev) => (prev !== closestIdx ? closestIdx : prev));
-        }
-        scrollTicking.current = false;
-      });
+  // Smooth debounced active card detector on horizontal swipe
+  const handleScroll = useCallback(() => {
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
     }
-  };
+
+    scrollTimeoutRef.current = setTimeout(() => {
+      if (scrollRef.current) {
+        const container = scrollRef.current;
+        const children = container.children;
+        let closestIdx = 0;
+        let minDistance = Infinity;
+        const containerRect = container.getBoundingClientRect();
+        const containerCenter = containerRect.left + containerRect.width / 2;
+        
+        for (let i = 0; i < children.length; i++) {
+          const childRect = children[i].getBoundingClientRect();
+          const childCenter = childRect.left + childRect.width / 2;
+          const distance = Math.abs(childCenter - containerCenter);
+          if (distance < minDistance) {
+            minDistance = distance;
+            closestIdx = i;
+          }
+        }
+        setActiveCardIdx((prev) => (prev !== closestIdx ? closestIdx : prev));
+      }
+    }, 40);
+  }, []);
 
   const handleScrollLeft = () => {
     if (scrollRef.current) {
@@ -164,27 +153,28 @@ export function Portfolio() {
   return (
     <section ref={sectionRef} id="work" className="relative py-12 md:py-stack-xl px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20 z-10 bg-transparent dark:bg-[#070609] overflow-hidden min-h-[100vh] md:min-h-[120vh] flex flex-col justify-center pb-16 md:pb-32 transition-colors duration-400">
       
-      {/* Volumetric dynamic image background matching active card's 1st image */}
-      <div className="absolute inset-0 z-0 transition-all duration-1000 ease-in-out pointer-events-none">
+      {/* Volumetric dynamic image background (Desktop only for GPU efficiency) */}
+      <div className="hidden md:block absolute inset-0 z-0 pointer-events-none overflow-hidden">
         {currentBgImage && (
           <img 
-            key={currentBgImage}
             src={currentBgImage} 
-            className="w-full h-full object-cover opacity-[0.04] dark:opacity-25 blur-[60px] scale-105 transition-all duration-1000 ease-in-out"
+            className="w-full h-full object-cover opacity-[0.04] dark:opacity-20 blur-[50px] scale-105 transition-opacity duration-700 ease-out will-change-transform"
             alt="dynamic contextual background"
+            loading="eager"
+            decoding="async"
           />
         )}
-
-        {/* Dedicated Emerald Depth Green Gradient Ambient Background on Web and Mobile */}
-        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-1/4 -left-1/4 w-[110vw] h-[110vw] rounded-full bg-gradient-to-tr from-emerald-600/35 via-teal-700/25 to-transparent blur-[90px] mix-blend-screen" />
-          <div className="absolute bottom-1/4 -right-1/4 w-[100vw] h-[100vw] rounded-full bg-gradient-to-bl from-[#28623A]/40 via-emerald-800/25 to-transparent blur-[100px] mix-blend-screen" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] h-[85vw] rounded-full bg-radial from-emerald-500/25 via-[#163629]/20 to-transparent blur-[80px]" />
-        </div>
-
-        {/* Subtle dark mode vignette */}
-        <div className="absolute inset-0 hidden sm:block bg-transparent dark:bg-gradient-to-b dark:from-[#070609]/70 dark:to-[#070609]/95 transition-colors duration-400" />
       </div>
+
+      {/* Dedicated Emerald Depth Green Gradient Ambient Background on Web and Mobile */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-1/4 -left-1/4 w-[110vw] h-[110vw] rounded-full bg-gradient-to-tr from-emerald-600/35 via-teal-700/25 to-transparent blur-[90px] mix-blend-screen" />
+        <div className="absolute bottom-1/4 -right-1/4 w-[100vw] h-[100vw] rounded-full bg-gradient-to-bl from-[#28623A]/40 via-emerald-800/25 to-transparent blur-[100px] mix-blend-screen" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] h-[85vw] rounded-full bg-radial from-emerald-500/25 via-[#163629]/20 to-transparent blur-[80px]" />
+      </div>
+
+      {/* Subtle dark mode vignette */}
+      <div className="absolute inset-0 hidden sm:block bg-transparent dark:bg-gradient-to-b dark:from-[#070609]/70 dark:to-[#070609]/95 transition-colors duration-400 pointer-events-none" />
 
       {/* Section Header with Nav Buttons */}
       <div className="w-full max-w-[1720px] mx-auto">
@@ -217,7 +207,7 @@ export function Portfolio() {
       <div
         ref={scrollRef}
         onScroll={handleScroll}
-        className="w-full flex gap-4 sm:gap-8 overflow-x-auto snap-x snap-mandatory pb-8 scroll-smooth relative z-10"
+        className="w-full flex gap-4 sm:gap-8 overflow-x-auto snap-x snap-mandatory pb-8 scroll-smooth relative z-10 overscroll-x-contain"
         style={{
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
@@ -266,3 +256,4 @@ export function Portfolio() {
   );
 }
 
+export default Portfolio;
