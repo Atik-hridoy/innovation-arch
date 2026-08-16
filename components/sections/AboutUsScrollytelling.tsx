@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { RadialGlowButton } from '@/components/ui/radial-glow-button';
 import { AuroraHeroBg } from '@/components/ui/aurora-hero';
+import { MobilePhoneScrollytelling } from '@/components/sections/MobilePhoneScrollytelling';
 
 const TOTAL_FRAMES = 240;
 const FRAME_PATH = (index: number) => {
@@ -47,7 +48,7 @@ export function AboutUsScrollytelling() {
     };
   }, []);
 
-  // 2. High-DPI Canvas Rendering
+  // 2. High-DPI Canvas Rendering (Desktop Hardware Canvas)
   const renderFrame = (frameIndex: number, progressVal: number = 0) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -77,9 +78,8 @@ export function AboutUsScrollytelling() {
     ctx.fillStyle = '#080103';
     ctx.fillRect(0, 0, width, height);
 
-    // Aspect Contain Fit (Responsive Scale & Vertical Split for Mobile vs Desktop)
-    const isMobile = width < 768;
-    const scaleFactor = isMobile ? 0.78 : 0.82;
+    // Aspect Contain Fit (Scale for Desktop)
+    const scaleFactor = 0.82;
     const hRatio = width / img.naturalWidth;
     const vRatio = height / img.naturalHeight;
     const ratio = Math.min(hRatio, vRatio) * scaleFactor;
@@ -87,8 +87,7 @@ export function AboutUsScrollytelling() {
     const renderW = img.naturalWidth * ratio;
     const renderH = img.naturalHeight * ratio;
     const renderX = (width - renderW) / 2;
-    // On mobile portrait, position laptop in upper 40% so text cards in bottom 50% never collide
-    const renderY = isMobile ? height * 0.14 : (height - renderH) / 2;
+    const renderY = (height - renderH) / 2;
 
     // Smooth entry transition: canvas opacity builds gracefully as scrolling begins
     const canvasOpacity = Math.min(1, Math.max(0.15, progressVal * 6));
@@ -136,10 +135,10 @@ export function AboutUsScrollytelling() {
     ctx.globalAlpha = 1;
     const gradient = ctx.createRadialGradient(
       width / 2,
-      isMobile ? renderY + renderH / 2 : height / 2,
+      height / 2,
       Math.min(renderW, renderH) * 0.32,
       width / 2,
-      isMobile ? renderY + renderH / 2 : height / 2,
+      height / 2,
       Math.max(width, height) * 0.65
     );
     gradient.addColorStop(0, 'rgba(8, 1, 3, 0)');
@@ -258,15 +257,20 @@ export function AboutUsScrollytelling() {
       ref={sectionRef}
       className="relative w-full h-screen bg-[#080103] text-white overflow-hidden select-none"
     >
-      {/* ── Sticky Fullscreen Hardware Sequence Canvas ── */}
+      {/* ── Sticky Fullscreen Desktop Hardware Sequence Canvas (Desktop Only) ── */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-75"
+        className="hidden md:block absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-75"
         style={{
           filter: 'contrast(1.1) brightness(1.03) saturate(1.15)',
           imageRendering: '-webkit-optimize-contrast',
         }}
       />
+
+      {/* ── Mobile Portrait 3D Smartphone Scrollytelling (Mobile Only) ── */}
+      <div className="md:hidden absolute top-[7%] xs:top-[9%] inset-x-0 z-0 flex justify-center pointer-events-none">
+        <MobilePhoneScrollytelling scrollProgress={scrollProgress} />
+      </div>
 
       {/* ── 8K Cinematic Micro-Grain Texture ── */}
       <div
