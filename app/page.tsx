@@ -13,6 +13,7 @@ import { Process } from '@/components/sections/Process';
 import { Portfolio } from '@/components/sections/Portfolio';
 import { TechStack } from '@/components/sections/TechStack';
 import { CTA } from '@/components/sections/CTA';
+import { CookieConsent } from '@/components/ui/CookieConsent';
 
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -321,6 +322,7 @@ export default function Home() {
     >
       <div ref={cursorRef} className="cursor-follower hidden md:block" id="cursor" />
       <GlobalOverlays />
+      <CookieConsent />
       <Header />
 
       <main className="relative w-full z-10 bg-transparent transition-colors duration-400">
