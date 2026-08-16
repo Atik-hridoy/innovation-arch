@@ -200,8 +200,8 @@ export function Process() {
         {/* Center Spotlight */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] sm:w-[55vw] h-[70vw] sm:h-[55vw] rounded-full bg-radial from-primary/20 via-transparent to-transparent blur-[60px] sm:blur-[110px]" />
 
-        {/* Soft Dark Vignette Overlay - Only in Dark Mode */}
-        <div className="absolute inset-0 hidden dark:block bg-gradient-to-b from-[#050505] via-transparent to-[#050505] opacity-75" />
+        {/* Clean background on mobile, subtle vignette on larger screens */}
+        <div className="absolute inset-0 hidden sm:dark:block bg-gradient-to-b from-[#050505] via-transparent to-[#050505] opacity-75" />
       </div>
 
       <div className="w-full max-w-7xl mx-auto">

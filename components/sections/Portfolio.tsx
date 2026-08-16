@@ -174,8 +174,8 @@ export function Portfolio() {
             alt="dynamic contextual background"
           />
         )}
-        {/* Soft atmospheric gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/90 dark:from-[#070609]/70 via-white/80 dark:via-transparent to-white/95 dark:to-[#070609]/95 transition-colors duration-400" />
+        {/* Clean background on mobile, subtle vignette on larger screens */}
+        <div className="absolute inset-0 hidden sm:block bg-gradient-to-b from-white/90 dark:from-[#070609]/70 via-white/80 dark:via-transparent to-white/95 dark:to-[#070609]/95 transition-colors duration-400" />
       </div>
 
       {/* Section Header with Nav Buttons */}
