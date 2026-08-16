@@ -52,8 +52,8 @@ export function Header() {
             : 'bg-transparent backdrop-blur-none border-b border-transparent'
         }`}
       >
-        {/* Real-time Smooth Scroll Indicator Bar */}
-        <div className="absolute bottom-0 inset-x-0 h-[2px] bg-transparent overflow-hidden pointer-events-none">
+        {/* Real-time Smooth Scroll Indicator Bar (Mobile Only - Hidden on Web) */}
+        <div className="md:hidden absolute bottom-0 inset-x-0 h-[2px] bg-transparent overflow-hidden pointer-events-none">
           <div
             className="h-full bg-gradient-to-r from-red-500 via-rose-400 to-emerald-400 shadow-[0_0_10px_rgba(225,29,72,0.8)] transition-all duration-75 ease-out"
             style={{ width: `${scrollProgress}%` }}

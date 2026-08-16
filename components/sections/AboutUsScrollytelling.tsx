@@ -107,11 +107,11 @@ export function AboutUsScrollytelling() {
     ctx.fillStyle = '#080103';
     ctx.fillRect(0, 0, width, height);
 
-    // Aspect Fit: Scale portrait image to fill the mobile screen height gracefully (No empty vertical void)
+    // Aspect Fit: Scale portrait image gracefully on mobile (Slightly smaller for breathing room)
     const hRatio = width / img.naturalWidth;
     const vRatio = height / img.naturalHeight;
     const ratio = isMobile
-      ? (height / img.naturalHeight) * 0.96
+      ? Math.min(hRatio * 0.88, vRatio * 0.78)
       : Math.min(hRatio, vRatio) * 0.82;
 
     const renderW = img.naturalWidth * ratio;
@@ -119,70 +119,11 @@ export function AboutUsScrollytelling() {
     const renderX = (width - renderW) / 2;
     const renderY = (height - renderH) / 2;
 
-    // Smooth entry transition: canvas opacity builds gracefully as scrolling begins
-    const canvasOpacity = Math.min(1, Math.max(0.15, progressVal * 6));
-    ctx.globalAlpha = canvasOpacity;
-
     ctx.drawImage(img, renderX, renderY, renderW, renderH);
-
-    // ── 4-Sided Edge Feather Gradients (Completely eliminates rectangular border cuts) ──
-    const featherW = renderW * 0.18;
-    const featherH = renderH * 0.22;
-
-    // Left Edge Feather
-    const leftGrad = ctx.createLinearGradient(renderX - 2, 0, renderX + featherW, 0);
-    leftGrad.addColorStop(0, '#080103');
-    leftGrad.addColorStop(0.5, 'rgba(8, 1, 3, 0.7)');
-    leftGrad.addColorStop(1, 'rgba(8, 1, 3, 0)');
-    ctx.fillStyle = leftGrad;
-    ctx.fillRect(renderX - 4, renderY - 4, featherW + 4, renderH + 8);
-
-    // Right Edge Feather
-    const rightGrad = ctx.createLinearGradient(renderX + renderW - featherW, 0, renderX + renderW + 2, 0);
-    rightGrad.addColorStop(0, 'rgba(8, 1, 3, 0)');
-    rightGrad.addColorStop(0.5, 'rgba(8, 1, 3, 0.7)');
-    rightGrad.addColorStop(1, '#080103');
-    ctx.fillStyle = rightGrad;
-    ctx.fillRect(renderX + renderW - featherW, renderY - 4, featherW + 6, renderH + 8);
-
-    // Top Edge Feather
-    const topGrad = ctx.createLinearGradient(0, renderY - 2, 0, renderY + featherH);
-    topGrad.addColorStop(0, '#080103');
-    topGrad.addColorStop(0.5, 'rgba(8, 1, 3, 0.7)');
-    topGrad.addColorStop(1, 'rgba(8, 1, 3, 0)');
-    ctx.fillStyle = topGrad;
-    ctx.fillRect(renderX - 4, renderY - 4, renderW + 8, featherH + 4);
-
-    // Bottom Edge Feather
-    const bottomGrad = ctx.createLinearGradient(0, renderY + renderH - featherH, 0, renderY + renderH + 2);
-    bottomGrad.addColorStop(0, 'rgba(8, 1, 3, 0)');
-    bottomGrad.addColorStop(0.5, 'rgba(8, 1, 3, 0.7)');
-    bottomGrad.addColorStop(1, '#080103');
-    ctx.fillStyle = bottomGrad;
-    ctx.fillRect(renderX - 4, renderY + renderH - featherH, renderW + 8, featherH + 6);
-
-    // ── Full-Canvas Liquid-Silk Radial Vignette ──
-    ctx.globalAlpha = 1;
-    const gradient = ctx.createRadialGradient(
-      width / 2,
-      height / 2,
-      Math.min(renderW, renderH) * 0.32,
-      width / 2,
-      height / 2,
-      Math.max(width, height) * 0.65
-    );
-    gradient.addColorStop(0, 'rgba(8, 1, 3, 0)');
-    gradient.addColorStop(0.5, 'rgba(8, 1, 3, 0.2)');
-    gradient.addColorStop(0.82, 'rgba(8, 1, 3, 0.92)');
-    gradient.addColorStop(1, '#080103');
-
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, width, height);
 
     ctx.restore();
   };
 
-  // 3. GSAP ScrollTrigger Sequence Timeline (Compact & Snappy)
   useEffect(() => {
     if (typeof window === 'undefined') return;
     gsap.registerPlugin(ScrollTrigger);
@@ -203,19 +144,15 @@ export function AboutUsScrollytelling() {
         onUpdate: (self) => {
           const p = self.progress;
           setScrollProgress(p);
-
           const isMobile = window.innerWidth < 768;
-
           let frameIndex = 1;
 
           if (isMobile) {
-            // Mobile: Pure continuous forward progression 1 -> 300 across all scroll phases (No reverse playback)
             frameIndex = Math.min(
               MOBILE_FRAMES,
               Math.max(1, Math.floor(p * (MOBILE_FRAMES - 1)) + 1)
             );
           } else {
-            // Desktop: Forward 1 -> 240, then smooth close 240 -> 1 on grand finale
             if (p <= 0.08) {
               frameIndex = 1;
             } else if (p > 0.08 && p <= 0.76) {
@@ -253,7 +190,6 @@ export function AboutUsScrollytelling() {
     };
   }, [isReady]);
 
-  // Window resize handler
   useEffect(() => {
     const onResize = () => {
       setIsMobileDevice(window.innerWidth < 768);
@@ -263,61 +199,28 @@ export function AboutUsScrollytelling() {
     return () => window.removeEventListener('resize', onResize);
   }, [scrollProgress]);
 
-  // 6 Expanded Scrollytelling Phases Calculations
-  const phase1Opacity = Math.max(0, 1 - scrollProgress * 8.5);
-
-  const phase2Opacity =
-    scrollProgress >= 0.12 && scrollProgress <= 0.28
-      ? Math.sin(((scrollProgress - 0.12) / 0.16) * Math.PI)
-      : 0;
-
-  const phase3Opacity =
-    scrollProgress >= 0.28 && scrollProgress <= 0.46
-      ? Math.sin(((scrollProgress - 0.28) / 0.18) * Math.PI)
-      : 0;
-
-  const phase4Opacity =
-    scrollProgress >= 0.46 && scrollProgress <= 0.64
-      ? Math.sin(((scrollProgress - 0.46) / 0.18) * Math.PI)
-      : 0;
-
-  const phase5Opacity =
-    scrollProgress >= 0.64 && scrollProgress <= 0.80
-      ? Math.sin(((scrollProgress - 0.64) / 0.16) * Math.PI)
-      : 0;
-
-  const phase6Opacity = Math.max(0, Math.min(1, (scrollProgress - 0.84) / 0.14));
+  const phase1Opacity = Math.max(0, 1 - scrollProgress * 9.5);
+  const phase2Opacity = Math.max(0, 1 - Math.abs(scrollProgress - 0.20) * 8.5);
+  const phase3Opacity = Math.max(0, 1 - Math.abs(scrollProgress - 0.37) * 8.5);
+  const phase4Opacity = Math.max(0, 1 - Math.abs(scrollProgress - 0.55) * 8.5);
+  const phase5Opacity = Math.max(0, 1 - Math.abs(scrollProgress - 0.72) * 8.5);
+  const phase6Opacity = Math.max(0, Math.min(1, (scrollProgress - 0.82) * 6.5));
 
   return (
-    <div
-      id="about"
+    <section
       ref={sectionRef}
-      className="relative w-full h-[100svh] sm:h-screen bg-[#080103] text-white overflow-hidden select-none"
+      id="about"
+      className="relative w-full h-screen overflow-hidden bg-[#080103] select-none"
     >
-      {/* ── Sticky Fullscreen Hardware Sequence Canvas (Desktop: 240 Laptop Frames | Mobile: 300 Portrait Frames) ── */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-75"
-        style={{
-          filter: 'contrast(1.1) brightness(1.03) saturate(1.15)',
-          imageRendering: '-webkit-optimize-contrast',
-        }}
+        className="absolute inset-0 w-full h-full object-contain pointer-events-none z-[2]"
       />
 
-      {/* ── 8K Cinematic Micro-Grain Texture ── */}
-      <div
-        className="absolute inset-0 z-[1] pointer-events-none opacity-[0.04] mix-blend-overlay"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-        }}
-      />
-
-      {/* ── Liquid Crimson Ambient Glow ── */}
-      <div className="absolute inset-0 z-[2] pointer-events-none overflow-hidden">
+      <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] sm:w-[75vw] h-[90vw] sm:h-[75vw] max-w-[1000px] max-h-[1000px] rounded-full bg-radial from-red-600/12 via-rose-950/6 to-transparent blur-[160px]" />
       </div>
 
-      {/* ── Vengeance UI Aurora Hero Hook Background (Smooth Scroll Fade) ── */}
       <div
         className="absolute inset-0 z-[3] pointer-events-none transition-opacity duration-300"
         style={{
@@ -327,7 +230,6 @@ export function AboutUsScrollytelling() {
         <AuroraHeroBg />
       </div>
 
-      {/* ── Fullscreen Finale Color Gradient Cover Overlay (Fades in on Phase 6 for 8K Text Legibility) ── */}
       <div
         className="absolute inset-0 z-[4] pointer-events-none transition-opacity duration-300 bg-gradient-to-b from-[#140207] via-[#090103] to-[#040001]"
         style={{
@@ -337,229 +239,203 @@ export function AboutUsScrollytelling() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(225,29,72,0.22)_0%,rgba(13,1,4,0.88)_60%,#040001_100%)]" />
       </div>
 
-      {/* ── Seamless Floating Editorial Typography & Chat Bubble Ecosystem (RESPONSIVE FULL VIEWPORT) ── */}
       <div className="relative z-10 w-full h-full px-3 sm:px-8 md:px-12 lg:px-16 xl:px-20 pointer-events-none flex items-center">
-
-        {/* ━━━ PHASE 1: 0% - 12% (INNOVATION ARK FLAGSHIP HOOK - 1 CLEAN CTA BUTTON) ━━━ */}
         <div
-          className="absolute inset-x-3 sm:inset-x-8 md:inset-x-16 lg:inset-x-24 top-1/2 -translate-y-1/2 flex flex-col items-center text-center transition-all duration-200 pointer-events-auto [perspective:1000px] max-w-5xl mx-auto"
+          className="absolute inset-x-3 sm:inset-x-8 md:inset-x-16 lg:inset-x-24 top-1/2 -translate-y-1/2 flex flex-col items-center text-center transition-all duration-200 pointer-events-auto max-w-5xl mx-auto"
           style={{
             opacity: phase1Opacity,
-            transform: `translateY(${-scrollProgress * 150}px) scale(${Math.max(0.85, 1 - scrollProgress * 0.6)})`,
+            transform: `translateY(${-scrollProgress * 60}px) scale(${1 - scrollProgress * 0.1})`,
           }}
         >
-          {/* Software Badge */}
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full border border-red-500/30 bg-[#160206]/85 font-mono text-[9px] sm:text-xs text-rose-300 uppercase tracking-[0.2em] mb-2.5 sm:mb-4 backdrop-blur-md">
-            <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse" />
-            DIGITAL PRODUCT STUDIO
+          <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full border border-rose-500/30 bg-rose-500/10 backdrop-blur-md mb-2 sm:mb-6 shadow-[0_0_20px_rgba(225,29,72,0.2)]">
+            <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+            <span className="font-mono text-[9px] sm:text-xs uppercase tracking-[0.25em] text-rose-300 font-semibold">
+              Digital Product Studio
+            </span>
           </div>
 
-          {/* Majestic Hero Headline (Proportional Mobile Sizing) */}
-          <h1 className="font-sans font-black text-2xl sm:text-5xl md:text-7xl lg:text-8xl uppercase tracking-tighter leading-[0.94] text-rose-300 drop-shadow-[0_25px_60px_rgba(0,0,0,1)] max-w-5xl">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-400 to-rose-600 drop-shadow-[0_10px_30px_rgba(225,29,72,0.5)]">
-              INNOVATION ARK
-            </span>
+          <h1 className="font-sans font-black text-2xl xs:text-3xl sm:text-6xl md:text-7xl lg:text-8xl uppercase tracking-tighter leading-[0.92] sm:leading-[0.9] text-[#fff0f2] drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
+            WE CRAFT <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-300 to-rose-600">
+              TIMELESS
+            </span>{' '}
+            <span className="font-serif italic font-normal lowercase tracking-tight text-rose-200">
+              digital
+            </span>{' '}
             <br />
-            <span className="font-serif italic font-normal lowercase tracking-normal text-rose-300 text-3xl sm:text-6xl md:text-8xl lg:text-9xl drop-shadow-[0_15px_40px_rgba(225,29,72,0.6)]">
-              digital excellence.
-            </span>
+            PRODUCTS.
           </h1>
 
-          <p className="font-sans text-[11px] sm:text-base md:text-lg text-rose-100 font-normal tracking-wide mt-2.5 sm:mt-6 max-w-2xl leading-relaxed drop-shadow-[0_4px_20px_rgba(0,0,0,1)] px-1 antialiased">
-            We architect world-class web platforms, bespoke software ecosystems, and high-performance digital products that scale businesses globally.
+          <p className="mt-2 sm:mt-6 font-sans text-[11px] xs:text-xs sm:text-lg md:text-xl text-[#f3d5dc] max-w-2xl font-light leading-relaxed drop-shadow-[0_2px_15px_rgba(0,0,0,0.95)]">
+            Architecting next-generation digital ecosystems, intelligent mobile applications, and high-impact brand identities.
           </p>
 
-          {/* 1 Clean High-Impact CTA Button */}
-          <div className="mt-4 sm:mt-8 flex justify-center">
-            <a href="#contact">
-              <RadialGlowButton size="sm" className="font-sans font-bold text-[11px] sm:text-xs tracking-wider uppercase !min-w-[170px] sm:!min-w-[200px] !h-[40px] sm:!h-[48px] !px-6 sm:!px-7 !bg-gradient-to-r !from-red-600 !to-rose-900 shadow-[0_0_25px_rgba(225,29,72,0.5)] border border-red-500/40 text-rose-100">
-                Initialize Project
-                <span className="material-symbols-outlined text-sm sm:text-base ml-1.5">arrow_forward</span>
+          <div className="mt-4 sm:mt-8 flex items-center justify-center">
+            <a href="#contact" className="pointer-events-auto">
+              <RadialGlowButton
+                size="md"
+                className="px-6 sm:px-8 py-2.5 sm:py-3.5 text-xs sm:text-sm font-semibold tracking-wider uppercase text-white shadow-[0_10px_35px_rgba(225,29,72,0.5)] active:scale-95 transition-transform"
+              >
+                Initialize Project →
               </RadialGlowButton>
             </a>
           </div>
 
-          {/* Scroll Cue */}
           <div className="mt-4 sm:mt-10 flex items-center gap-1.5 font-mono text-[9px] sm:text-[11px] text-rose-300 uppercase tracking-widest animate-bounce drop-shadow-[0_2px_10px_rgba(0,0,0,1)]">
             <span className="material-symbols-outlined text-sm sm:text-base">expand_more</span>
             Scroll to explore
           </div>
         </div>
 
-        {/* ━━━ PHASE 2: 12% - 28% (BLUEPRINT - CHAT BUBBLE APPEARS TOP-LEFT OF PHONE) ━━━ */}
         <div
-          className="absolute top-[14%] sm:top-1/2 sm:-translate-y-1/2 left-3 sm:left-6 md:left-10 lg:left-12 xl:left-16 max-w-[240px] xs:max-w-[260px] sm:max-w-[380px] lg:max-w-[420px] flex flex-col items-start text-left transition-all duration-200 pointer-events-auto [perspective:1000px]"
+          className="absolute top-[12%] sm:top-1/2 sm:-translate-y-1/2 left-3 sm:left-6 md:left-10 lg:left-12 xl:left-16 max-w-[245px] xs:max-w-[270px] sm:max-w-[390px] lg:max-w-[430px] flex flex-col items-start text-left transition-all duration-200 pointer-events-auto [perspective:1000px]"
           style={{
             opacity: phase2Opacity,
-            transform: `translateY(${(0.20 - scrollProgress) * 50}px) scale(${0.96 + Math.min(0.04, phase2Opacity * 0.04)})`,
+            transform: `translateY(${(0.20 - scrollProgress) * 45}px) scale(${0.96 + Math.min(0.04, phase2Opacity * 0.04)})`,
           }}
         >
-          {/* Chat-Box Bubble Frame */}
-          <div className="w-full relative group p-3 sm:p-6 lg:p-7 rounded-2xl sm:rounded-3xl rounded-bl-sm sm:rounded-bl-3xl bg-gradient-to-b from-white/[0.12] via-[#150308]/92 to-[#0a0104]/96 backdrop-blur-2xl border border-rose-500/30 sm:border-white/[0.18] shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.4),0_20px_40px_rgba(0,0,0,0.95),0_0_25px_rgba(225,29,72,0.2)] overflow-hidden">
-            {/* macOS / iOS Specular Light */}
-            <div className="absolute top-0 inset-x-4 h-[1px] bg-gradient-to-r from-transparent via-white/60 to-transparent pointer-events-none" />
-
-            {/* Chat Bubble Sender Chip */}
-            <div className="flex items-center justify-between w-full mb-1 sm:mb-2">
-              <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_6px_rgba(225,29,72,1)]" />
-                <span className="font-mono text-[8.5px] sm:text-[11px] uppercase tracking-[0.2em] text-rose-300 font-bold">
-                  IA // BLUEPRINT
+          <div className="w-full relative group p-3.5 sm:p-6 lg:p-7 rounded-[24px] sm:rounded-[32px] bg-white/[0.14] dark:bg-white/[0.09] backdrop-blur-3xl border border-white/[0.28] dark:border-white/[0.22] shadow-[0_16px_36px_rgba(0,0,0,0.5),inset_0_1px_1.5px_rgba(255,255,255,0.65),inset_0_-1px_1px_rgba(0,0,0,0.2)] overflow-hidden">
+            <div className="absolute top-0 inset-x-5 h-[1.5px] bg-gradient-to-r from-transparent via-white/80 to-transparent pointer-events-none rounded-full" />
+            <div className="flex items-center justify-between w-full mb-1.5 sm:mb-2.5">
+              <div className="px-2.5 py-0.5 rounded-full bg-white/[0.16] backdrop-blur-xl border border-white/[0.25] flex items-center gap-1.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)]">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-400 shadow-[0_0_6px_rgba(248,113,113,0.9)]" />
+                <span className="font-mono text-[8.5px] sm:text-[11px] uppercase tracking-[0.16em] text-white font-bold">
+                  BLUEPRINT
                 </span>
               </div>
-              <span className="font-mono text-[7.5px] sm:text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300">
+              <span className="font-mono text-[7.5px] sm:text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/25 border border-emerald-400/30 text-emerald-200 font-semibold">
                 ACTIVE
               </span>
             </div>
-
-            <h2 className="font-sans font-black text-xs sm:text-3xl lg:text-4xl uppercase tracking-tight leading-tight text-rose-200">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-rose-300 to-rose-500">
+            <h2 className="font-sans font-black text-xs sm:text-3xl lg:text-4xl uppercase tracking-tight leading-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.4)]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-rose-100 to-rose-300">
                 ARCHITECTED FOR
               </span>{' '}
-              <span className="font-serif italic font-normal lowercase tracking-normal text-rose-300 text-sm sm:text-4xl">
+              <span className="font-serif italic font-normal lowercase tracking-normal text-rose-200 text-sm sm:text-4xl">
                 scale.
               </span>
             </h2>
-
-            <p className="font-sans text-[10px] sm:text-sm text-[#fff5f6] font-normal leading-relaxed mt-1 sm:mt-4 antialiased">
+            <p className="font-sans text-[10.5px] sm:text-sm text-white/90 font-normal leading-relaxed mt-1 sm:mt-3 drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)]">
               Foundational blueprints—modular design systems, high-throughput microservices, and end-to-end technical roadmaps.
             </p>
-
-            <div className="mt-2 sm:mt-5 flex flex-wrap gap-1 sm:gap-2 text-[8px] sm:text-[11px] font-mono text-rose-200">
-              <span className="px-2 py-0.5 rounded-full border border-white/[0.15] bg-white/[0.05]">Design Systems</span>
-              <span className="px-2 py-0.5 rounded-full border border-white/[0.15] bg-white/[0.05]">Core Mesh</span>
+            <div className="mt-2 sm:mt-4 flex flex-wrap gap-1.5 sm:gap-2 text-[8.5px] sm:text-[11px] font-mono text-white/90">
+              <span className="px-2.5 py-0.5 rounded-full border border-white/[0.2] bg-white/[0.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]">Design Systems</span>
+              <span className="px-2.5 py-0.5 rounded-full border border-white/[0.2] bg-white/[0.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]">Core Mesh</span>
             </div>
           </div>
         </div>
 
-        {/* ━━━ PHASE 3: 28% - 46% (SPATIAL CRAFT - CHAT BUBBLE APPEARS MID-RIGHT OF PHONE) ━━━ */}
         <div
-          className="absolute top-[32%] sm:top-1/2 sm:-translate-y-1/2 right-3 sm:right-6 md:right-10 lg:right-12 xl:right-16 max-w-[240px] xs:max-w-[260px] sm:max-w-[380px] lg:max-w-[420px] flex flex-col items-end text-right transition-all duration-200 ml-auto pointer-events-auto [perspective:1000px]"
+          className="absolute top-[30%] sm:top-1/2 sm:-translate-y-1/2 right-3 sm:right-6 md:right-10 lg:right-12 xl:right-16 max-w-[245px] xs:max-w-[270px] sm:max-w-[390px] lg:max-w-[430px] flex flex-col items-end text-right transition-all duration-200 ml-auto pointer-events-auto [perspective:1000px]"
           style={{
             opacity: phase3Opacity,
-            transform: `translateY(${(0.37 - scrollProgress) * 50}px) scale(${0.96 + Math.min(0.04, phase3Opacity * 0.04)})`,
+            transform: `translateY(${(0.37 - scrollProgress) * 45}px) scale(${0.96 + Math.min(0.04, phase3Opacity * 0.04)})`,
           }}
         >
-          {/* Chat-Box Bubble Frame */}
-          <div className="w-full relative group p-3 sm:p-6 lg:p-7 rounded-2xl sm:rounded-3xl rounded-br-sm sm:rounded-br-3xl bg-gradient-to-b from-white/[0.12] via-[#20050d]/92 to-[#0d0105]/96 backdrop-blur-2xl border border-rose-400/40 sm:border-white/[0.18] shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.4),0_20px_40px_rgba(0,0,0,0.95),0_0_25px_rgba(225,29,72,0.2)] overflow-hidden flex flex-col items-end">
-            <div className="absolute top-0 inset-x-4 h-[1px] bg-gradient-to-r from-transparent via-white/60 to-transparent pointer-events-none" />
-
-            <div className="flex items-center justify-between w-full mb-1 sm:mb-2">
-              <span className="font-mono text-[7.5px] sm:text-[9px] px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-300">
+          <div className="w-full relative group p-3.5 sm:p-6 lg:p-7 rounded-[24px] sm:rounded-[32px] bg-white/[0.14] dark:bg-white/[0.09] backdrop-blur-3xl border border-white/[0.28] dark:border-white/[0.22] shadow-[0_16px_36px_rgba(0,0,0,0.5),inset_0_1px_1.5px_rgba(255,255,255,0.65),inset_0_-1px_1px_rgba(0,0,0,0.2)] overflow-hidden flex flex-col items-end">
+            <div className="absolute top-0 inset-x-5 h-[1.5px] bg-gradient-to-r from-transparent via-white/80 to-transparent pointer-events-none rounded-full" />
+            <div className="flex items-center justify-between w-full mb-1.5 sm:mb-2.5">
+              <span className="font-mono text-[7.5px] sm:text-[9px] px-2 py-0.5 rounded-full bg-rose-500/25 border border-rose-400/30 text-rose-200 font-semibold">
                 120 FPS
               </span>
-              <div className="flex items-center gap-1.5">
-                <span className="font-mono text-[8.5px] sm:text-[11px] uppercase tracking-[0.2em] text-rose-300 font-bold">
-                  IA // SPATIAL
+              <div className="px-2.5 py-0.5 rounded-full bg-white/[0.16] backdrop-blur-xl border border-white/[0.25] flex items-center gap-1.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)]">
+                <span className="font-mono text-[8.5px] sm:text-[11px] uppercase tracking-[0.16em] text-white font-bold">
+                  SPATIAL
                 </span>
-                <span className="w-2 h-2 rounded-full bg-rose-400 shadow-[0_0_6px_rgba(251,113,133,1)]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-rose-400 shadow-[0_0_6px_rgba(251,113,133,0.9)]" />
               </div>
             </div>
-
-            <h2 className="font-sans font-black text-xs sm:text-3xl lg:text-4xl uppercase tracking-tight leading-tight text-rose-200">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-rose-300 to-rose-500">
+            <h2 className="font-sans font-black text-xs sm:text-3xl lg:text-4xl uppercase tracking-tight leading-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.4)]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-rose-100 to-rose-300">
                 EXPERIENCES
               </span>{' '}
-              <span className="font-serif italic font-normal lowercase tracking-normal text-rose-300 text-sm sm:text-4xl">
+              <span className="font-serif italic font-normal lowercase tracking-normal text-rose-200 text-sm sm:text-4xl">
                 beyond.
               </span>
             </h2>
-
-            <p className="font-sans text-[10px] sm:text-sm text-[#fff5f6] font-normal leading-relaxed mt-1 sm:mt-4 antialiased">
+            <p className="font-sans text-[10.5px] sm:text-sm text-white/90 font-normal leading-relaxed mt-1 sm:mt-3 drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)]">
               120 FPS sub-pixel GPU spatial interactions, fluid 3D motion, and memorable experiences.
             </p>
-
-            <div className="mt-2 sm:mt-5 flex flex-wrap justify-end gap-1 sm:gap-2 text-[8px] sm:text-[11px] font-mono text-rose-200">
-              <span className="px-2 py-0.5 rounded-full border border-white/[0.15] bg-white/[0.05]">GPU Accelerated</span>
-              <span className="px-2 py-0.5 rounded-full border border-white/[0.15] bg-white/[0.05]">Sub-Pixel</span>
+            <div className="mt-2 sm:mt-4 flex flex-wrap justify-end gap-1.5 sm:gap-2 text-[8.5px] sm:text-[11px] font-mono text-white/90">
+              <span className="px-2.5 py-0.5 rounded-full border border-white/[0.2] bg-white/[0.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]">GPU Accelerated</span>
+              <span className="px-2.5 py-0.5 rounded-full border border-white/[0.2] bg-white/[0.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]">Sub-Pixel</span>
             </div>
           </div>
         </div>
 
-        {/* ━━━ PHASE 4: 46% - 64% (FULL-STACK SUPREMACY - CHAT BUBBLE APPEARS MID-LEFT OF PHONE) ━━━ */}
         <div
-          className="absolute top-[50%] sm:top-1/2 sm:-translate-y-1/2 left-3 sm:left-6 md:left-10 lg:left-12 xl:left-16 max-w-[240px] xs:max-w-[260px] sm:max-w-[380px] lg:max-w-[420px] flex flex-col items-start text-left transition-all duration-200 pointer-events-auto"
+          className="absolute top-[48%] sm:top-1/2 sm:-translate-y-1/2 left-3 sm:left-6 md:left-10 lg:left-12 xl:left-16 max-w-[245px] xs:max-w-[270px] sm:max-w-[390px] lg:max-w-[430px] flex flex-col items-start text-left transition-all duration-200 pointer-events-auto"
           style={{
             opacity: phase4Opacity,
-            transform: `translateY(${(0.55 - scrollProgress) * 50}px) scale(${0.96 + Math.min(0.04, phase4Opacity * 0.04)})`,
+            transform: `translateY(${(0.55 - scrollProgress) * 45}px) scale(${0.96 + Math.min(0.04, phase4Opacity * 0.04)})`,
           }}
         >
-          {/* Chat-Box Bubble Frame */}
-          <div className="w-full relative group p-3 sm:p-6 lg:p-7 rounded-2xl sm:rounded-3xl rounded-tl-sm sm:rounded-tl-3xl bg-gradient-to-b from-white/[0.12] via-[#150308]/92 to-[#0a0104]/96 backdrop-blur-2xl border border-emerald-500/30 sm:border-white/[0.18] shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.4),0_20px_40px_rgba(0,0,0,0.95),0_0_25px_rgba(16,185,129,0.15)] overflow-hidden">
-            <div className="absolute top-0 inset-x-4 h-[1px] bg-gradient-to-r from-transparent via-white/60 to-transparent pointer-events-none" />
-
-            <div className="flex items-center justify-between w-full mb-1 sm:mb-2">
-              <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,1)]" />
-                <span className="font-mono text-[8.5px] sm:text-[11px] uppercase tracking-[0.2em] text-rose-300 font-bold">
-                  IA // SUPREMACY
+          <div className="w-full relative group p-3.5 sm:p-6 lg:p-7 rounded-[24px] sm:rounded-[32px] bg-white/[0.14] dark:bg-white/[0.09] backdrop-blur-3xl border border-white/[0.28] dark:border-white/[0.22] shadow-[0_16px_36px_rgba(0,0,0,0.5),inset_0_1px_1.5px_rgba(255,255,255,0.65),inset_0_-1px_1px_rgba(0,0,0,0.2)] overflow-hidden">
+            <div className="absolute top-0 inset-x-5 h-[1.5px] bg-gradient-to-r from-transparent via-white/80 to-transparent pointer-events-none rounded-full" />
+            <div className="flex items-center justify-between w-full mb-1.5 sm:mb-2.5">
+              <div className="px-2.5 py-0.5 rounded-full bg-white/[0.16] backdrop-blur-xl border border-white/[0.25] flex items-center gap-1.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)]">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.9)]" />
+                <span className="font-mono text-[8.5px] sm:text-[11px] uppercase tracking-[0.16em] text-white font-bold">
+                  SUPREMACY
                 </span>
               </div>
-              <span className="font-mono text-[7.5px] sm:text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300">
+              <span className="font-mono text-[7.5px] sm:text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/25 border border-emerald-400/30 text-emerald-200 font-semibold">
                 0.4ms EDGE
               </span>
             </div>
-
-            <h2 className="font-sans font-black text-xs sm:text-3xl lg:text-4xl uppercase tracking-tight leading-tight text-rose-200">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-rose-300 to-rose-500">
+            <h2 className="font-sans font-black text-xs sm:text-3xl lg:text-4xl uppercase tracking-tight leading-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.4)]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-rose-100 to-rose-300">
                 ENGINEERED FOR
               </span>{' '}
-              <span className="font-serif italic font-normal lowercase tracking-normal text-rose-300 text-sm sm:text-4xl">
+              <span className="font-serif italic font-normal lowercase tracking-normal text-rose-200 text-sm sm:text-4xl">
                 speed.
               </span>
             </h2>
-
-            <p className="font-sans text-[10px] sm:text-sm text-[#fff5f6] font-normal leading-relaxed mt-1 sm:mt-4 antialiased">
+            <p className="font-sans text-[10.5px] sm:text-sm text-white/90 font-normal leading-relaxed mt-1 sm:mt-3 drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)]">
               Powered by Next.js Turbopack, distributed edge networks, and sub-millisecond execution.
             </p>
-
-            <div className="mt-2 sm:mt-5 flex flex-wrap gap-1 sm:gap-2 text-[8px] sm:text-[11px] font-mono text-rose-200">
-              <span className="px-2 py-0.5 rounded-full border border-white/[0.15] bg-white/[0.05]">Turbopack</span>
-              <span className="px-2 py-0.5 rounded-full border border-white/[0.15] bg-white/[0.05]">0.4ms Latency</span>
+            <div className="mt-2 sm:mt-4 flex flex-wrap gap-1.5 sm:gap-2 text-[8.5px] sm:text-[11px] font-mono text-white/90">
+              <span className="px-2.5 py-0.5 rounded-full border border-white/[0.2] bg-white/[0.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]">Turbopack</span>
+              <span className="px-2.5 py-0.5 rounded-full border border-white/[0.2] bg-white/[0.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]">0.4ms Latency</span>
             </div>
           </div>
         </div>
 
-        {/* ━━━ PHASE 5: 64% - 80% (AI & AUTOMATION - CHAT BUBBLE APPEARS LOWER-RIGHT OF PHONE) ━━━ */}
         <div
-          className="absolute top-[65%] sm:top-1/2 sm:-translate-y-1/2 right-3 sm:right-6 md:right-10 lg:right-12 xl:right-16 max-w-[240px] xs:max-w-[260px] sm:max-w-[380px] lg:max-w-[420px] flex flex-col items-end text-right transition-all duration-200 ml-auto pointer-events-auto [perspective:1000px]"
+          className="absolute top-[66%] sm:top-1/2 sm:-translate-y-1/2 right-3 sm:right-6 md:right-10 lg:right-12 xl:right-16 max-w-[245px] xs:max-w-[270px] sm:max-w-[390px] lg:max-w-[430px] flex flex-col items-end text-right transition-all duration-200 ml-auto pointer-events-auto [perspective:1000px]"
           style={{
             opacity: phase5Opacity,
-            transform: `translateY(${(0.72 - scrollProgress) * 50}px) scale(${0.96 + Math.min(0.04, phase5Opacity * 0.04)})`,
+            transform: `translateY(${(0.72 - scrollProgress) * 45}px) scale(${0.96 + Math.min(0.04, phase5Opacity * 0.04)})`,
           }}
         >
-          {/* Chat-Box Bubble Frame */}
-          <div className="w-full relative group p-3 sm:p-6 lg:p-7 rounded-2xl sm:rounded-3xl rounded-tr-sm sm:rounded-tr-3xl bg-gradient-to-b from-white/[0.12] via-[#20050d]/92 to-[#0d0105]/96 backdrop-blur-2xl border border-rose-400/40 sm:border-white/[0.18] shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.4),0_20px_40px_rgba(0,0,0,0.95),0_0_25px_rgba(225,29,72,0.2)] overflow-hidden flex flex-col items-end">
-            <div className="absolute top-0 inset-x-4 h-[1px] bg-gradient-to-r from-transparent via-white/60 to-transparent pointer-events-none" />
-
-            <div className="flex items-center justify-between w-full mb-1 sm:mb-2">
-              <span className="font-mono text-[7.5px] sm:text-[9px] px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-300">
+          <div className="w-full relative group p-3.5 sm:p-6 lg:p-7 rounded-[24px] sm:rounded-[32px] bg-white/[0.14] dark:bg-white/[0.09] backdrop-blur-3xl border border-white/[0.28] dark:border-white/[0.22] shadow-[0_16px_36px_rgba(0,0,0,0.5),inset_0_1px_1.5px_rgba(255,255,255,0.65),inset_0_-1px_1px_rgba(0,0,0,0.2)] overflow-hidden flex flex-col items-end">
+            <div className="absolute top-0 inset-x-5 h-[1.5px] bg-gradient-to-r from-transparent via-white/80 to-transparent pointer-events-none rounded-full" />
+            <div className="flex items-center justify-between w-full mb-1.5 sm:mb-2.5">
+              <span className="font-mono text-[7.5px] sm:text-[9px] px-2 py-0.5 rounded-full bg-rose-500/25 border border-rose-400/30 text-rose-200 font-semibold">
                 NEURAL
               </span>
-              <div className="flex items-center gap-1.5">
-                <span className="font-mono text-[8.5px] sm:text-[11px] uppercase tracking-[0.2em] text-rose-300 font-bold">
-                  IA // AI CORE
+              <div className="px-2.5 py-0.5 rounded-full bg-white/[0.16] backdrop-blur-xl border border-white/[0.25] flex items-center gap-1.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)]">
+                <span className="font-mono text-[8.5px] sm:text-[11px] uppercase tracking-[0.16em] text-white font-bold">
+                  AI CORE
                 </span>
-                <span className="w-2 h-2 rounded-full bg-rose-400 shadow-[0_0_6px_rgba(251,113,133,1)]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-rose-400 shadow-[0_0_6px_rgba(251,113,133,0.9)]" />
               </div>
             </div>
-
-            <h2 className="font-sans font-black text-xs sm:text-3xl lg:text-4xl uppercase tracking-tight leading-tight text-rose-200">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-rose-300 to-rose-500">
+            <h2 className="font-sans font-black text-xs sm:text-3xl lg:text-4xl uppercase tracking-tight leading-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.4)]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-rose-100 to-rose-300">
                 INTELLIGENT
               </span>{' '}
-              <span className="font-serif italic font-normal lowercase tracking-normal text-rose-300 text-sm sm:text-4xl">
+              <span className="font-serif italic font-normal lowercase tracking-normal text-rose-200 text-sm sm:text-4xl">
                 evolution.
               </span>
             </h2>
-
-            <p className="font-sans text-[10px] sm:text-sm text-[#fff5f6] font-normal leading-relaxed mt-1 sm:mt-4 antialiased">
+            <p className="font-sans text-[10.5px] sm:text-sm text-white/90 font-normal leading-relaxed mt-1 sm:mt-3 drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)]">
               Custom AI agents, neural pipelines, and real-time automated workflows giving your enterprise an unfair edge.
             </p>
 
-            <div className="mt-2 sm:mt-5 flex flex-wrap justify-end gap-1 sm:gap-2 text-[8px] sm:text-[11px] font-mono text-rose-200">
-              <span className="px-2 py-0.5 rounded-full border border-white/[0.15] bg-white/[0.05]">AI Agents</span>
-              <span className="px-2 py-0.5 rounded-full border border-white/[0.15] bg-white/[0.05]">Neural Stream</span>
+            <div className="mt-2 sm:mt-4 flex flex-wrap justify-end gap-1.5 sm:gap-2 text-[8.5px] sm:text-[11px] font-mono text-white/90">
+              <span className="px-2.5 py-0.5 rounded-full border border-white/[0.2] bg-white/[0.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]">AI Agents</span>
+              <span className="px-2.5 py-0.5 rounded-full border border-white/[0.2] bg-white/[0.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]">Neural Stream</span>
             </div>
           </div>
         </div>
@@ -603,7 +479,7 @@ export function AboutUsScrollytelling() {
         </div>
 
       </div>
-    </div>
+    </section>
   );
 }
 
