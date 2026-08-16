@@ -14,6 +14,7 @@ export interface SpotlightNavbarProps {
     className?: string;
     onItemClick?: (item: NavItem, index: number) => void;
     defaultActiveIndex?: number;
+    activeIndex?: number;
 }
 
 export function SpotlightNavbar({
@@ -23,14 +24,23 @@ export function SpotlightNavbar({
         { label: "Process", href: "#process" },
         { label: "Work", href: "#work" },
         { label: "Tech", href: "#tech" },
+        { label: "Contact", href: "#contact" },
     ],
     className,
     onItemClick,
     defaultActiveIndex = 0,
+    activeIndex: controlledActiveIndex,
 }: SpotlightNavbarProps) {
     const navRef = useRef<HTMLDivElement>(null);
-    const [activeIndex, setActiveIndex] = useState(defaultActiveIndex);
+    const [activeIndex, setActiveIndex] = useState(controlledActiveIndex ?? defaultActiveIndex);
     const [hoverX, setHoverX] = useState<number | null>(null);
+
+    // Sync when controlledActiveIndex prop changes on scroll
+    useEffect(() => {
+        if (controlledActiveIndex !== undefined) {
+            setActiveIndex(controlledActiveIndex);
+        }
+    }, [controlledActiveIndex]);
 
     // Refs for the "light" positions so we can animate them imperatively
     const spotlightX = useRef(0);

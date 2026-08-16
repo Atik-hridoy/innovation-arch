@@ -11,12 +11,14 @@ const navItems = [
   { label: 'Process', href: '#process' },
   { label: 'Work', href: '#work' },
   { label: 'Tech', href: '#tech' },
+  { label: 'Contact', href: '#contact' },
 ];
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isPastHero, setIsPastHero] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [activeSectionIndex, setActiveSectionIndex] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,6 +37,21 @@ export function Header() {
         const isMobile = window.innerWidth < 768;
         const threshold = window.innerHeight * (isMobile ? 1.1 : 4.5);
         setIsPastHero(window.scrollY > threshold);
+      }
+
+      // Track active section for spotlight navbar highlight shifting (Overview -> Services -> Process -> Work -> Tech -> Contact)
+      const sectionIds = ['home', 'services', 'process', 'work', 'tech', 'contact'];
+      const scrollThreshold = window.scrollY + window.innerHeight * 0.4;
+
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sectionIds[i]);
+        if (el) {
+          const top = el.offsetTop;
+          if (scrollThreshold >= top) {
+            setActiveSectionIndex(i);
+            break;
+          }
+        }
       }
     };
 
@@ -62,7 +79,7 @@ export function Header() {
 
         <Logo isHero={!isPastHero} />
 
-        {/* Center Navbar: Hidden on Hero, smoothly transitions in after passing hero */}
+        {/* Center Navbar: Active highlight pill shifts automatically with scroll */}
         <div
           className={`hidden md:flex flex-1 justify-center transition-all duration-500 ease-out ${
             isPastHero
@@ -70,7 +87,7 @@ export function Header() {
               : 'opacity-0 -translate-y-4 pointer-events-none'
           }`}
         >
-          <SpotlightNavbar />
+          <SpotlightNavbar items={navItems} activeIndex={activeSectionIndex} />
         </div>
 
         {/* Right CTA Actions: Hidden on Hero, transitions in after passing hero */}

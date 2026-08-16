@@ -284,13 +284,16 @@ export function AboutUsScrollytelling() {
         <AuroraHeroBg />
       </div>
 
+      {/* ── Phase 6 Grand Finale Background Gradient: Fades to white at bottom in Light Mode, obsidian in Dark Mode ── */}
       <div
-        className="absolute inset-0 z-[4] pointer-events-none transition-opacity duration-300 bg-gradient-to-b from-[#140207] via-[#090103] to-[#040001]"
+        className="absolute inset-0 z-[4] pointer-events-none transition-opacity duration-300 bg-gradient-to-b from-[#140207]/90 via-[#2a040e]/60 to-white dark:from-[#140207] dark:via-[#090103] dark:to-[#080103]"
         style={{
           opacity: phase6Opacity,
         }}
       >
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(225,29,72,0.22)_0%,rgba(13,1,4,0.88)_60%,#040001_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(225,29,72,0.15)_0%,rgba(255,255,255,0.7)_60%,#ffffff_100%)] dark:bg-[radial-gradient(circle_at_center,rgba(225,29,72,0.22)_0%,rgba(13,1,4,0.88)_60%,#080103_100%)]" />
+        {/* Soft bottom blend to guarantee 100% white transition in Light mode */}
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white via-white/80 to-transparent dark:from-[#080103] dark:via-[#080103]/80 dark:to-transparent" />
       </div>
 
       <div className="relative z-10 w-full h-full px-3 sm:px-8 md:px-12 lg:px-16 xl:px-20 pointer-events-none flex items-center">
