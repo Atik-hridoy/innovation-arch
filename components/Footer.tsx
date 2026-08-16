@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { Logo } from '@/components/Logo';
 import { CONFIG } from '../lib/config';
-import TwistingRibbon from '@/components/ui/twisting-ribbon';
 
 interface SiteSettings {
   facebook_url: string;
@@ -28,13 +27,7 @@ export function Footer() {
   const mailUrl = settings?.email_address ? `mailto:${settings.email_address}` : "mailto:contact@innovativeark.com";
 
   return (
-    <div className="w-full pt-16 pb-8 md:pb-12 flex flex-col md:flex-row justify-between items-center gap-6 px-4 sm:px-margin-edge border-t-0 md:border-t border-emerald-500/20 dark:border-white/15 relative z-20 overflow-hidden transition-colors duration-400">
-      
-      {/* 3D Twisting Ribbon Canvas Wave directly inside Footer on Phone View */}
-      <div className="md:hidden absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        <TwistingRibbon className="w-full h-full opacity-65 dark:opacity-85" />
-      </div>
-
+    <div className="w-full max-w-[1720px] mx-auto pt-16 pb-8 md:pb-12 flex flex-col md:flex-row justify-between items-center gap-6 px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20 border-t-0 md:border-t border-emerald-500/20 dark:border-white/15 relative z-20 overflow-hidden transition-colors duration-400">
       <div className="relative z-10">
         <Logo layout="vertical" />
       </div>
@@ -86,3 +79,5 @@ export function Footer() {
     </div>
   );
 }
+
+export default Footer;

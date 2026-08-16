@@ -162,7 +162,7 @@ export function Portfolio() {
   };
 
   return (
-    <section ref={sectionRef} id="work" className="relative py-12 md:py-stack-xl px-4 sm:px-margin-edge z-10 bg-transparent dark:bg-[#070609] overflow-hidden min-h-[100vh] md:min-h-[120vh] flex flex-col justify-center pb-16 md:pb-32 transition-colors duration-400">
+    <section ref={sectionRef} id="work" className="relative py-12 md:py-stack-xl px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20 z-10 bg-transparent dark:bg-[#070609] overflow-hidden min-h-[100vh] md:min-h-[120vh] flex flex-col justify-center pb-16 md:pb-32 transition-colors duration-400">
       
       {/* Volumetric dynamic image background matching active card's 1st image */}
       <div className="absolute inset-0 z-0 transition-all duration-1000 ease-in-out pointer-events-none">
@@ -187,7 +187,7 @@ export function Portfolio() {
       </div>
 
       {/* Section Header with Nav Buttons */}
-      <div className="w-full max-w-7xl mx-auto">
+      <div className="w-full max-w-[1720px] mx-auto">
         <SectionHeader
           eyebrow="FEATURED WORK & CASE STUDIES"
           title="PROVEN DIGITAL IMPACT"

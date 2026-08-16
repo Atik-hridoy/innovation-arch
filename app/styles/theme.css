@@ -1,6 +1,6 @@
 @theme {
   --color-primary-fixed-dim: #a1a1aa;
-  --color-secondary: #842bd2;
+  --color-secondary: #28623A;
   --color-secondary-fixed-dim: #a1a1aa;
   --color-on-surface: var(--color-on-surface);
   --color-on-surface-variant: var(--color-on-surface-variant);
@@ -11,7 +11,7 @@
   --spacing-gutter: 24px;
   --spacing-stack-sm: 40px;
   --spacing-stack-xl: 160px;
-  --spacing-margin-edge: 5vw;
+  --spacing-margin-edge: 24px;
 }
 
 :root {
@@ -32,8 +32,8 @@
   --surface: #0a0a0c;
   --surface-card: rgba(13, 13, 17, 0.7);
   --border-color: rgba(255, 255, 255, 0.08);
-  --color-primary: #ddb7ff;
-  --color-secondary: #842bd2;
+  --color-primary: #34d399;
+  --color-secondary: #28623A;
   --color-on-surface: #ffffff;
   --color-on-surface-variant: #9ca3af;
 }

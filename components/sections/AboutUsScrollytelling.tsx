@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { RadialGlowButton } from '@/components/ui/radial-glow-button';
@@ -22,88 +22,100 @@ const MOBILE_FRAME_PATH = (index: number) => {
 export function AboutUsScrollytelling() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [isReady, setIsReady] = useState(false);
-  const [isMobileDevice, setIsMobileDevice] = useState(false);
+  
+  // Phase DOM refs for direct transform/opacity manipulation (zero React re-renders on scroll)
+  const heroAuroraRef = useRef<HTMLDivElement>(null);
+  const finaleBgRef = useRef<HTMLDivElement>(null);
+  const phase1Ref = useRef<HTMLDivElement>(null);
+  const phase2Ref = useRef<HTMLDivElement>(null);
+  const phase3Ref = useRef<HTMLDivElement>(null);
+  const phase4Ref = useRef<HTMLDivElement>(null);
+  const phase5Ref = useRef<HTMLDivElement>(null);
+  const phase6Ref = useRef<HTMLDivElement>(null);
 
-  const desktopImagesRef = useRef<HTMLImageElement[]>([]);
-  const mobileImagesRef = useRef<HTMLImageElement[]>([]);
+  const imagesRef = useRef<HTMLImageElement[]>([]);
   const currentFrameRef = useRef(1);
+  const isMobileDeviceRef = useRef(false);
 
-  // 1. High-Speed Progressive Preloading (Both Desktop & Mobile Sequences)
+  // 1. Device-Adaptive Progressive Frame Preloading
   useEffect(() => {
     let isMounted = true;
     const isMobile = window.innerWidth < 768;
-    setIsMobileDevice(isMobile);
+    isMobileDeviceRef.current = isMobile;
 
-    // Preload Mobile Frames (300 Frames from public/ezgif-7a49adbe3b30bbc0-jpg)
-    const mobileImgs: HTMLImageElement[] = [];
-    for (let i = 1; i <= MOBILE_FRAMES; i++) {
-      const img = new Image();
-      img.src = MOBILE_FRAME_PATH(i);
-      img.onload = () => {
-        if (!isMounted) return;
-        if (isMobile && i >= 10 && !isReady) {
-          setIsReady(true);
-        }
-      };
-      mobileImgs.push(img);
-    }
-    mobileImagesRef.current = mobileImgs;
+    const totalFrames = isMobile ? MOBILE_FRAMES : DESKTOP_FRAMES;
+    const getPath = isMobile ? MOBILE_FRAME_PATH : DESKTOP_FRAME_PATH;
 
-    // Preload Desktop Frames (240 Frames from public/ezgif-39322c0c1b972c68-jpg)
-    const desktopImgs: HTMLImageElement[] = [];
-    for (let i = 1; i <= DESKTOP_FRAMES; i++) {
+    const imgs: HTMLImageElement[] = new Array(totalFrames);
+
+    // Load initial critical frames first (Phases 1-2)
+    const initialBatchSize = Math.min(30, totalFrames);
+    for (let i = 1; i <= initialBatchSize; i++) {
       const img = new Image();
-      img.src = DESKTOP_FRAME_PATH(i);
-      img.onload = () => {
-        if (!isMounted) return;
-        if (!isMobile && i >= 10 && !isReady) {
-          setIsReady(true);
-        }
-      };
-      desktopImgs.push(img);
+      img.src = getPath(i);
+      imgs[i - 1] = img;
     }
-    desktopImagesRef.current = desktopImgs;
+
+    // Progressively stream remaining frames in background chunks without saturating main thread
+    let nextIndex = initialBatchSize + 1;
+    const loadNextChunk = () => {
+      if (!isMounted || nextIndex > totalFrames) return;
+      const chunkSize = 20;
+      const limit = Math.min(totalFrames, nextIndex + chunkSize);
+      for (let i = nextIndex; i <= limit; i++) {
+        const img = new Image();
+        img.src = getPath(i);
+        imgs[i - 1] = img;
+      }
+      nextIndex = limit + 1;
+      if (nextIndex <= totalFrames) {
+        if ('requestIdleCallback' in window) {
+          (window as any).requestIdleCallback(loadNextChunk);
+        } else {
+          setTimeout(loadNextChunk, 80);
+        }
+      }
+    };
+
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(loadNextChunk);
+    } else {
+      setTimeout(loadNextChunk, 150);
+    }
+
+    imagesRef.current = imgs;
 
     return () => {
       isMounted = false;
     };
   }, []);
 
-  // 2. High-DPI Canvas Rendering (Adaptive Hardware & Portrait Staging)
+  // 2. Optimized Canvas Rendering
   const renderFrame = (frameIndex: number, progressVal: number = 0) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: false });
     if (!ctx) return;
 
     const width = canvas.clientWidth;
     const height = canvas.clientHeight;
-    const isMobile = width < 768;
+    if (width === 0 || height === 0) return;
 
-    const images = isMobile ? mobileImagesRef.current : desktopImagesRef.current;
+    const isMobile = isMobileDeviceRef.current;
     const maxFrames = isMobile ? MOBILE_FRAMES : DESKTOP_FRAMES;
     const safeIndex = Math.min(maxFrames, Math.max(1, frameIndex));
-    const img = images[safeIndex - 1];
+    const img = imagesRef.current[safeIndex - 1];
 
-    if (!img || !img.complete || img.naturalWidth === 0) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
-
-    if (canvas.width !== width * dpr || canvas.height !== height * dpr) {
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
+    if (canvas.width !== Math.floor(width * dpr) || canvas.height !== Math.floor(height * dpr)) {
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
     }
 
     ctx.save();
     ctx.scale(dpr, dpr);
 
-    // High quality bicubic interpolation
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = 'high';
-
-    // Dynamic background matching current mode
     const isDarkMode = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
     const bgBaseColor = isDarkMode ? '#080103' : '#0F2027';
 
@@ -116,13 +128,12 @@ export function AboutUsScrollytelling() {
       ? progressVal < 0.08 || progressVal > 0.84
       : progressVal < 0.08 || progressVal > 0.91;
 
-    if (isHookOrFinale) {
+    if (isHookOrFinale || !img || !img.complete || img.naturalWidth === 0) {
       ctx.restore();
       return;
     }
 
-    // Aspect Fit/Cover: On desktop, cover edge-to-edge (1.02x) to eliminate all rectangular borders completely.
-    // On mobile, scale to fill portrait height cleanly.
+    // Aspect Fit/Cover
     const hRatio = width / img.naturalWidth;
     const vRatio = height / img.naturalHeight;
     const ratio = isMobile
@@ -136,11 +147,11 @@ export function AboutUsScrollytelling() {
 
     ctx.drawImage(img, renderX, renderY, renderW, renderH);
 
-    // ── 4-Sided Edge Feather Gradients (Completely seamless transition into page) ──
+    // ── 4-Sided Edge Feather Gradients ──
     const featherW = Math.max(80, width * 0.25);
     const featherH = Math.max(80, height * 0.25);
 
-    // Left Edge Feather
+    // Left Edge
     const leftGrad = ctx.createLinearGradient(0, 0, featherW, 0);
     leftGrad.addColorStop(0, bgBaseColor);
     leftGrad.addColorStop(0.35, isDarkMode ? 'rgba(8, 1, 3, 0.7)' : 'rgba(15, 32, 39, 0.7)');
@@ -148,7 +159,7 @@ export function AboutUsScrollytelling() {
     ctx.fillStyle = leftGrad;
     ctx.fillRect(0, 0, featherW, height);
 
-    // Right Edge Feather
+    // Right Edge
     const rightGrad = ctx.createLinearGradient(width - featherW, 0, width, 0);
     rightGrad.addColorStop(0, 'rgba(0, 0, 0, 0)');
     rightGrad.addColorStop(0.65, isDarkMode ? 'rgba(8, 1, 3, 0.7)' : 'rgba(15, 32, 39, 0.7)');
@@ -156,7 +167,7 @@ export function AboutUsScrollytelling() {
     ctx.fillStyle = rightGrad;
     ctx.fillRect(width - featherW, 0, featherW, height);
 
-    // Top Edge Feather
+    // Top Edge
     const topGrad = ctx.createLinearGradient(0, 0, 0, featherH);
     topGrad.addColorStop(0, bgBaseColor);
     topGrad.addColorStop(0.35, isDarkMode ? 'rgba(8, 1, 3, 0.7)' : 'rgba(15, 32, 39, 0.7)');
@@ -164,7 +175,7 @@ export function AboutUsScrollytelling() {
     ctx.fillStyle = topGrad;
     ctx.fillRect(0, 0, width, featherH);
 
-    // Bottom Edge Feather
+    // Bottom Edge
     const bottomGrad = ctx.createLinearGradient(0, height - featherH, 0, height);
     bottomGrad.addColorStop(0, 'rgba(0, 0, 0, 0)');
     bottomGrad.addColorStop(0.65, isDarkMode ? 'rgba(8, 1, 3, 0.7)' : 'rgba(15, 32, 39, 0.7)');
@@ -172,7 +183,7 @@ export function AboutUsScrollytelling() {
     ctx.fillStyle = bottomGrad;
     ctx.fillRect(0, height - featherH, width, featherH);
 
-    // ── Full-Canvas Cinematic Radial Vignette ──
+    // ── Radial Vignette ──
     const gradient = ctx.createRadialGradient(
       width / 2,
       height / 2,
@@ -192,6 +203,7 @@ export function AboutUsScrollytelling() {
     ctx.restore();
   };
 
+  // 3. High-Performance ScrollTrigger Pipeline
   useEffect(() => {
     if (typeof window === 'undefined') return;
     gsap.registerPlugin(ScrollTrigger);
@@ -200,6 +212,7 @@ export function AboutUsScrollytelling() {
     if (!section) return;
 
     const isMobile = window.innerWidth < 768;
+    isMobileDeviceRef.current = isMobile;
 
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
@@ -211,12 +224,10 @@ export function AboutUsScrollytelling() {
         anticipatePin: 1,
         onUpdate: (self) => {
           const p = self.progress;
-          setScrollProgress(p);
-          const isMobileDevice = window.innerWidth < 768;
+          const isMobileDevice = isMobileDeviceRef.current;
           let frameIndex = 1;
 
           if (isMobileDevice) {
-            // Mobile: Straight forward sequence (Phases 2 to 5)
             if (p < 0.08) {
               frameIndex = 1;
             } else if (p <= 0.84) {
@@ -229,7 +240,6 @@ export function AboutUsScrollytelling() {
               frameIndex = MOBILE_FRAMES;
             }
           } else {
-            // Web/Desktop: Forward playback (0.08 to 0.74) + Smooth Reverse Closure (0.74 to 0.90)
             if (p <= 0.08) {
               frameIndex = 1;
             } else if (p > 0.08 && p <= 0.74) {
@@ -239,7 +249,6 @@ export function AboutUsScrollytelling() {
                 Math.max(1, Math.floor(forwardProgress * (DESKTOP_FRAMES - 1)) + 1)
               );
             } else if (p > 0.74 && p <= 0.90) {
-              // Smooth Reverse Frame Playback: Laptop reverses and closes smoothly
               const reverseProgress = (p - 0.74) / 0.16;
               frameIndex = Math.min(
                 DESKTOP_FRAMES,
@@ -254,6 +263,69 @@ export function AboutUsScrollytelling() {
             currentFrameRef.current = frameIndex;
             renderFrame(frameIndex, p);
           }
+
+          // Direct DOM updates for butter-smooth 60-120 FPS without React re-renders
+          const phase1Opacity = Math.max(0, 1 - p * 9.5);
+          const phase2Opacity = Math.max(0, 1 - Math.abs(p - 0.20) * 8.5);
+          const phase3Opacity = Math.max(0, 1 - Math.abs(p - 0.37) * 8.5);
+          const phase4Opacity = Math.max(0, 1 - Math.abs(p - 0.55) * 8.5);
+          const phase5Opacity = Math.max(0, 1 - Math.abs(p - 0.72) * 8.5);
+          const phase6Opacity = Math.max(0, Math.min(1, (p - 0.82) * 6.5));
+
+          if (phase1Ref.current) {
+            phase1Ref.current.style.opacity = `${phase1Opacity}`;
+            phase1Ref.current.style.transform = `translateY(${-p * 60}px) scale(${1 - p * 0.1})`;
+            phase1Ref.current.style.pointerEvents = phase1Opacity > 0.1 ? 'auto' : 'none';
+          }
+
+          if (phase2Ref.current) {
+            phase2Ref.current.style.opacity = `${phase2Opacity}`;
+            phase2Ref.current.style.transform = `translateY(${(0.20 - p) * 45}px) scale(${0.96 + Math.min(0.04, phase2Opacity * 0.04)})`;
+            phase2Ref.current.style.pointerEvents = phase2Opacity > 0.1 ? 'auto' : 'none';
+          }
+
+          if (phase3Ref.current) {
+            phase3Ref.current.style.opacity = `${phase3Opacity}`;
+            phase3Ref.current.style.transform = `translateY(${(0.37 - p) * 45}px) scale(${0.96 + Math.min(0.04, phase3Opacity * 0.04)})`;
+            phase3Ref.current.style.pointerEvents = phase3Opacity > 0.1 ? 'auto' : 'none';
+          }
+
+          if (phase4Ref.current) {
+            phase4Ref.current.style.opacity = `${phase4Opacity}`;
+            phase4Ref.current.style.transform = `translateY(${(0.55 - p) * 45}px) scale(${0.96 + Math.min(0.04, phase4Opacity * 0.04)})`;
+            phase4Ref.current.style.pointerEvents = phase4Opacity > 0.1 ? 'auto' : 'none';
+          }
+
+          if (phase5Ref.current) {
+            phase5Ref.current.style.opacity = `${phase5Opacity}`;
+            phase5Ref.current.style.transform = `translateY(${(0.72 - p) * 45}px) scale(${0.96 + Math.min(0.04, phase5Opacity * 0.04)})`;
+            phase5Ref.current.style.pointerEvents = phase5Opacity > 0.1 ? 'auto' : 'none';
+          }
+
+          if (phase6Ref.current) {
+            phase6Ref.current.style.opacity = `${phase6Opacity}`;
+            phase6Ref.current.style.transform = `translateY(${(0.92 - p) * 70}px) scale(${Math.min(1, 0.92 + p * 0.08)})`;
+            phase6Ref.current.style.pointerEvents = phase6Opacity > 0.1 ? 'auto' : 'none';
+          }
+
+          if (heroAuroraRef.current) {
+            heroAuroraRef.current.style.opacity = `${Math.max(0, 1 - p * 8.5)}`;
+          }
+
+          if (finaleBgRef.current) {
+            finaleBgRef.current.style.opacity = `${phase6Opacity}`;
+          }
+
+          if (canvasRef.current) {
+            const maxActiveP = isMobileDevice ? 0.84 : 0.90;
+            let canvasOpacity = 0;
+            if (p >= 0.06 && p <= maxActiveP) {
+              const fadeIn = Math.min(1, (p - 0.06) / 0.05);
+              const fadeOut = Math.min(1, (maxActiveP - p) / 0.05);
+              canvasOpacity = Math.max(0, Math.min(fadeIn, fadeOut));
+            }
+            canvasRef.current.style.opacity = `${canvasOpacity}`;
+          }
         },
       });
     }, section);
@@ -262,82 +334,63 @@ export function AboutUsScrollytelling() {
       renderFrame(1, 0);
     }, 150);
 
+    const onResize = () => {
+      isMobileDeviceRef.current = window.innerWidth < 768;
+      renderFrame(currentFrameRef.current, 0);
+    };
+    window.addEventListener('resize', onResize, { passive: true });
+
     return () => {
       ctx.revert();
       clearTimeout(initialTimer);
+      window.removeEventListener('resize', onResize);
     };
-  }, [isReady]);
-
-  useEffect(() => {
-    const onResize = () => {
-      setIsMobileDevice(window.innerWidth < 768);
-      renderFrame(currentFrameRef.current, scrollProgress);
-    };
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, [scrollProgress]);
-
-  const phase1Opacity = Math.max(0, 1 - scrollProgress * 9.5);
-  const phase2Opacity = Math.max(0, 1 - Math.abs(scrollProgress - 0.20) * 8.5);
-  const phase3Opacity = Math.max(0, 1 - Math.abs(scrollProgress - 0.37) * 8.5);
-  const phase4Opacity = Math.max(0, 1 - Math.abs(scrollProgress - 0.55) * 8.5);
-  const phase5Opacity = Math.max(0, 1 - Math.abs(scrollProgress - 0.72) * 8.5);
-  const phase6Opacity = Math.max(0, Math.min(1, (scrollProgress - 0.82) * 6.5));
-
-  // Canvas Image Visibility: Only visible during active middle scrollytelling phases
-  let canvasOpacity = 0;
-  const maxActiveP = isMobileDevice ? 0.84 : 0.90;
-  if (scrollProgress >= 0.06 && scrollProgress <= maxActiveP) {
-    const fadeIn = Math.min(1, (scrollProgress - 0.06) / 0.05);
-    const fadeOut = Math.min(1, (maxActiveP - scrollProgress) / 0.05);
-    canvasOpacity = Math.max(0, Math.min(fadeIn, fadeOut));
-  }
+  }, []);
 
   return (
     <section
       ref={sectionRef}
-      id="about"
+      id="home"
       className="relative w-full h-screen overflow-hidden bg-[#080103] select-none"
     >
+      {/* 2D Accelerated Scrollytelling Canvas */}
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full object-contain pointer-events-none z-[2] transition-opacity duration-200"
-        style={{
-          opacity: canvasOpacity,
-        }}
+        style={{ opacity: 0 }}
       />
 
+      {/* Ambient background glow */}
       <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] sm:w-[75vw] h-[90vw] sm:h-[75vw] max-w-[1000px] max-h-[1000px] rounded-full bg-radial from-emerald-600/20 via-emerald-950/10 to-transparent dark:from-red-600/12 dark:via-rose-950/6 blur-[160px]" />
       </div>
 
+      {/* Hero Aurora Background Layer */}
       <div
+        ref={heroAuroraRef}
         className="absolute inset-0 z-[3] pointer-events-none transition-opacity duration-300"
-        style={{
-          opacity: Math.max(0, 1 - scrollProgress * 8.5),
-        }}
+        style={{ opacity: 1 }}
       >
         <AuroraHeroBg />
       </div>
 
-      {/* ── Phase 6 Grand Finale Background: Clean Dark-to-Light Gradient ── */}
+      {/* Phase 6 Grand Finale Background */}
       <div
+        ref={finaleBgRef}
         className="absolute inset-0 z-[4] pointer-events-none transition-opacity duration-300 bg-gradient-to-b from-[#0F2027] via-[#163629] to-[#28623A] dark:from-[#080103] dark:via-[#140207] dark:to-[#080103]"
-        style={{
-          opacity: phase6Opacity,
-        }}
+        style={{ opacity: 0 }}
       >
-        {/* Soft bottom ambient glow to ensure a crystal-clean merge into Services */}
         <div className="absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-b from-transparent via-[#28623A]/50 to-[#28623A] dark:from-transparent dark:via-[#080103]/70 dark:to-[#080103]" />
       </div>
 
+      {/* Content Container */}
       <div className="relative z-10 w-full h-full px-3 sm:px-8 md:px-12 lg:px-16 xl:px-20 pointer-events-none flex items-center">
+        
+        {/* Phase 1: Hero */}
         <div
-          className="absolute inset-x-3 sm:inset-x-8 md:inset-x-16 lg:inset-x-24 top-1/2 -translate-y-1/2 flex flex-col items-center text-center transition-all duration-200 pointer-events-auto max-w-5xl mx-auto"
-          style={{
-            opacity: phase1Opacity,
-            transform: `translateY(${-scrollProgress * 60}px) scale(${1 - scrollProgress * 0.1})`,
-          }}
+          ref={phase1Ref}
+          className="absolute inset-x-3 sm:inset-x-8 md:inset-x-16 lg:inset-x-24 top-1/2 -translate-y-1/2 flex flex-col items-center text-center transition-all duration-200 pointer-events-auto max-w-5xl mx-auto will-change-transform"
+          style={{ opacity: 1 }}
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full border border-emerald-500/30 dark:border-rose-500/30 bg-emerald-500/10 dark:bg-rose-500/10 backdrop-blur-md mb-2 sm:mb-6 shadow-[0_0_20px_rgba(52,211,153,0.2)] dark:shadow-[0_0_20px_rgba(225,29,72,0.2)]">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 dark:bg-red-500 animate-pulse" />
@@ -379,12 +432,11 @@ export function AboutUsScrollytelling() {
           </div>
         </div>
 
+        {/* Phase 2: Blueprint */}
         <div
-          className="absolute top-[12%] sm:top-1/2 sm:-translate-y-1/2 left-3 sm:left-6 md:left-10 lg:left-12 xl:left-16 max-w-[245px] xs:max-w-[270px] sm:max-w-[390px] lg:max-w-[430px] flex flex-col items-start text-left transition-all duration-200 pointer-events-auto [perspective:1000px]"
-          style={{
-            opacity: phase2Opacity,
-            transform: `translateY(${(0.20 - scrollProgress) * 45}px) scale(${0.96 + Math.min(0.04, phase2Opacity * 0.04)})`,
-          }}
+          ref={phase2Ref}
+          className="absolute top-[12%] sm:top-1/2 sm:-translate-y-1/2 left-3 sm:left-6 md:left-10 lg:left-12 xl:left-16 max-w-[245px] xs:max-w-[270px] sm:max-w-[390px] lg:max-w-[430px] flex flex-col items-start text-left transition-all duration-200 pointer-events-none [perspective:1000px] will-change-transform"
+          style={{ opacity: 0 }}
         >
           <div className="w-full relative group p-3.5 sm:p-6 lg:p-7 rounded-[24px] sm:rounded-[32px] bg-white/[0.14] dark:bg-white/[0.09] backdrop-blur-3xl border border-white/[0.28] dark:border-white/[0.22] shadow-[0_16px_36px_rgba(0,0,0,0.5),inset_0_1px_1.5px_rgba(255,255,255,0.65),inset_0_-1px_1px_rgba(0,0,0,0.2)] overflow-hidden">
             <div className="absolute top-0 inset-x-5 h-[1.5px] bg-gradient-to-r from-transparent via-white/80 to-transparent pointer-events-none rounded-full" />
@@ -417,12 +469,11 @@ export function AboutUsScrollytelling() {
           </div>
         </div>
 
+        {/* Phase 3: Spatial */}
         <div
-          className="absolute top-[30%] sm:top-1/2 sm:-translate-y-1/2 right-3 sm:right-6 md:right-10 lg:right-12 xl:right-16 max-w-[245px] xs:max-w-[270px] sm:max-w-[390px] lg:max-w-[430px] flex flex-col items-end text-right transition-all duration-200 ml-auto pointer-events-auto [perspective:1000px]"
-          style={{
-            opacity: phase3Opacity,
-            transform: `translateY(${(0.37 - scrollProgress) * 45}px) scale(${0.96 + Math.min(0.04, phase3Opacity * 0.04)})`,
-          }}
+          ref={phase3Ref}
+          className="absolute top-[30%] sm:top-1/2 sm:-translate-y-1/2 right-3 sm:right-6 md:right-10 lg:right-12 xl:right-16 max-w-[245px] xs:max-w-[270px] sm:max-w-[390px] lg:max-w-[430px] flex flex-col items-end text-right transition-all duration-200 ml-auto pointer-events-none [perspective:1000px] will-change-transform"
+          style={{ opacity: 0 }}
         >
           <div className="w-full relative group p-3.5 sm:p-6 lg:p-7 rounded-[24px] sm:rounded-[32px] bg-white/[0.14] dark:bg-white/[0.09] backdrop-blur-3xl border border-white/[0.28] dark:border-white/[0.22] shadow-[0_16px_36px_rgba(0,0,0,0.5),inset_0_1px_1.5px_rgba(255,255,255,0.65),inset_0_-1px_1px_rgba(0,0,0,0.2)] overflow-hidden flex flex-col items-end">
             <div className="absolute top-0 inset-x-5 h-[1.5px] bg-gradient-to-r from-transparent via-white/80 to-transparent pointer-events-none rounded-full" />
@@ -455,12 +506,11 @@ export function AboutUsScrollytelling() {
           </div>
         </div>
 
+        {/* Phase 4: Supremacy */}
         <div
-          className="absolute top-[48%] sm:top-1/2 sm:-translate-y-1/2 left-3 sm:left-6 md:left-10 lg:left-12 xl:left-16 max-w-[245px] xs:max-w-[270px] sm:max-w-[390px] lg:max-w-[430px] flex flex-col items-start text-left transition-all duration-200 pointer-events-auto"
-          style={{
-            opacity: phase4Opacity,
-            transform: `translateY(${(0.55 - scrollProgress) * 45}px) scale(${0.96 + Math.min(0.04, phase4Opacity * 0.04)})`,
-          }}
+          ref={phase4Ref}
+          className="absolute top-[48%] sm:top-1/2 sm:-translate-y-1/2 left-3 sm:left-6 md:left-10 lg:left-12 xl:left-16 max-w-[245px] xs:max-w-[270px] sm:max-w-[390px] lg:max-w-[430px] flex flex-col items-start text-left transition-all duration-200 pointer-events-none will-change-transform"
+          style={{ opacity: 0 }}
         >
           <div className="w-full relative group p-3.5 sm:p-6 lg:p-7 rounded-[24px] sm:rounded-[32px] bg-white/[0.14] dark:bg-white/[0.09] backdrop-blur-3xl border border-white/[0.28] dark:border-white/[0.22] shadow-[0_16px_36px_rgba(0,0,0,0.5),inset_0_1px_1.5px_rgba(255,255,255,0.65),inset_0_-1px_1px_rgba(0,0,0,0.2)] overflow-hidden">
             <div className="absolute top-0 inset-x-5 h-[1.5px] bg-gradient-to-r from-transparent via-white/80 to-transparent pointer-events-none rounded-full" />
@@ -493,12 +543,11 @@ export function AboutUsScrollytelling() {
           </div>
         </div>
 
+        {/* Phase 5: Neural AI */}
         <div
-          className="absolute top-[66%] sm:top-1/2 sm:-translate-y-1/2 right-3 sm:right-6 md:right-10 lg:right-12 xl:right-16 max-w-[245px] xs:max-w-[270px] sm:max-w-[390px] lg:max-w-[430px] flex flex-col items-end text-right transition-all duration-200 ml-auto pointer-events-auto [perspective:1000px]"
-          style={{
-            opacity: phase5Opacity,
-            transform: `translateY(${(0.72 - scrollProgress) * 45}px) scale(${0.96 + Math.min(0.04, phase5Opacity * 0.04)})`,
-          }}
+          ref={phase5Ref}
+          className="absolute top-[66%] sm:top-1/2 sm:-translate-y-1/2 right-3 sm:right-6 md:right-10 lg:right-12 xl:right-16 max-w-[245px] xs:max-w-[270px] sm:max-w-[390px] lg:max-w-[430px] flex flex-col items-end text-right transition-all duration-200 ml-auto pointer-events-none will-change-transform"
+          style={{ opacity: 0 }}
         >
           <div className="w-full relative group p-3.5 sm:p-6 lg:p-7 rounded-[24px] sm:rounded-[32px] bg-white/[0.14] dark:bg-white/[0.09] backdrop-blur-3xl border border-white/[0.28] dark:border-white/[0.22] shadow-[0_16px_36px_rgba(0,0,0,0.5),inset_0_1px_1.5px_rgba(255,255,255,0.65),inset_0_-1px_1px_rgba(0,0,0,0.2)] overflow-hidden flex flex-col items-end">
             <div className="absolute top-0 inset-x-5 h-[1.5px] bg-gradient-to-r from-transparent via-white/80 to-transparent pointer-events-none rounded-full" />
@@ -532,13 +581,11 @@ export function AboutUsScrollytelling() {
           </div>
         </div>
 
-        {/* ━━━ PHASE 6: 84% - 100% (GRAND FINALE - 1 CLEAN HIGH-IMPACT CTA BUTTON ON GRADIENT COVER) ━━━ */}
+        {/* Phase 6: Grand Finale */}
         <div
-          className="absolute inset-x-3 sm:inset-x-8 md:inset-x-16 lg:inset-x-24 top-1/2 -translate-y-1/2 flex flex-col items-center text-center transition-all duration-300 pointer-events-auto max-w-5xl mx-auto"
-          style={{
-            opacity: phase6Opacity,
-            transform: `translateY(${(0.92 - scrollProgress) * 70}px) scale(${Math.min(1, 0.92 + scrollProgress * 0.08)})`,
-          }}
+          ref={phase6Ref}
+          className="absolute inset-x-3 sm:inset-x-8 md:inset-x-16 lg:inset-x-24 top-1/2 -translate-y-1/2 flex flex-col items-center text-center transition-all duration-300 pointer-events-none max-w-5xl mx-auto will-change-transform"
+          style={{ opacity: 0 }}
         >
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full border border-emerald-500/30 dark:border-red-500/30 bg-emerald-950/85 dark:bg-[#160206]/85 font-mono text-[9px] sm:text-xs text-emerald-300 dark:text-rose-300 uppercase tracking-[0.2em] mb-2.5 sm:mb-4 backdrop-blur-md">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -559,9 +606,8 @@ export function AboutUsScrollytelling() {
             Transform your vision into an industry-defining digital powerhouse. Let&apos;s build your next high-performance platform together.
           </p>
 
-          {/* 1 Clean High-Impact CTA Button */}
           <div className="mt-4 sm:mt-8 flex justify-center">
-            <a href="#contact">
+            <a href="#contact" className="pointer-events-auto">
               <RadialGlowButton size="sm" className="font-sans font-bold text-xs sm:text-sm tracking-wider uppercase !min-w-[180px] sm:!min-w-[220px] !h-[42px] sm:!h-[52px] !px-6 sm:!px-8 !bg-gradient-to-r !from-[#0F2027] !to-[#28623A] dark:!from-red-600 dark:!to-rose-900 shadow-[0_0_30px_rgba(52,211,153,0.5)] dark:shadow-[0_0_30px_rgba(225,29,72,0.6)] border border-emerald-500/40 dark:border-red-500/40 text-emerald-100 dark:text-rose-100 whitespace-nowrap">
                 Start Your Project
                 <span className="material-symbols-outlined text-sm sm:text-base ml-1.5">arrow_forward</span>

@@ -27,7 +27,7 @@ export function ProjectCard({ project, isActive }: ProjectCardProps) {
 
   return (
     <div
-      className={`w-[88vw] md:w-[78vw] max-w-[1120px] shrink-0 snap-center rounded-3xl border p-6 md:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative overflow-hidden transition-all duration-500 shadow-[0_20px_50px_rgba(0,0,0,0.25)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.8)] backdrop-blur-md ${
+      className={`w-[92vw] sm:w-[86vw] md:w-[82vw] lg:w-[76vw] max-w-[1400px] 2xl:max-w-[1600px] shrink-0 snap-center rounded-3xl border p-6 md:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative overflow-hidden transition-all duration-500 shadow-[0_20px_50px_rgba(0,0,0,0.25)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.8)] backdrop-blur-md ${
         isActive
           ? 'border-emerald-500/30 dark:border-primary/20 bg-emerald-950/60 dark:bg-[#0b0a0d]/70'
           : 'border-emerald-500/15 dark:border-white/5 bg-emerald-950/30 dark:bg-[#0b0a0d]/40 opacity-70'

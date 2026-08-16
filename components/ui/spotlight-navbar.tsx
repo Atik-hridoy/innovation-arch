@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
 import { cn } from "@/lib/utils";
 
@@ -32,20 +32,69 @@ export function SpotlightNavbar({
     activeIndex: controlledActiveIndex,
 }: SpotlightNavbarProps) {
     const navRef = useRef<HTMLDivElement>(null);
-    const [activeIndex, setActiveIndex] = useState(controlledActiveIndex ?? defaultActiveIndex);
+    const activePillRef = useRef<HTMLDivElement>(null);
+    const [localActiveIndex, setLocalActiveIndex] = useState(defaultActiveIndex);
     const [hoverX, setHoverX] = useState<number | null>(null);
 
-    // Sync when controlledActiveIndex prop changes on scroll
-    useEffect(() => {
-        if (controlledActiveIndex !== undefined) {
-            setActiveIndex(controlledActiveIndex);
+    const activeIndex = controlledActiveIndex !== undefined ? controlledActiveIndex : localActiveIndex;
+
+    const updatePillPosition = useCallback((targetIndex: number, animate = true) => {
+        if (!navRef.current || !activePillRef.current) return;
+        const nav = navRef.current;
+        const activeItem = nav.querySelector(`[data-index="${targetIndex}"]`) as HTMLElement;
+
+        if (activeItem) {
+            const navRect = nav.getBoundingClientRect();
+            const itemRect = activeItem.getBoundingClientRect();
+            const targetLeft = itemRect.left - navRect.left;
+            const targetWidth = itemRect.width;
+            const targetCenterX = targetLeft + targetWidth / 2;
+
+            if (animate) {
+                gsap.to(activePillRef.current, {
+                    x: targetLeft,
+                    width: targetWidth,
+                    duration: 0.35,
+                    ease: "power2.out",
+                    overwrite: "auto",
+                });
+                gsap.to(nav, {
+                    "--ambience-x": `${targetCenterX}px`,
+                    duration: 0.35,
+                    ease: "power2.out",
+                    overwrite: "auto",
+                });
+            } else {
+                gsap.set(activePillRef.current, {
+                    x: targetLeft,
+                    width: targetWidth,
+                });
+                nav.style.setProperty("--ambience-x", `${targetCenterX}px`);
+            }
         }
-    }, [controlledActiveIndex]);
+    }, []);
 
-    // Refs for the "light" positions so we can animate them imperatively
-    const spotlightX = useRef(0);
-    const ambienceX = useRef(0);
+    // Animate active sliding pill & lighting indicator when activeIndex changes
+    useEffect(() => {
+        updatePillPosition(activeIndex, true);
+    }, [activeIndex, updatePillPosition]);
 
+    // Handle initial render & font load alignment
+    useEffect(() => {
+        const timer1 = setTimeout(() => updatePillPosition(activeIndex, false), 50);
+        const timer2 = setTimeout(() => updatePillPosition(activeIndex, false), 300);
+
+        const handleResize = () => updatePillPosition(activeIndex, false);
+        window.addEventListener("resize", handleResize, { passive: true });
+
+        return () => {
+            clearTimeout(timer1);
+            clearTimeout(timer2);
+            window.removeEventListener("resize", handleResize);
+        };
+    }, [activeIndex, updatePillPosition]);
+
+    // Mouse movement spotlight
     useEffect(() => {
         if (!navRef.current) return;
         const nav = navRef.current;
@@ -54,29 +103,11 @@ export function SpotlightNavbar({
             const rect = nav.getBoundingClientRect();
             const x = e.clientX - rect.left;
             setHoverX(x);
-            // Direct update for immediate feedback (no spring for the mouse itself, feels snappier)
-            spotlightX.current = x;
             nav.style.setProperty("--spotlight-x", `${x}px`);
         };
 
         const handleMouseLeave = () => {
             setHoverX(null);
-            // When mouse leaves, spring the spotlight back to the active item
-            const activeItem = nav.querySelector(`[data-index="${activeIndex}"]`);
-            if (activeItem) {
-                const navRect = nav.getBoundingClientRect();
-                const itemRect = activeItem.getBoundingClientRect();
-                const targetX = itemRect.left - navRect.left + itemRect.width / 2;
-
-                gsap.to(spotlightX, {
-                    current: targetX,
-                    duration: 0.6,
-                    ease: "elastic.out(1, 0.6)",
-                    onUpdate: () => {
-                        nav.style.setProperty("--spotlight-x", `${spotlightX.current}px`);
-                    }
-                });
-            }
         };
 
         nav.addEventListener("mousemove", handleMouseMove);
@@ -86,32 +117,10 @@ export function SpotlightNavbar({
             nav.removeEventListener("mousemove", handleMouseMove);
             nav.removeEventListener("mouseleave", handleMouseLeave);
         };
-    }, [activeIndex]);
-
-    // Handle the "Ambience" (Active Item) Movement
-    useEffect(() => {
-        if (!navRef.current) return;
-        const nav = navRef.current;
-        const activeItem = nav.querySelector(`[data-index="${activeIndex}"]`);
-
-        if (activeItem) {
-            const navRect = nav.getBoundingClientRect();
-            const itemRect = activeItem.getBoundingClientRect();
-            const targetX = itemRect.left - navRect.left + itemRect.width / 2;
-
-            gsap.to(ambienceX, {
-                current: targetX,
-                duration: 0.6,
-                ease: "elastic.out(1, 0.6)",
-                onUpdate: () => {
-                    nav.style.setProperty("--ambience-x", `${ambienceX.current}px`);
-                },
-            });
-        }
-    }, [activeIndex]);
+    }, []);
 
     const handleItemClick = (item: NavItem, index: number) => {
-        setActiveIndex(index);
+        setLocalActiveIndex(index);
         onItemClick?.(item, index);
     };
 
@@ -120,84 +129,93 @@ export function SpotlightNavbar({
             <nav
                 ref={navRef}
                 className={cn(
-                    "relative h-11 rounded-full transition-all duration-300 overflow-hidden",
-                    "border border-emerald-500/20 dark:border-white/10 bg-emerald-950/70 dark:bg-black/40 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.2)] dark:shadow-[0_0_15px_rgba(255,255,255,0.05)]"
+                    "relative h-12 rounded-full transition-all duration-300 overflow-hidden px-1.5 flex items-center",
+                    "border border-emerald-500/25 dark:border-white/12 bg-emerald-950/80 dark:bg-[#070709]/80 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.35),inset_0_1px_1px_rgba(255,255,255,0.15)]"
                 )}
             >
-                {/* Content */}
-                <ul className="relative flex items-center h-full px-1 sm:px-2 gap-0 z-[10] overflow-x-auto hide-scrollbar whitespace-nowrap w-full">
-                    {items.map((item, idx) => (
-                        <li key={idx} className="relative h-full flex items-center justify-center shrink-0">
-                            <a
-                                href={item.href}
-                                data-index={idx}
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    handleItemClick(item, idx);
-                                    
-                                    // Smooth scroll fallback if lenis/gsap is integrated site-wide
-                                    const target = document.querySelector(item.href);
-                                    if (target) {
-                                        target.scrollIntoView({ behavior: 'smooth' });
-                                    }
-                                }}
-                                className={cn(
-                                    "px-3 sm:px-4 py-2 text-[11px] sm:text-[13px] font-body-md uppercase tracking-wider transition-colors duration-200 rounded-full",
-                                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
-                                    // Active vs Inactive Text
-                                    activeIndex === idx
-                                        ? "text-white font-bold"
-                                        : "text-emerald-100/70 dark:text-on-surface-variant/70 hover:text-white"
-                                )}
-                            >
-                                {item.label}
-                            </a>
-                        </li>
-                    ))}
+                {/* 🌟 Animated Sliding Active Pill Background 🌟 */}
+                <div
+                    ref={activePillRef}
+                    className="absolute top-1 bottom-1 left-0 rounded-full bg-gradient-to-r from-emerald-500/25 via-teal-500/20 to-emerald-500/25 dark:from-emerald-500/30 dark:via-teal-500/25 dark:to-emerald-500/30 border border-emerald-400/50 dark:border-emerald-400/50 shadow-[0_0_20px_rgba(52,211,153,0.35)] dark:shadow-[0_0_20px_rgba(52,211,153,0.35)] pointer-events-none z-[5] will-change-transform"
+                />
+
+                {/* Nav Items List */}
+                <ul className="relative flex items-center h-full gap-1 z-[10] whitespace-nowrap w-full">
+                    {items.map((item, idx) => {
+                        const isActive = activeIndex === idx;
+                        return (
+                            <li key={idx} className="relative h-full flex items-center justify-center shrink-0">
+                                <a
+                                    href={item.href}
+                                    data-index={idx}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        handleItemClick(item, idx);
+                                        const target = document.querySelector(item.href);
+                                        if (target) {
+                                            target.scrollIntoView({ behavior: "smooth" });
+                                        }
+                                    }}
+                                    className={cn(
+                                        "relative px-4 py-2 text-[11px] sm:text-[12.5px] font-mono uppercase tracking-[0.14em] transition-all duration-300 rounded-full select-none cursor-pointer flex items-center gap-1.5",
+                                        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400",
+                                        isActive
+                                            ? "text-white font-black drop-shadow-[0_0_10px_rgba(52,211,153,0.8)] dark:drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]"
+                                            : "text-emerald-100/65 dark:text-white/55 hover:text-white dark:hover:text-white font-semibold"
+                                    )}
+                                >
+                                    {isActive && (
+                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 dark:bg-primary animate-pulse shrink-0" />
+                                    )}
+                                    <span>{item.label}</span>
+                                </a>
+                            </li>
+                        );
+                    })}
                 </ul>
 
-                {/* LIGHTING LAYERS */}
-                {/* 1. The Moving Spotlight (Follows Mouse) */}
+                {/* Moving Spotlight (Mouse interaction) */}
                 <div
                     className="pointer-events-none absolute bottom-0 left-0 w-full h-full z-[1] transition-opacity duration-300"
                     style={{
                         opacity: hoverX !== null ? 1 : 0,
                         background: `
-              radial-gradient(
-                120px circle at var(--spotlight-x) 100%, 
-                var(--spotlight-color, rgba(52,211,153,0.2)) 0%, 
-                transparent 50%
-              )
-            `
+                            radial-gradient(
+                                130px circle at var(--spotlight-x) 100%, 
+                                var(--spotlight-color, rgba(52,211,153,0.25)) 0%, 
+                                transparent 60%
+                            )
+                        `,
                     }}
                 />
 
-                {/* 2. The Active State Ambience (Stays on Active) */}
+                {/* Active Section Bottom Neon Glow Line */}
                 <div
-                    className="pointer-events-none absolute bottom-0 left-0 w-full h-[2px] z-[2]"
+                    className="pointer-events-none absolute bottom-0 left-0 w-full h-[3px] z-[2]"
                     style={{
                         background: `
-                  radial-gradient(
-                    60px circle at var(--ambience-x) 0%, 
-                    var(--ambience-color, rgba(52,211,153,0.9)) 0%, 
-                    transparent 100%
-                  )
-                `
+                            radial-gradient(
+                                80px circle at var(--ambience-x, 50%) 0%, 
+                                var(--ambience-color, rgba(52,211,153,1)) 0%, 
+                                transparent 100%
+                            )
+                        `,
                     }}
                 />
-
             </nav>
 
             <style jsx>{`
-        nav {
-          --spotlight-color: rgba(52, 211, 153, 0.2);
-          --ambience-color: rgba(52, 211, 153, 0.9);
-        }
-        :global(.dark) nav {
-          --spotlight-color: rgba(255, 255, 255, 0.15);
-          --ambience-color: rgba(221, 183, 255, 0.9);
-        }
-      `}</style>
+                nav {
+                    --spotlight-color: rgba(52, 211, 153, 0.25);
+                    --ambience-color: rgba(52, 211, 153, 1);
+                }
+                :global(.dark) nav {
+                    --spotlight-color: rgba(52, 211, 153, 0.25);
+                    --ambience-color: rgba(52, 211, 153, 1);
+                }
+            `}</style>
         </div>
     );
 }
+
+export default SpotlightNavbar;

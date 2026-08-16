@@ -111,7 +111,7 @@ export function CTA() {
         <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay z-10 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
       </div>
 
-      <div ref={containerRef} className="relative z-20 w-full max-w-[1400px] mx-auto px-6 sm:px-12 flex flex-col gap-10 lg:gap-16">
+      <div ref={containerRef} className="relative z-20 w-full max-w-[1720px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20 flex flex-col gap-10 lg:gap-16">
 
         {/* --- Top Section: Context & Info --- */}
         <div className="w-full gsap-fade-up opacity-0">

@@ -142,7 +142,7 @@ export function Services() {
       </div>
 
       {/* ━━━ Foreground Content ━━━ */}
-      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 lg:px-20 py-12 md:py-20 lg:py-28">
+      <div className="relative z-10 w-full max-w-[1720px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20 py-12 md:py-20 lg:py-28">
 
         {/* ── Section Header ── */}
         <SectionHeader

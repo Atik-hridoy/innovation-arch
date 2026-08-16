@@ -25,8 +25,8 @@ export const SLIDES: ServiceSlide[] = [
     subtitle: 'iOS & Android Ecosystems',
     desc: 'Beautiful, native and cross-platform mobile experiences crafted with Flutter and React Native. Fully optimized for fluid performance and user delight.',
     image: '/images/mobile.webp',
-    themeColor: '#a855f7',
-    pillColor: 'bg-purple-500/10 border-purple-500/20 text-purple-400',
+    themeColor: '#10b981',
+    pillColor: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400',
     features: [
       { icon: 'phone_iphone', title: 'Cross-Platform', desc: 'High-performance Flutter builds', spec: 'FLUTTER / SWIFT' },
       { icon: 'security', title: 'Secure Logins', desc: 'Biometric FaceID & Secure Keychains', spec: 'BIOMETRICS' },

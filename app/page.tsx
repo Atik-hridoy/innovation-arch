@@ -324,27 +324,27 @@ export default function Home() {
       <Header />
 
       <main className="relative w-full z-10 bg-transparent transition-colors duration-400">
-        <SectionStage id="home" className="w-full bg-transparent dark:bg-[#080103]">
+        <SectionStage className="w-full bg-transparent dark:bg-[#080103]">
           <AboutUsScrollytelling />
         </SectionStage>
 
-        <SectionStage id="services" className="w-full bg-transparent dark:bg-[#080103]">
+        <SectionStage className="w-full bg-transparent dark:bg-[#080103]">
           <Services />
         </SectionStage>
 
-        <SectionStage id="process" className="w-full bg-transparent dark:bg-[#080103]">
+        <SectionStage className="w-full bg-transparent dark:bg-[#080103]">
           <Process />
         </SectionStage>
 
-        <SectionStage id="work" className="w-full bg-transparent dark:bg-[#080103]">
+        <SectionStage className="w-full bg-transparent dark:bg-[#080103]">
           <Portfolio />
         </SectionStage>
 
-        <SectionStage id="tech" className="w-full bg-transparent dark:bg-[#080103]">
+        <SectionStage className="w-full bg-transparent dark:bg-[#080103]">
           <TechStack />
         </SectionStage>
 
-        <SectionStage id="contact" className="w-full bg-transparent dark:bg-[#080103]">
+        <SectionStage className="w-full bg-transparent dark:bg-[#080103]">
           <CTA />
         </SectionStage>
       </main>

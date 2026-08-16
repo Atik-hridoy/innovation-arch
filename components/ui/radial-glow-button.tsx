@@ -30,14 +30,14 @@ export function RadialGlowButton({
         @property --rg-pos-y { syntax: '<percentage>'; initial-value: 130%; inherits: false; }
         @property --rg-spread-x { syntax: '<percentage>'; initial-value: 130%; inherits: false; }
         @property --rg-spread-y { syntax: '<percentage>'; initial-value: 170%; inherits: false; }
-        @property --rg-color-1 { syntax: '<color>'; initial-value: #05040a; inherits: false; }
-        @property --rg-color-2 { syntax: '<color>'; initial-value: #1f1235; inherits: false; }
-        @property --rg-color-3 { syntax: '<color>'; initial-value: #4c1d95; inherits: false; }
-        @property --rg-color-4 { syntax: '<color>'; initial-value: #c084fc; inherits: false; }
-        @property --rg-color-5 { syntax: '<color>'; initial-value: hsl(260 90% 4%); inherits: false; }
+        @property --rg-color-1 { syntax: '<color>'; initial-value: #021a11; inherits: false; }
+        @property --rg-color-2 { syntax: '<color>'; initial-value: #063c26; inherits: false; }
+        @property --rg-color-3 { syntax: '<color>'; initial-value: #0e653d; inherits: false; }
+        @property --rg-color-4 { syntax: '<color>'; initial-value: #34d399; inherits: false; }
+        @property --rg-color-5 { syntax: '<color>'; initial-value: hsl(156 90% 4%); inherits: false; }
         @property --rg-border-angle { syntax: '<angle>'; initial-value: 180deg; inherits: true; }
-        @property --rg-border-color-1 { syntax: '<color>'; initial-value: hsla(270, 75%, 85%, 0.6); inherits: true; }
-        @property --rg-border-color-2 { syntax: '<color>'; initial-value: hsla(270, 50%, 85%, 0.15); inherits: true; }
+        @property --rg-border-color-1 { syntax: '<color>'; initial-value: hsla(156, 75%, 85%, 0.6); inherits: true; }
+        @property --rg-border-color-2 { syntax: '<color>'; initial-value: hsla(156, 50%, 85%, 0.15); inherits: true; }
         @property --rg-stop-1 { syntax: '<percentage>'; initial-value: 30%; inherits: false; }
         @property --rg-stop-2 { syntax: '<percentage>'; initial-value: 55%; inherits: false; }
         @property --rg-stop-3 { syntax: '<percentage>'; initial-value: 75%; inherits: false; }
@@ -51,11 +51,11 @@ export function RadialGlowButton({
           --cut: 1px;
           --bg: radial-gradient(
             var(--rg-spread-x) var(--rg-spread-y) at var(--rg-pos-x) var(--rg-pos-y),
-            rgba(40, 98, 58, 0.7) var(--rg-stop-1),
-            rgba(22, 54, 41, 0.65) var(--rg-stop-2),
-            rgba(15, 32, 39, 0.6) var(--rg-stop-3),
-            rgba(52, 211, 153, 0.4) var(--rg-stop-4),
-            rgba(15, 32, 39, 0.5) var(--rg-stop-5)
+            rgba(40, 98, 58, 0.8) var(--rg-stop-1),
+            rgba(22, 54, 41, 0.75) var(--rg-stop-2),
+            rgba(15, 32, 39, 0.7) var(--rg-stop-3),
+            rgba(52, 211, 153, 0.45) var(--rg-stop-4),
+            rgba(15, 32, 39, 0.6) var(--rg-stop-5)
           );
           
           position: relative;
@@ -92,7 +92,7 @@ export function RadialGlowButton({
             var(--rg-color-4) var(--rg-stop-4),
             var(--rg-color-5) var(--rg-stop-5)
           );
-          box-shadow: 0 10px 30px -10px rgba(124, 58, 237, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+          box-shadow: 0 10px 30px -10px rgba(52, 211, 153, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
         .rg-button::before {
@@ -101,7 +101,7 @@ export function RadialGlowButton({
           inset: 0;
           padding: 1px;
           border-radius: inherit;
-          background-image: linear-gradient(var(--rg-border-angle), rgba(52, 211, 153, 0.6), rgba(255, 255, 255, 0.15));
+          background-image: linear-gradient(var(--rg-border-angle), rgba(52, 211, 153, 0.7), rgba(255, 255, 255, 0.2));
           mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
           mask-composite: exclude;
           pointer-events: none;
@@ -112,21 +112,21 @@ export function RadialGlowButton({
           --rg-pos-y: 120%;
           --rg-spread-x: 115%;
           --rg-spread-y: 115%;
-          --rg-color-1: #090314;
-          --rg-color-2: #c084fc;
-          --rg-color-3: #7c3aed;
-          --rg-color-4: #4338ca;
+          --rg-color-1: #032014;
+          --rg-color-2: #34d399;
+          --rg-color-3: #10b981;
+          --rg-color-4: #059669;
           --rg-stop-1: 0%;
           --rg-stop-2: 12%;
           --rg-stop-3: 38%;
           --rg-stop-4: 75%;
           --rg-stop-5: 150%;
           --rg-border-angle: 190deg;
-          --rg-border-color-1: hsla(270, 85%, 90%, 0.8);
-          --rg-border-color-2: hsla(270, 60%, 90%, 0.4);
+          --rg-border-color-1: hsla(156, 85%, 90%, 0.8);
+          --rg-border-color-2: hsla(156, 60%, 90%, 0.4);
           --button-line-opacity: 1;
           transform: translateY(-2px);
-          box-shadow: 0 16px 36px -8px rgba(124, 58, 237, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+          box-shadow: 0 16px 36px -8px rgba(52, 211, 153, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.4);
         }
 
         .rg-button:active {

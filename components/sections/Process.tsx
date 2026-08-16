@@ -54,9 +54,9 @@ function LaunchIcon() {
       <path d="M8 15l-4 2v-3l4-1" className="stroke-primary" />
       <path d="M16 15l4 2v-3l-4-1" className="stroke-primary" />
       {/* Fire thrust */}
-      <path d="M12 18v4" className="stroke-[#adc6ff] animate-bounce" strokeWidth="2" />
-      <path d="M10 19v2" className="stroke-[#842bd2] animate-pulse" />
-      <path d="M14 19v2" className="stroke-[#842bd2] animate-pulse" />
+      <path d="M12 18v4" className="stroke-[#5eead4] animate-bounce" strokeWidth="2" />
+      <path d="M10 19v2" className="stroke-[#34d399] animate-pulse" />
+      <path d="M14 19v2" className="stroke-[#34d399] animate-pulse" />
     </svg>
   );
 }
@@ -157,7 +157,7 @@ export function Process() {
                 steps.length - 1,
                 Math.floor(self.progress * steps.length)
               );
-              setActiveStep(stepIndex);
+              setActiveStep((prev) => (prev !== stepIndex ? stepIndex : prev));
             },
           },
         });
@@ -178,7 +178,7 @@ export function Process() {
                 steps.length - 1,
                 Math.floor(self.progress * steps.length)
               );
-              setActiveStep(stepIndex);
+              setActiveStep((prev) => (prev !== stepIndex ? stepIndex : prev));
             },
           });
         }
@@ -196,23 +196,23 @@ export function Process() {
   }, []);
 
   return (
-    <section ref={containerRef} id="process" className="process-section relative py-12 md:py-stack-xl px-4 sm:px-margin-edge z-10 overflow-hidden">
+    <section ref={containerRef} id="process" className="process-section relative py-12 md:py-stack-xl px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20 z-10 overflow-hidden">
       {/* Mobile-Visible Dynamic Color Motion Ambient Background */}
       <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden animate-color-motion">
-        {/* Dynamic Color Motion Node 1 (Violet / Purple) */}
-        <div className="animate-aurora absolute top-[-10%] left-[-15%] w-[100vw] sm:w-[75vw] h-[100vw] sm:h-[75vw] rounded-full bg-gradient-to-tr from-primary/35 via-[#842bd2]/25 to-transparent blur-[70px] sm:blur-[140px] opacity-85" />
+        {/* Dynamic Color Motion Node 1 (Emerald / Mint Glow) */}
+        <div className="animate-aurora absolute top-[-10%] left-[-15%] w-[100vw] sm:w-[75vw] h-[100vw] sm:h-[75vw] rounded-full bg-gradient-to-tr from-emerald-500/35 via-teal-600/25 to-transparent blur-[70px] sm:blur-[140px] opacity-85" />
         
-        {/* Dynamic Color Motion Node 2 (Deep Indigo / Cyan Glow) */}
-        <div className="animate-aurora absolute bottom-[-10%] right-[-15%] w-[90vw] sm:w-[65vw] h-[90vw] sm:h-[65vw] rounded-full bg-gradient-to-bl from-secondary/30 via-primary/20 to-transparent blur-[80px] sm:blur-[150px] opacity-80" style={{ animationDirection: 'reverse', animationDuration: '22s' }} />
+        {/* Dynamic Color Motion Node 2 (Deep Forest / Cyan Glow) */}
+        <div className="animate-aurora absolute bottom-[-10%] right-[-15%] w-[90vw] sm:w-[65vw] h-[90vw] sm:h-[65vw] rounded-full bg-gradient-to-bl from-secondary/30 via-emerald-500/20 to-transparent blur-[80px] sm:blur-[150px] opacity-80" style={{ animationDirection: 'reverse', animationDuration: '22s' }} />
 
         {/* Center Spotlight */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] sm:w-[55vw] h-[70vw] sm:h-[55vw] rounded-full bg-radial from-primary/20 via-transparent to-transparent blur-[60px] sm:blur-[110px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] sm:w-[55vw] h-[70vw] sm:h-[55vw] rounded-full bg-radial from-emerald-500/20 via-transparent to-transparent blur-[60px] sm:blur-[110px]" />
 
         {/* Clean background on mobile, subtle vignette on larger screens */}
         <div className="absolute inset-0 hidden sm:dark:block bg-gradient-to-b from-[#050505] via-transparent to-[#050505] opacity-75" />
       </div>
 
-      <div className="w-full max-w-7xl mx-auto">
+      <div className="w-full max-w-[1720px] mx-auto">
         <SectionHeader
           eyebrow="METHODOLOGY & EXECUTION"
           title="HOW WE WORK"
@@ -221,7 +221,7 @@ export function Process() {
       </div>
 
       {/* ================= DESKTOP LAYOUT (md and up) ================= */}
-      <div className="hidden md:flex w-full max-w-7xl mx-auto relative h-[450px] items-center justify-center overflow-visible mt-12 mb-16 z-20">
+      <div className="hidden md:flex w-full max-w-[1720px] mx-auto relative h-[450px] items-center justify-center overflow-visible mt-12 mb-16 z-20">
 
         {/* Wave Path Container */}
         <svg className="absolute w-full h-full overflow-visible z-10" viewBox="0 0 1000 300" fill="none" preserveAspectRatio="none">
@@ -240,20 +240,20 @@ export function Process() {
             stroke="url(#process-wave-grad)"
             strokeWidth="4.5"
             strokeLinecap="round"
-            style={{ filter: 'drop-shadow(0 0 10px rgba(183,109,255,0.4))' }}
+            style={{ filter: 'drop-shadow(0 0 10px rgba(52,211,153,0.4))' }}
           />
           {/* Custom Glowing Dot that follows path */}
           <circle
             className="process-progress-dot"
             r="8"
-            fill="#ddb7ff"
-            style={{ filter: 'drop-shadow(0 0 8px #ddb7ff)' }}
+            fill="#34d399"
+            style={{ filter: 'drop-shadow(0 0 8px #34d399)' }}
           />
           <defs>
             <linearGradient id="process-wave-grad" x1="0%" x2="100%" y1="0%" y2="0%">
-              <stop offset="0%" stopColor="#842bd2"></stop>
-              <stop offset="50%" stopColor="#ddb7ff"></stop>
-              <stop offset="100%" stopColor="#adc6ff"></stop>
+              <stop offset="0%" stopColor="#10b981"></stop>
+              <stop offset="50%" stopColor="#34d399"></stop>
+              <stop offset="100%" stopColor="#5eead4"></stop>
             </linearGradient>
           </defs>
         </svg>
