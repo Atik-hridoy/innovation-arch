@@ -118,8 +118,60 @@ export function AboutUsScrollytelling() {
     const renderH = img.naturalHeight * ratio;
     const renderX = (width - renderW) / 2;
     const renderY = (height - renderH) / 2;
-
     ctx.drawImage(img, renderX, renderY, renderW, renderH);
+
+    // ── 4-Sided Edge Feather Gradients (Completely eliminates rectangular border cuts on Web/Desktop & Mobile) ──
+    const featherW = renderW * 0.20;
+    const featherH = renderH * 0.22;
+
+    // Left Edge Feather
+    const leftGrad = ctx.createLinearGradient(renderX - 2, 0, renderX + featherW, 0);
+    leftGrad.addColorStop(0, '#080103');
+    leftGrad.addColorStop(0.5, 'rgba(8, 1, 3, 0.75)');
+    leftGrad.addColorStop(1, 'rgba(8, 1, 3, 0)');
+    ctx.fillStyle = leftGrad;
+    ctx.fillRect(renderX - 4, renderY - 4, featherW + 4, renderH + 8);
+
+    // Right Edge Feather
+    const rightGrad = ctx.createLinearGradient(renderX + renderW - featherW, 0, renderX + renderW + 2, 0);
+    rightGrad.addColorStop(0, 'rgba(8, 1, 3, 0)');
+    rightGrad.addColorStop(0.5, 'rgba(8, 1, 3, 0.75)');
+    rightGrad.addColorStop(1, '#080103');
+    ctx.fillStyle = rightGrad;
+    ctx.fillRect(renderX + renderW - featherW, renderY - 4, featherW + 6, renderH + 8);
+
+    // Top Edge Feather
+    const topGrad = ctx.createLinearGradient(0, renderY - 2, 0, renderY + featherH);
+    topGrad.addColorStop(0, '#080103');
+    topGrad.addColorStop(0.5, 'rgba(8, 1, 3, 0.75)');
+    topGrad.addColorStop(1, 'rgba(8, 1, 3, 0)');
+    ctx.fillStyle = topGrad;
+    ctx.fillRect(renderX - 4, renderY - 4, renderW + 8, featherH + 4);
+
+    // Bottom Edge Feather
+    const bottomGrad = ctx.createLinearGradient(0, renderY + renderH - featherH, 0, renderY + renderH + 2);
+    bottomGrad.addColorStop(0, 'rgba(8, 1, 3, 0)');
+    bottomGrad.addColorStop(0.5, 'rgba(8, 1, 3, 0.75)');
+    bottomGrad.addColorStop(1, '#080103');
+    ctx.fillStyle = bottomGrad;
+    ctx.fillRect(renderX - 4, renderY + renderH - featherH, renderW + 8, featherH + 6);
+
+    // ── Full-Canvas Liquid-Silk Radial Vignette ──
+    const gradient = ctx.createRadialGradient(
+      width / 2,
+      height / 2,
+      Math.min(renderW, renderH) * 0.32,
+      width / 2,
+      height / 2,
+      Math.max(width, height) * 0.65
+    );
+    gradient.addColorStop(0, 'rgba(8, 1, 3, 0)');
+    gradient.addColorStop(0.5, 'rgba(8, 1, 3, 0.25)');
+    gradient.addColorStop(0.82, 'rgba(8, 1, 3, 0.95)');
+    gradient.addColorStop(1, '#080103');
+
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, width, height);
 
     ctx.restore();
   };
