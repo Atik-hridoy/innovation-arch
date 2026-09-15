@@ -15,6 +15,7 @@ import { Portfolio } from '@/components/sections/Portfolio';
 import { FounderProfile } from '@/components/sections/FounderProfile';
 import { Testimonials } from '@/components/sections/Testimonials';
 import { TechStack } from '@/components/sections/TechStack';
+import { InteractiveStudioEngine } from '@/components/sections/InteractiveStudioEngine';
 import { CTA } from '@/components/sections/CTA';
 import { CookieConsent } from '@/components/ui/CookieConsent';
 
@@ -103,6 +104,10 @@ export default function Home() {
         <Hero />
 
         <StatsSection />
+
+        <SectionStage className="w-full bg-transparent">
+          <InteractiveStudioEngine />
+        </SectionStage>
 
         <SectionStage className="w-full bg-transparent">
           <Services />
