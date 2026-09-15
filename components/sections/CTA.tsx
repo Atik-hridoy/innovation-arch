@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { CONFIG } from '../../lib/config';
 import { Footer } from '@/components/Footer';
+import { LocationMapSection } from '@/components/sections/LocationMapSection';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 
 interface FAQ {
@@ -199,6 +200,9 @@ export function CTA() {
             </div>
           </div>
         </div>
+
+        {/* Global HQ Location Map Section */}
+        <LocationMapSection />
 
         <Footer />
       </div>
