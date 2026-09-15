@@ -11,40 +11,39 @@ export function Logo({ className = '', showText = true, layout = 'horizontal' }:
   const isVertical = layout === 'vertical';
 
   return (
-    <a href="/" className={`flex ${isVertical ? 'flex-col items-center text-center gap-4' : 'items-center gap-2.5'} group select-none ${className}`}>
+    <a href="/" className={`flex ${isVertical ? 'flex-col items-center text-center gap-4' : 'items-center gap-3'} group select-none ${className}`}>
       
-      {/* Minimalist SVG Icon */}
-      <div className={`relative flex items-center justify-center transition-transform duration-300 ${
-        isVertical ? 'w-16 h-16' : 'w-8 h-8'
+      {/* Official 3D Ribbon iA Emblem Logo Mark (High-Visibility Dark Mode Filters) */}
+      <div className={`relative flex items-center justify-center transition-all duration-300 group-hover:scale-105 rounded-xl p-0.5 dark:bg-blue-500/10 dark:border dark:border-blue-500/20 ${
+        isVertical ? 'w-16 h-16 sm:w-20 sm:h-20' : 'w-8 h-8 sm:w-10 sm:h-10'
       }`}>
-        <svg
-          viewBox="0 0 100 100"
-          className="w-full h-full"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          {/* Pitch Black / Slate 900 Arch Geometry (White in Dark Mode) */}
-          <path
-            d="M 20 80 L 50 20 L 80 80 L 65 80 L 50 50 L 35 80 Z"
-            className="fill-[#0f172a] dark:fill-white transition-colors duration-200"
-          />
-          {/* Royal Blue Accent Dot */}
-          <circle cx="50" cy="36" r="6" fill="#2563eb" />
-        </svg>
+        <img
+          src="/images/logo_mark.png"
+          alt="Innovation Ark Logo Mark"
+          className="w-full h-full object-contain transition-all duration-300 filter drop-shadow-[0_0_6px_rgba(37,99,235,0.4)] dark:brightness-125 dark:contrast-125 dark:drop-shadow-[0_0_14px_rgba(59,130,246,0.8)]"
+        />
       </div>
 
       {showText && (
-        <div className={`flex flex-col ${isVertical ? 'items-center' : 'items-start'}`}>
-          <span className="font-sans font-extrabold uppercase tracking-tight text-[#0f172a] dark:text-white text-[17px]">
-            INNOVATIVE <span className="text-[#2563eb]">ARC</span>
-          </span>
-          {isVertical && (
-            <span className="font-mono text-[9px] tracking-[0.2em] text-slate-500 uppercase mt-1">
-              B2B SOFTWARE AGENCY
+        <div className={`${isVertical ? 'flex flex-col items-center' : 'hidden sm:flex flex-col items-start'}`}>
+          <div className="flex items-center gap-1.5 leading-none">
+            <span className="font-sans font-black uppercase tracking-tight text-slate-900 dark:text-white text-lg sm:text-xl">
+              INNOVATION
             </span>
-          )}
+            <span className="font-sans font-black uppercase tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-400 dark:from-blue-400 dark:via-cyan-300 dark:to-sky-200 text-lg sm:text-xl">
+              ARK
+            </span>
+          </div>
+          <span className="font-mono text-[8px] sm:text-[9px] tracking-[0.22em] text-slate-500 dark:text-slate-300 uppercase font-bold mt-1">
+            TECH PLATFORM
+          </span>
         </div>
       )}
     </a>
   );
 }
+
+export default Logo;
+
+
+

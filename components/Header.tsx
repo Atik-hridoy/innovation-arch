@@ -127,10 +127,10 @@ export function Header() {
         {/* Right Actions: Theme Switcher & Book Call CTA */}
         <div className="flex items-center gap-2.5 sm:gap-3.5 transition-all duration-500 ease-out opacity-100 translate-y-0 pointer-events-auto">
           
-          {/* Theme Toggle Button */}
+          {/* Theme Toggle Button (Desktop Only) */}
           <button
             onClick={toggleTheme}
-            className="w-9 h-9 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center transition-colors cursor-pointer"
+            className="hidden md:flex w-9 h-9 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 items-center justify-center transition-colors cursor-pointer"
             aria-label="Toggle Dark/Light Mode"
             title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
           >
@@ -160,6 +160,17 @@ export function Header() {
         </button>
       </nav>
 
+      {/* Mobile Floating Mode Switcher (Fixed at Bottom Right on Mobile) */}
+      <button
+        onClick={toggleTheme}
+        className="md:hidden fixed bottom-5 right-5 z-40 w-11 h-11 rounded-full border border-slate-200 dark:border-slate-700 bg-white/90 dark:bg-[#111116]/90 text-slate-800 dark:text-slate-100 backdrop-blur-md shadow-xl flex items-center justify-center active:scale-90 transition-all cursor-pointer"
+        aria-label="Toggle Dark/Light Mode"
+      >
+        <span className="material-symbols-outlined text-xl">
+          {theme === 'dark' ? 'light_mode' : 'dark_mode'}
+        </span>
+      </button>
+
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-[45] bg-white/98 dark:bg-[#0b0f19]/98 backdrop-blur-xl flex flex-col items-center justify-center gap-6 md:hidden animate-[fadeIn_0.2s_ease-out]">
@@ -181,15 +192,16 @@ export function Header() {
             );
           })}
 
-          <div className="flex items-center gap-3 mt-4">
+          <div className="flex flex-col items-center gap-4 mt-6">
             <button
               onClick={toggleTheme}
-              className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 flex items-center justify-center"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-mono text-xs font-bold"
               title="Toggle Theme"
             >
-              <span className="material-symbols-outlined text-xl">
+              <span className="material-symbols-outlined text-lg">
                 {theme === 'dark' ? 'light_mode' : 'dark_mode'}
               </span>
+              <span>{theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}</span>
             </button>
 
             <button
@@ -204,6 +216,7 @@ export function Header() {
           </div>
         </div>
       )}
+
 
       <DiscoveryModal isOpen={isDiscoveryOpen} onClose={() => setIsDiscoveryOpen(false)} />
     </>

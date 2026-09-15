@@ -20,7 +20,7 @@ export function Hero() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <section id="home" className="relative w-full min-h-screen md:h-screen md:max-h-[1000px] bg-[#070709] text-white overflow-hidden flex flex-col justify-between pt-20 md:pt-24 pb-0">
+    <section id="home" className="relative w-full min-h-screen md:h-screen md:max-h-[1000px] bg-[#070709] text-white overflow-hidden flex flex-col justify-between pt-16 md:pt-24 pb-0">
       
       {/* Full-width Background Image (Mid-tone Tech Team Studio with Soft Blur) */}
       <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden">
@@ -35,12 +35,12 @@ export function Hero() {
       </div>
 
       {/* ========================================================= */}
-      {/* 📱 DEDICATED MOBILE LAYOUT (Compact, Uncluttered & Punchy) */}
+      {/* 📱 DEDICATED MOBILE LAYOUT (Compact, Tight Spacing & Perfectly Balanced) */}
       {/* ========================================================= */}
-      <div className="md:hidden relative z-10 w-full px-4 pt-20 pb-8 flex flex-col items-center text-center my-auto">
+      <div className="md:hidden relative z-10 w-full px-4 pt-4 pb-6 flex flex-col items-center text-center my-auto">
         
         {/* Minimal Pill Badge */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/20 bg-white/10 backdrop-blur-md mb-4 shadow-md">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/20 bg-white/10 backdrop-blur-md mb-3 shadow-md">
           <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
           <span className="font-mono text-[9px] uppercase tracking-widest text-slate-100 font-bold">
             Dedicated Software Partner
@@ -56,12 +56,12 @@ export function Hero() {
         </h1>
 
         {/* Short Mobile Sub-headline */}
-        <p className="mt-3 text-xs text-slate-300 max-w-xs mx-auto font-normal leading-relaxed">
-          Intelligent mobile apps & high-performance web platforms. We act as your dedicated technical partner.
+        <p className="mt-2.5 text-xs text-slate-300 max-w-xs mx-auto font-normal leading-relaxed">
+          Intelligent mobile apps &amp; high-performance web platforms. We act as your dedicated technical partner.
         </p>
 
         {/* Primary Mobile CTA Button */}
-        <div className="mt-5 w-full max-w-xs flex flex-col gap-2.5">
+        <div className="mt-4 w-full max-w-xs flex flex-col gap-2">
           <button
             onClick={() => setIsModalOpen(true)}
             className="w-full py-3.5 px-6 font-sans font-bold text-xs uppercase tracking-wider text-slate-950 bg-white rounded-xl shadow-lg active:scale-95 transition-all text-center"
@@ -71,14 +71,14 @@ export function Hero() {
           
           <a
             href="#work"
-            className="font-mono text-[10px] text-slate-300 uppercase tracking-widest py-1.5 block text-center"
+            className="font-mono text-[10px] text-slate-300 uppercase tracking-widest py-1 block text-center"
           >
             View Case Studies ↓
           </a>
         </div>
 
-        {/* Mobile Compact 3-Pill Highlight Row (No heavy stacked cards) */}
-        <div className="grid grid-cols-3 gap-2 mt-6 w-full max-w-xs mx-auto">
+        {/* Mobile Compact 3-Pill Highlight Row */}
+        <div className="grid grid-cols-3 gap-2 mt-5 w-full max-w-xs mx-auto">
           <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-2.5 flex flex-col items-center justify-center text-center">
             <span className="text-blue-300 text-sm mb-0.5">⚡</span>
             <span className="font-sans font-bold text-[10px] text-white leading-tight">Instant Speed</span>
@@ -198,9 +198,6 @@ export function Hero() {
           ))}
         </div>
       </div>
-
-
-
 
       <DiscoveryModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </section>
