@@ -1,54 +1,70 @@
 'use client';
 
-import React, { forwardRef } from 'react';
-import { RadialGlowButton } from '@/components/ui/radial-glow-button';
+import React, { forwardRef, useState } from 'react';
+import { DiscoveryModal } from '@/components/ui/DiscoveryModal';
 
 export const PhaseHero = forwardRef<HTMLDivElement>((props, ref) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
-    <div
-      ref={ref}
-      className="absolute inset-x-3 sm:inset-x-8 md:inset-x-16 lg:inset-x-24 top-1/2 -translate-y-1/2 flex flex-col items-center text-center transition-all duration-200 pointer-events-auto max-w-5xl mx-auto will-change-transform"
-      style={{ opacity: 1 }}
-    >
-      <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full border border-emerald-500/30 dark:border-rose-500/30 bg-emerald-500/10 dark:bg-rose-500/10 backdrop-blur-md mb-2 sm:mb-6 shadow-[0_0_20px_rgba(52,211,153,0.2)] dark:shadow-[0_0_20px_rgba(225,29,72,0.2)]">
-        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 dark:bg-red-500 animate-pulse" />
-        <span className="font-mono text-[9px] sm:text-xs uppercase tracking-[0.25em] text-emerald-300 dark:text-rose-300 font-semibold">
-          Digital Product Studio
-        </span>
-      </div>
+    <>
+      <div
+        ref={ref}
+        className="absolute inset-x-3 sm:inset-x-8 md:inset-x-16 lg:inset-x-24 top-1/2 -translate-y-1/2 flex flex-col items-center text-center transition-all duration-200 pointer-events-auto max-w-5xl mx-auto will-change-transform z-20"
+        style={{ opacity: 1 }}
+      >
+        {/* Minimal pill badge */}
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/80 mb-4 sm:mb-6 shadow-xs">
+          <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
+          <span className="font-mono text-[10px] sm:text-xs uppercase tracking-widest text-slate-800 dark:text-slate-200 font-semibold">
+            B2B Software Agency &amp; Product Studio
+          </span>
+        </div>
 
-      <h1 className="font-sans font-black text-2xl xs:text-3xl sm:text-6xl md:text-7xl lg:text-8xl uppercase tracking-tighter leading-[0.92] sm:leading-[0.9] text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
-        WE CRAFT <br />
-        <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-200 to-emerald-500 dark:from-red-500 dark:via-rose-300 dark:to-rose-600">
-          TIMELESS
-        </span>{' '}
-        <span className="font-serif italic font-normal lowercase tracking-tight text-emerald-200 dark:text-rose-200">
-          digital
-        </span>{' '}
-        <br />
-        PRODUCTS.
-      </h1>
+        {/* Deep Charcoal Headline */}
+        <h1 className="font-sans font-black text-3xl xs:text-4xl sm:text-6xl md:text-7xl lg:text-8xl uppercase tracking-tight leading-[0.95] text-[#0f172a] dark:text-white">
+          WE BUILD <br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-slate-800 to-blue-600 dark:from-white dark:via-slate-200 dark:to-blue-400">
+            SCALABLE SOFTWARE
+          </span>{' '}
+          <br />
+          <span className="font-serif italic font-normal lowercase tracking-normal text-slate-600 dark:text-slate-300">
+            to grow your
+          </span>{' '}
+          BUSINESS.
+        </h1>
 
-      <p className="mt-2 sm:mt-6 font-sans text-[11px] xs:text-xs sm:text-lg md:text-xl text-emerald-100/90 dark:text-[#f3d5dc] max-w-2xl font-light leading-relaxed drop-shadow-[0_2px_15px_rgba(0,0,0,0.95)]">
-        Architecting next-generation digital ecosystems, intelligent mobile applications, and high-impact brand identities.
-      </p>
+        {/* Sub-headline */}
+        <p className="mt-4 sm:mt-6 font-sans text-xs xs:text-sm sm:text-lg md:text-xl text-slate-600 dark:text-slate-300 max-w-3xl font-normal leading-relaxed">
+          From intelligent mobile apps to high-performance web platforms, we act as your dedicated technical partner to scale your business risk-free.
+        </p>
 
-      <div className="mt-4 sm:mt-8 flex items-center justify-center">
-        <a href="#contact" className="pointer-events-auto">
-          <RadialGlowButton
-            size="md"
-            className="px-6 sm:px-8 py-2.5 sm:py-3.5 text-xs sm:text-sm font-semibold tracking-wider uppercase text-white shadow-[0_10px_35px_rgba(40,98,58,0.5)] dark:shadow-[0_10px_35px_rgba(225,29,72,0.5)] active:scale-95 transition-transform"
+        {/* Action Buttons */}
+        <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="px-8 py-3.5 text-xs sm:text-sm font-semibold tracking-wider uppercase text-white bg-[#0f172a] hover:bg-black rounded-xl shadow-md shadow-slate-900/10 active:scale-95 transition-all duration-200 cursor-pointer"
           >
-            Initialize Project →
-          </RadialGlowButton>
-        </a>
+            Book a Free Discovery Call →
+          </button>
+          
+          <a
+            href="#work"
+            className="font-mono text-xs text-slate-700 dark:text-slate-300 hover:text-slate-900 uppercase tracking-wider py-3 px-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 transition-all"
+          >
+            Explore Case Studies
+          </a>
+        </div>
+
+        {/* Scroll indicator */}
+        <div className="mt-6 sm:mt-10 flex items-center gap-1.5 font-mono text-[10px] sm:text-xs text-slate-400 uppercase tracking-widest animate-bounce">
+          <span className="material-symbols-outlined text-sm">expand_more</span>
+          Scroll to explore capabilities
+        </div>
       </div>
 
-      <div className="mt-4 sm:mt-10 flex items-center gap-1.5 font-mono text-[9px] sm:text-[11px] text-emerald-300 dark:text-rose-300 uppercase tracking-widest animate-bounce drop-shadow-[0_2px_10px_rgba(0,0,0,1)]">
-        <span className="material-symbols-outlined text-sm sm:text-base">expand_more</span>
-        Scroll to explore
-      </div>
-    </div>
+      <DiscoveryModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+    </>
   );
 });
 

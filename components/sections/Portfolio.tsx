@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { Project } from '../../data/portfolio';
+import { useState, useEffect, useRef } from 'react';
+import { PROJECTS, Project } from '../../data/portfolio';
 import { CONFIG } from '../../lib/config';
 import { ProjectCard } from './ProjectCard';
 import { SectionHeader } from '@/components/ui/SectionHeader';
@@ -14,13 +14,10 @@ if (typeof window !== 'undefined') {
 
 export function Portfolio() {
   const sectionRef = useRef<HTMLElement>(null);
-  const headerRef = useRef<HTMLHeadingElement>(null);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [activeCardIdx, setActiveCardIdx] = useState(0);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const rowsRef = useRef<(HTMLDivElement | null)[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchProjects() {
@@ -44,7 +41,10 @@ export function Portfolio() {
               id: apiProj.id.toString(),
               title: apiProj.title || 'Untitled Project',
               subtitle: apiProj.subtitle || 'Category',
-              description: apiProj.description || 'No description provided.',
+              description: apiProj.description || '',
+              problem: apiProj.problem || '',
+              solution: apiProj.solution || '',
+              impact: apiProj.impact || '',
               tags: apiProj.tags || [],
               mockups: mockups,
               metrics: {
@@ -55,11 +55,11 @@ export function Portfolio() {
           });
           setProjects(mappedProjects);
         } else {
-          setProjects([]);
+          setProjects(PROJECTS);
         }
       } catch (err) {
-        console.error("Failed to fetch projects from backend:", err);
-        setError("Unable to load projects at this time.");
+        console.warn("Using fallback local projects array:", err);
+        setProjects(PROJECTS);
       } finally {
         setIsLoading(false);
       }
@@ -68,7 +68,7 @@ export function Portfolio() {
     fetchProjects();
   }, []);
 
-  // Staggered Scroll Animation
+  // Staggered Scroll Animation for Header and Zig-Zag Rows
   useEffect(() => {
     if (isLoading || projects.length === 0) return;
 
@@ -76,29 +76,26 @@ export function Portfolio() {
       if (headerRef.current) {
         gsap.from(headerRef.current, {
           scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top bottom',
-            end: 'top center',
-            scrub: 1,
+            trigger: headerRef.current,
+            start: 'top 85%',
           },
-          y: 60,
+          y: 40,
           opacity: 0,
-          ease: 'power2.out'
+          duration: 0.8,
+          ease: 'power3.out'
         });
       }
 
-      const validCards = cardsRef.current.filter(Boolean);
-      validCards.forEach((card, index) => {
-        gsap.from(card, {
+      rowsRef.current.filter(Boolean).forEach((row) => {
+        gsap.from(row, {
           scrollTrigger: {
-            trigger: sectionRef.current,
+            trigger: row,
             start: 'top 85%',
-            end: 'center center',
-            scrub: 1,
           },
-          y: 40,
-          opacity: 0.4,
-          ease: 'power2.out',
+          y: 50,
+          opacity: 0,
+          duration: 0.9,
+          ease: 'power3.out'
         });
       });
     }, sectionRef);
@@ -106,146 +103,43 @@ export function Portfolio() {
     return () => ctx.revert();
   }, [isLoading, projects]);
 
-  const currentBgImage = projects[activeCardIdx]?.mockups[0];
-  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Smooth debounced active card detector on horizontal swipe
-  const handleScroll = useCallback(() => {
-    if (scrollTimeoutRef.current) {
-      clearTimeout(scrollTimeoutRef.current);
-    }
-
-    scrollTimeoutRef.current = setTimeout(() => {
-      if (scrollRef.current) {
-        const container = scrollRef.current;
-        const children = container.children;
-        let closestIdx = 0;
-        let minDistance = Infinity;
-        const containerRect = container.getBoundingClientRect();
-        const containerCenter = containerRect.left + containerRect.width / 2;
-        
-        for (let i = 0; i < children.length; i++) {
-          const childRect = children[i].getBoundingClientRect();
-          const childCenter = childRect.left + childRect.width / 2;
-          const distance = Math.abs(childCenter - containerCenter);
-          if (distance < minDistance) {
-            minDistance = distance;
-            closestIdx = i;
-          }
-        }
-        setActiveCardIdx((prev) => (prev !== closestIdx ? closestIdx : prev));
-      }
-    }, 40);
-  }, []);
-
-  const handleScrollLeft = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: -window.innerWidth * 0.7, behavior: 'smooth' });
-    }
-  };
-
-  const handleScrollRight = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: window.innerWidth * 0.7, behavior: 'smooth' });
-    }
-  };
-
   return (
-    <section ref={sectionRef} id="work" className="relative py-12 md:py-stack-xl px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20 z-10 bg-transparent dark:bg-[#070609] overflow-hidden min-h-[100vh] md:min-h-[120vh] flex flex-col justify-center pb-16 md:pb-32 transition-colors duration-400">
+    <section ref={sectionRef} id="work" className="relative py-16 md:py-28 px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20 z-10 bg-white dark:bg-[#070609] transition-colors duration-300">
       
-      {/* Volumetric dynamic image background (Desktop only for GPU efficiency) */}
-      <div className="hidden md:block absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        {currentBgImage && (
-          <img 
-            src={currentBgImage} 
-            className="w-full h-full object-cover opacity-[0.04] dark:opacity-20 blur-[50px] scale-105 transition-opacity duration-700 ease-out will-change-transform"
-            alt="dynamic contextual background"
-            loading="eager"
-            decoding="async"
-          />
-        )}
+      {/* Subtle ambient light/dark background */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-30 dark:opacity-100">
+        <div className="absolute top-1/3 -left-1/4 w-[90vw] h-[90vw] rounded-full bg-gradient-to-tr from-blue-500/10 via-transparent to-transparent blur-[100px]" />
+        <div className="absolute bottom-1/3 -right-1/4 w-[80vw] h-[80vw] rounded-full bg-gradient-to-bl from-slate-200/50 dark:from-[#28623A]/30 via-transparent to-transparent blur-[120px]" />
       </div>
 
-      {/* Dedicated Emerald Depth Green Gradient Ambient Background on Web and Mobile */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/4 -left-1/4 w-[110vw] h-[110vw] rounded-full bg-gradient-to-tr from-emerald-600/35 via-teal-700/25 to-transparent blur-[90px] mix-blend-screen" />
-        <div className="absolute bottom-1/4 -right-1/4 w-[100vw] h-[100vw] rounded-full bg-gradient-to-bl from-[#28623A]/40 via-emerald-800/25 to-transparent blur-[100px] mix-blend-screen" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] h-[85vw] rounded-full bg-radial from-emerald-500/25 via-[#163629]/20 to-transparent blur-[80px]" />
-      </div>
-
-      {/* Subtle dark mode vignette */}
-      <div className="absolute inset-0 hidden sm:block bg-transparent dark:bg-gradient-to-b dark:from-[#070609]/70 dark:to-[#070609]/95 transition-colors duration-400 pointer-events-none" />
-
-      {/* Section Header with Nav Buttons */}
-      <div className="w-full max-w-[1720px] mx-auto">
+      {/* Section Header */}
+      <div ref={headerRef} className="w-full max-w-[1720px] mx-auto mb-16 sm:mb-20 lg:mb-24">
         <SectionHeader
-          eyebrow="FEATURED WORK & CASE STUDIES"
+          eyebrow="OUR WORK // SELECTED CASE STUDIES"
           title="PROVEN DIGITAL IMPACT"
-          description="A selection of high-performance web platforms, mobile applications, and intelligent digital products."
-          action={
-            <div className="flex gap-3">
-              <button
-                onClick={handleScrollLeft}
-                className="w-12 h-12 rounded-full border border-emerald-500/20 dark:border-white/10 flex items-center justify-center text-white hover:text-emerald-400 hover:border-emerald-400 bg-emerald-950/60 dark:bg-[#121118] backdrop-blur-xl transition-all duration-300 active:scale-95 cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.2)] dark:shadow-none hover:shadow-[0_6px_25px_rgba(52,211,153,0.3)]"
-                aria-label="Scroll Left"
-              >
-                <span className="material-symbols-outlined text-xl">arrow_back</span>
-              </button>
-              <button
-                onClick={handleScrollRight}
-                className="w-12 h-12 rounded-full border border-emerald-500/20 dark:border-white/10 flex items-center justify-center text-white hover:text-emerald-400 hover:border-emerald-400 bg-emerald-950/60 dark:bg-[#121118] backdrop-blur-xl transition-all duration-300 active:scale-95 cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.2)] dark:shadow-none hover:shadow-[0_6px_25px_rgba(52,211,153,0.3)]"
-                aria-label="Scroll Right"
-              >
-                <span className="material-symbols-outlined text-xl">arrow_forward</span>
-              </button>
-            </div>
-          }
+          description="A showcase of enterprise-grade platforms, intelligent mobile apps, and high-conversion software solutions built for our clients."
         />
       </div>
 
-      {/* Horizontal Scroll Snap Container */}
-      <div
-        ref={scrollRef}
-        onScroll={handleScroll}
-        className="w-full flex gap-4 sm:gap-8 overflow-x-auto snap-x snap-mandatory pb-8 scroll-smooth relative z-10 overscroll-x-contain"
-        style={{
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
-        }}
-      >
+      {/* Vertical Zig-Zag Projects Container */}
+      <div className="w-full max-w-[1720px] mx-auto flex flex-col gap-20 sm:gap-28 lg:gap-36 relative z-10">
         {isLoading ? (
-          <div className="w-full flex items-center justify-center min-h-[400px]">
-            <div className="flex flex-col items-center gap-4 text-white/50">
+          <div className="w-full flex items-center justify-center min-h-[300px]">
+            <div className="flex flex-col items-center gap-4 text-slate-400 dark:text-white/50">
               <span className="material-symbols-outlined text-4xl animate-spin">refresh</span>
-              <p className="font-mono text-sm tracking-widest">LOADING PROJECTS...</p>
-            </div>
-          </div>
-        ) : error ? (
-          <div className="w-full flex items-center justify-center min-h-[400px]">
-            <div className="border border-red-500/20 bg-red-500/5 rounded-3xl p-10 flex flex-col items-center gap-4 text-center max-w-md backdrop-blur-md">
-              <span className="material-symbols-outlined text-red-400 text-5xl">warning</span>
-              <h3 className="text-xl font-bold text-white">Oops! Connection Failed</h3>
-              <p className="text-sm text-white/50">{error}</p>
-            </div>
-          </div>
-        ) : projects.length === 0 ? (
-          <div className="w-full flex items-center justify-center min-h-[400px]">
-            <div className="border border-white/5 bg-white/[0.02] rounded-3xl p-10 flex flex-col items-center gap-4 text-center max-w-md backdrop-blur-md">
-              <span className="material-symbols-outlined text-white/20 text-5xl">folder_off</span>
-              <h3 className="text-xl font-bold text-white">No Projects Found</h3>
-              <p className="text-sm text-white/50">There are currently no case studies available to display. Please add some from the admin dashboard.</p>
+              <p className="font-mono text-sm tracking-widest">LOADING CASE STUDIES...</p>
             </div>
           </div>
         ) : (
           projects.map((project, idx) => (
             <div 
               key={project.id} 
-              ref={(el) => { cardsRef.current[idx] = el; }}
-              className="shrink-0"
+              ref={(el) => { rowsRef.current[idx] = el; }}
+              className="w-full"
             >
               <ProjectCard 
                 project={project} 
-                isActive={activeCardIdx === idx}
+                index={idx}
               />
             </div>
           ))

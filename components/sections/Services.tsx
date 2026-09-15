@@ -1,326 +1,163 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { MobileIconsRow } from '@/components/services/MobileIconsRow';
-import { ServiceTerminal } from '@/components/services/ServiceTerminal';
+import { useState } from 'react';
 import { SLIDES } from '@/components/services/data';
-import { RadialGlowButton } from '@/components/ui/radial-glow-button';
 import { SectionHeader } from '@/components/ui/SectionHeader';
-
-/* ─── Component ─── */
+import { DiscoveryModal } from '@/components/ui/DiscoveryModal';
 
 export function Services() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [expanded, setExpanded] = useState(false);
-  const [visibleLines, setVisibleLines] = useState(0);
-  const [visibleFacilities, setVisibleFacilities] = useState(0);
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  const active = SLIDES[activeIndex];
-  const marqueeText = `${active.title} • ${active.subtitle} • `;
-  const snippets = active.codeSnippets;
-  const themeColor = active.themeColor;
-
-  /* Reset expanded and typing on tab change */
-  useEffect(() => {
-    setExpanded(false);
-    setVisibleLines(0);
-    setVisibleFacilities(0);
-  }, [activeIndex]);
-
-  /* Typewriter: reveal code lines one by one */
-  useEffect(() => {
-    if (expanded) return;
-    if (visibleLines >= snippets.length) return;
-    const timer = setTimeout(() => {
-      setVisibleLines((prev) => prev + 1);
-    }, 120);
-    return () => clearTimeout(timer);
-  }, [visibleLines, expanded, snippets.length]);
-
-  /* Reveal facilities one by one */
-  useEffect(() => {
-    if (!expanded) { setVisibleFacilities(0); return; }
-    if (visibleFacilities >= active.facilities.length) return;
-    const timer = setTimeout(() => {
-      setVisibleFacilities((prev) => prev + 1);
-    }, 150);
-    return () => clearTimeout(timer);
-  }, [expanded, visibleFacilities, active.facilities.length]);
-
-  /* Animate content swap on tab change */
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo('.svc-hero-title', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' });
-      gsap.fromTo('.svc-hero-desc', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.45, delay: 0.08, ease: 'power3.out' });
-      gsap.fromTo('.svc-feat-card', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.4, stagger: 0.06, delay: 0.12, ease: 'power2.out' });
-      gsap.fromTo('.svc-code-line', { opacity: 0, x: -10 }, { opacity: 0.35, x: 0, duration: 0.35, stagger: 0.025, delay: 0.15, ease: 'power2.out' });
-      gsap.fromTo('.marquee-back-text', { opacity: 0 }, { opacity: 0.35, duration: 0.8, ease: 'power2.out' });
-      gsap.fromTo('.code-line-item', { opacity: 0, x: -15 }, { opacity: 0.25, x: 0, duration: 0.6, stagger: 0.03, ease: 'power2.out' });
-    }, sectionRef);
-    return () => ctx.revert();
-  }, [activeIndex]);
+  const [activeModalSlide, setActiveModalSlide] = useState<number | null>(null);
+  const [isDiscoveryOpen, setIsDiscoveryOpen] = useState(false);
 
   return (
     <section
-      ref={sectionRef}
       id="services"
-      className="relative w-full lg:min-h-screen flex items-center justify-center overflow-hidden z-10 bg-background dark:bg-[#080810] transition-colors duration-400"
+      className="relative w-full py-16 sm:py-20 md:py-32 px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20 z-10 bg-white dark:bg-[#070709] transition-colors duration-300"
     >
-      {/* ━━━ Background Motion Layer (Boosted Prominence) ━━━ */}
-      <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden">
-        {/* ━━━ MOBILE ONLY: 4-Line Alternating Kinetic Text Curtain (Optimized for 60fps) ━━━ */}
-        <div className="md:hidden absolute inset-0 flex flex-col justify-around py-8 overflow-hidden pointer-events-none opacity-30 dark:opacity-35 z-0">
-          {[
-            { dir: 'reverse', text: 'AI SYSTEMS • NEURAL ENGINE • COMPILATION • ', stroke: 'rgba(124, 58, 237, 0.35)' },
-            { dir: 'normal', text: 'BRAND ARCHITECTURE • CREATIVE DIRECTION • ', stroke: 'rgba(132, 43, 210, 0.35)' },
-            { dir: 'reverse', text: 'DIGITAL PRODUCTS • IMMERSIVE WEB • ', stroke: 'rgba(99, 102, 241, 0.35)' },
-            { dir: 'normal', text: 'STRATEGY • ARCHITECTURE • ENGINEERING • ', stroke: 'rgba(124, 58, 237, 0.3)' },
-          ].map((line, idx) => (
-            <div key={idx} className="w-full overflow-hidden whitespace-nowrap leading-none">
-              <div className={`${line.dir === 'reverse' ? 'animate-marquee-reverse' : 'animate-marquee'} inline-flex whitespace-nowrap`}>
-                {[0, 1].map((i) => (
-                  <span
-                    key={i}
-                    className="font-sans font-black text-[12vw] tracking-[0.15em] text-transparent uppercase px-2"
-                    style={{ WebkitTextStroke: `1.5px ${line.stroke}` }}
-                  >
-                    {line.text}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* ━━━ DESKTOP ONLY: Dual Text Marquees ━━━ */}
-        <div className="hidden md:block">
-          {/* Top Marquee (Left → Right) */}
-          <div className="absolute top-[18%] left-0 w-full overflow-hidden whitespace-nowrap z-0">
-            <div className="animate-marquee-reverse inline-flex whitespace-nowrap opacity-40 dark:opacity-60">
-              {[0, 1].map((i) => (
-                <span
-                  key={i}
-                  className="font-sans font-black text-[12vw] lg:text-[10vw] tracking-[0.2em] text-transparent uppercase marquee-back-text px-4"
-                  style={{ WebkitTextStroke: '2px rgba(124, 58, 237, 0.35)' }}
-                >
-                  {marqueeText}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Bottom Marquee (Right → Left) */}
-          <div className="absolute bottom-[18%] left-0 w-full overflow-hidden whitespace-nowrap z-0">
-            <div className="animate-marquee inline-flex whitespace-nowrap opacity-40 dark:opacity-60">
-              {[0, 1].map((i) => (
-                <span
-                  key={i}
-                  className="font-sans font-black text-[12vw] lg:text-[10vw] tracking-[0.2em] text-transparent uppercase marquee-back-text px-4"
-                  style={{ WebkitTextStroke: '2px rgba(132, 43, 210, 0.35)' }}
-                >
-                  {marqueeText}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Floating Code Stream */}
-        <div className="absolute top-[32%] left-[6%] max-w-[40vw] hidden md:flex flex-col gap-1 font-mono text-[9px] text-primary">
-          {snippets.map((line, i) => (
-            <div key={i} className="code-line-item opacity-25 whitespace-nowrap">{line}</div>
-          ))}
-        </div>
-
-        {/* Radial Glow */}
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[70vw] rounded-full blur-3xl opacity-[0.08] dark:opacity-[0.12] transition-all duration-1000"
-          style={{ backgroundImage: `radial-gradient(circle, ${themeColor} 0%, transparent 70%)` }}
-        />
-      </div>
-
-      {/* ━━━ Foreground Content ━━━ */}
-      <div className="relative z-10 w-full max-w-[1720px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20 py-12 md:py-20 lg:py-28">
-
-        {/* ── Section Header ── */}
+      <div className="relative z-10 w-full max-w-[1720px] mx-auto">
+        
+        {/* Section Header */}
         <SectionHeader
-          eyebrow="SERVICES & CAPABILITIES"
+          eyebrow="SOLUTIONS & CAPABILITIES"
           title="WHAT WE BUILD"
-          description="High-performance digital products engineered with modern architectures, smooth interactions, and AI intelligence."
-          action={
-            <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 rounded-2xl md:rounded-full border border-white/10 dark:border-white/10 bg-emerald-950/40 dark:bg-white/[0.02] backdrop-blur-xl w-full md:w-auto">
-              {SLIDES.map((slide, idx) => (
-                <button
-                  key={slide.title}
-                  onClick={() => setActiveIndex(idx)}
-                  className={`relative px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl md:rounded-full font-mono text-[9px] sm:text-[10px] uppercase tracking-wider font-bold transition-all duration-400 cursor-pointer ${
-                    idx === activeIndex
-                      ? 'text-white bg-white/15 dark:bg-white/10 border border-white/20 dark:border-white/15 shadow-md backdrop-blur-md'
-                      : 'text-emerald-200/60 dark:text-white/40 hover:text-white dark:hover:text-white/70 border border-transparent'
-                  }`}
-                >
-                  {slide.title}
-                  {idx === activeIndex && (
-                    <span className="absolute -bottom-px left-1/2 -translate-x-1/2 w-6 h-[2px] rounded-full" style={{ backgroundColor: slide.themeColor }} />
-                  )}
-                </button>
-              ))}
-            </div>
-          }
+          description="High-performance digital products engineered for growth, sub-second latency, and enterprise scalability."
         />
 
-        {/* ── Bento Grid ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        {/* 4-Pillar Modern Interactive Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8 mt-10 sm:mt-16">
+          {SLIDES.map((slide, idx) => {
+            const icons = ['phone_iphone', 'bolt', 'psychology', 'cloud_done'];
+            const badges = ['MOBILE APP SUITE', 'WEB PLATFORMS', 'AI & AUTOMATION', 'CLOUD & SECURITY'];
+            const metrics = ['Smooth & Fast', 'Sub-Second Load', '80% Time Saved', '99.99% Online'];
 
-          {/* ▎ Main Feature Card (Large, spans 7 cols) */}
-          <div className="lg:col-span-7 relative rounded-[20px] sm:rounded-[28px] border border-white/15 dark:border-white/10 bg-emerald-950/35 dark:bg-[#0a0a0c]/40 backdrop-blur-2xl overflow-hidden min-h-[280px] sm:min-h-[380px] flex flex-col justify-between p-5 sm:p-7 md:p-9 group shadow-[0_20px_50px_rgba(0,0,0,0.25)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.6)] transition-colors duration-400">
-            {/* Card bg image */}
-            <div className="absolute inset-0 z-0 opacity-15 dark:opacity-25 mix-blend-luminosity">
-              <img src={active.image} alt={active.title} className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0F2027] dark:from-[#0a0a0c] via-[#0F2027]/60 dark:via-[#0a0a0c]/60 to-transparent" />
-            </div>
-
-            {/* Top badge row */}
-            <div className="relative z-10 flex items-center gap-3">
-              <span className={`font-mono text-[9px] uppercase tracking-[0.15em] px-4 py-1.5 rounded-full border font-bold ${active.pillColor}`}>
-                {active.subtitle}
-              </span>
-              <span className="flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full opacity-75" style={{ backgroundColor: themeColor + '66' }} />
-                <span className="relative inline-flex rounded-full h-2 w-2" style={{ backgroundColor: themeColor }} />
-              </span>
-            </div>
-
-            {/* Title + Desc */}
-            <div className="relative z-10 mt-auto flex flex-col gap-3">
-              <h3 className="svc-hero-title font-sans font-extrabold text-2xl sm:text-4xl md:text-5xl lg:text-[3.2rem] text-white uppercase tracking-tighter leading-[0.95]">
-                {active.title}
-              </h3>
-              <p className="svc-hero-desc text-xs sm:text-sm md:text-base text-emerald-100/80 dark:text-white/60 leading-relaxed max-w-lg">
-                {active.desc}
-              </p>
-              <div className="flex items-center gap-6 mt-1">
-                <RadialGlowButton
-                  onClick={() => setExpanded(true)}
-                  size="sm"
-                  className="font-semibold text-xs tracking-wider !min-w-[140px] !min-h-[40px]"
-                >
-                  Explore Service
-                  <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
-                </RadialGlowButton>
-                <span className="font-mono text-[9px] text-emerald-300/50 dark:text-white/25 uppercase tracking-wider hidden md:inline">0{activeIndex + 1} / 0{SLIDES.length}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* ▎ Right Column: Code Console + Nav (spans 5 cols) */}
-          <div className="lg:col-span-5 flex flex-col gap-4">
-
-            {/* Code Terminal / Facilities Card */}
-            <div className="relative rounded-[24px] border border-white/15 dark:border-white/10 bg-emerald-950/35 dark:bg-[#08080a]/50 backdrop-blur-2xl p-5 sm:p-6 flex-1 overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.25)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.6)] transition-colors duration-400">
-              {/* Terminal Header */}
-              <div className="flex items-center gap-2 mb-4 pb-3 border-b border-white/10 dark:border-white/5">
-                <span className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
-                <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
-                <span className="w-2.5 h-2.5 rounded-full bg-green-500/60" />
-                <span className="ml-auto font-mono text-[8px] text-emerald-300/70 dark:text-white/30 uppercase tracking-wider">
-                  {expanded ? `${active.title.toLowerCase()} // deliverables` : `${active.title.toLowerCase()}.tsx`}
-                </span>
-              </div>
-
-              {/* Content: Code or Facilities */}
-              {!expanded ? (
-                <div className="flex flex-col gap-1.5 font-mono text-[11px] leading-relaxed">
-                  {snippets.slice(0, visibleLines).map((line, i) => (
-                    <div key={i} className="svc-code-line flex gap-3" style={{ animation: 'fadeSlideIn 0.3s ease-out' }}>
-                      <span className="text-emerald-300/40 dark:text-white/15 select-none w-5 text-right shrink-0">{i + 1}</span>
-                      <span className="text-emerald-100/80 dark:text-white/50 whitespace-pre">{line}</span>
-                    </div>
-                  ))}
-                  {visibleLines < snippets.length && (
-                    <div className="flex gap-3">
-                      <span className="text-emerald-300/40 dark:text-white/15 select-none w-5 text-right shrink-0">{visibleLines + 1}</span>
-                      <span className="inline-block w-[7px] h-[14px] bg-primary/70 animate-pulse" />
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="flex flex-col gap-2.5">
-                  <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-emerald-300/60 dark:text-white/25 font-bold mb-1">
-                    {active.title} // WHAT YOU GET
-                  </span>
-                  {active.facilities.slice(0, visibleFacilities).map((item, i) => (
-                    <div
-                      key={i}
-                      className="flex items-start gap-3 p-3 rounded-xl border border-white/10 dark:border-white/5 bg-white/[0.04] dark:bg-white/[0.015] hover:bg-white/[0.08] dark:hover:bg-white/[0.04] hover:border-white/20 dark:hover:border-white/10 backdrop-blur-md transition-all duration-300 group/fac"
-                      style={{ animation: 'fadeSlideIn 0.35s ease-out' }}
-                    >
-                      <span
-                        className="shrink-0 w-6 h-6 rounded-lg flex items-center justify-center font-mono text-[9px] font-bold border"
-                        style={{
-                          color: themeColor,
-                          borderColor: themeColor + '25',
-                          backgroundColor: themeColor + '08',
-                        }}
-                      >
-                        {String(i + 1).padStart(2, '0')}
-                      </span>
-                      <span className="text-[12px] text-emerald-100/90 dark:text-white/55 leading-relaxed pt-0.5 group-hover/fac:text-white dark:group-hover/fac:text-white/80 transition-colors duration-300">
-                        {item}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Slide Navigation Arrows */}
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setActiveIndex((p) => (p - 1 + SLIDES.length) % SLIDES.length)}
-                className="flex-1 h-14 rounded-2xl border border-white/15 dark:border-white/8 bg-emerald-950/40 dark:bg-white/[0.02] hover:bg-emerald-900/50 dark:hover:bg-white/[0.06] hover:border-emerald-400/40 dark:hover:border-white/15 flex items-center justify-center text-white/70 dark:text-white/40 hover:text-white dark:hover:text-white backdrop-blur-xl transition-all duration-300 cursor-pointer"
-                aria-label="Previous Service"
+            return (
+              <div
+                key={slide.title}
+                className="group relative rounded-3xl border border-slate-200/90 dark:border-slate-800/80 bg-slate-50/70 dark:bg-[#111116]/90 hover:bg-white dark:hover:bg-[#14141a] p-5 sm:p-8 flex flex-col justify-between shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 cursor-pointer overflow-hidden"
+                onClick={() => setActiveModalSlide(idx)}
               >
-                <span className="material-symbols-outlined text-xl">arrow_back</span>
-              </button>
-              <button
-                onClick={() => setActiveIndex((p) => (p + 1) % SLIDES.length)}
-                className="flex-1 h-14 rounded-2xl border border-white/15 dark:border-white/8 bg-emerald-950/40 dark:bg-white/[0.02] hover:bg-emerald-900/50 dark:hover:bg-white/[0.06] hover:border-emerald-400/40 dark:hover:border-white/15 flex items-center justify-center text-white/70 dark:text-white/40 hover:text-white dark:hover:text-white backdrop-blur-xl transition-all duration-300 cursor-pointer"
-                aria-label="Next Service"
-              >
-                <span className="material-symbols-outlined text-xl">arrow_forward</span>
-              </button>
-            </div>
-          </div>
+                {/* Subtle Ambient Hover Glow */}
+                <div className="absolute top-0 right-0 w-40 h-40 bg-blue-500/5 dark:bg-blue-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500 pointer-events-none" />
 
-          {/* ▎ Bottom Row: Feature Spec Cards */}
-          <div className="col-span-1 lg:col-span-12 mt-2">
-            {/* MOBILE ONLY: Single Row of 4 Pure Icons */}
-            <MobileIconsRow features={active.features} themeColor={themeColor} />
-
-            {/* DESKTOP ONLY: 4 Spec Cards Grid */}
-            <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-5">
-              {active.features.map((feat) => (
-                <div
-                  key={feat.title}
-                  className="rounded-[20px] border border-white/12 dark:border-white/6 bg-emerald-950/35 dark:bg-[#08080a]/50 backdrop-blur-2xl p-5 flex flex-col gap-3 hover:bg-emerald-900/40 dark:hover:bg-white/[0.03] hover:border-emerald-400/40 dark:hover:border-white/12 transition-all duration-300 relative overflow-hidden group shadow-sm dark:shadow-none"
-                >
-                  <div className="absolute top-0 left-0 w-full h-[1px]" style={{ background: `linear-gradient(90deg, transparent, ${themeColor}30, transparent)` }} />
-                  <div className="flex items-center justify-between">
-                    <span className="material-symbols-outlined text-lg" style={{ color: themeColor }}>{feat.icon}</span>
-                    <span className="font-mono text-[7px] uppercase tracking-widest text-emerald-300/50 dark:text-white/20 font-bold">{feat.spec}</span>
+                <div>
+                  {/* Top Bar: Icon + Metric Tag */}
+                  <div className="flex items-center justify-between gap-3 mb-5 sm:mb-6">
+                    <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-blue-600 dark:text-blue-400 shadow-xs group-hover:scale-110 transition-transform">
+                      <span className="material-symbols-outlined text-xl sm:text-2xl">{icons[idx]}</span>
+                    </div>
+                    <span className="font-mono text-[9px] sm:text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 sm:px-3 sm:py-1 rounded-full bg-blue-50 dark:bg-blue-950/80 border border-blue-200 dark:border-blue-900 text-blue-700 dark:text-blue-300">
+                      {metrics[idx]}
+                    </span>
                   </div>
-                  <span className="font-sans font-bold text-[13px] text-white tracking-tight leading-tight">{feat.title}</span>
-                  <span className="font-mono text-[10px] text-emerald-100/70 dark:text-white/40 leading-snug">{feat.desc}</span>
+
+                  {/* Title & Tech Tag */}
+                  <span className="font-mono text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 block mb-1">
+                    {badges[idx]}
+                  </span>
+                  <h3 className="font-sans font-extrabold text-xl sm:text-3xl text-slate-900 dark:text-white uppercase tracking-tight leading-tight">
+                    {slide.title}
+                  </h3>
+
+                  {/* Description */}
+                  <p className="mt-2.5 sm:mt-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                    {slide.desc}
+                  </p>
+
+                  {/* Deliverable Highlights */}
+                  <div className="mt-5 sm:mt-6 flex flex-col gap-2 pt-4 border-t border-slate-200/80 dark:border-slate-800">
+                    {slide.features.slice(0, 3).map((feat) => (
+                      <div key={feat.title} className="flex items-center gap-2 font-mono text-[10px] sm:text-[11px] text-slate-700 dark:text-slate-300">
+                        <span className="text-blue-600 dark:text-blue-400 font-bold text-xs">✓</span>
+                        <span>{feat.title}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
+
+                {/* Bottom Action Footer */}
+                <div className="mt-6 sm:mt-8 pt-4 flex items-center justify-between border-t border-slate-200/60 dark:border-slate-800/60">
+                  <span className="font-mono text-[11px] sm:text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                    View Deliverables →
+                  </span>
+                  <span className="font-mono text-[10px] font-bold text-slate-400">
+                    0{idx + 1}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
         </div>
 
       </div>
+
+      {/* Deliverable Details Modal */}
+      {activeModalSlide !== null && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-3.5 sm:p-4 bg-slate-950/85 backdrop-blur-md animate-[fadeIn_0.2s_ease-out]"
+          onClick={() => setActiveModalSlide(null)}
+        >
+          <div
+            className="bg-white dark:bg-[#111116] border border-slate-200 dark:border-slate-800 rounded-3xl max-w-2xl w-full p-5 sm:p-8 relative shadow-2xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-start justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
+              <div>
+                <span className="font-mono text-[10px] sm:text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 font-bold block mb-1">
+                  DELIVERABLE SPECIFICATION
+                </span>
+                <h3 className="font-sans font-extrabold text-xl sm:text-3xl text-slate-900 dark:text-white uppercase tracking-tight">
+                  {SLIDES[activeModalSlide].title}
+                </h3>
+              </div>
+              <button
+                onClick={() => setActiveModalSlide(null)}
+                className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center justify-center cursor-pointer transition-all"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="py-5 sm:py-6 flex flex-col gap-2.5 sm:gap-3 max-h-[60vh] overflow-y-auto">
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-1">
+                {SLIDES[activeModalSlide].desc}
+              </p>
+              
+              <span className="font-mono text-[11px] sm:text-xs uppercase tracking-wider font-bold text-slate-900 dark:text-white pt-2">
+                Included Deliverables:
+              </span>
+              {SLIDES[activeModalSlide].facilities.map((fac, i) => (
+                <div key={i} className="flex items-start gap-2.5 sm:gap-3 p-2.5 sm:p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-800 text-xs text-slate-800 dark:text-slate-200">
+                  <span className="text-blue-600 dark:text-blue-400 font-bold">✓</span>
+                  <span>{fac}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
+              <span className="font-mono text-[10px] sm:text-xs text-slate-500">
+                100% IP Ownership & Warranty Included
+              </span>
+              <button
+                onClick={() => {
+                  setActiveModalSlide(null);
+                  setIsDiscoveryOpen(true);
+                }}
+                className="w-full sm:w-auto px-6 py-3 font-sans font-semibold text-xs tracking-wider uppercase bg-[#0f172a] hover:bg-black dark:bg-blue-600 dark:hover:bg-blue-500 text-white rounded-xl cursor-pointer transition-all"
+              >
+                Discuss This Solution →
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+      <DiscoveryModal isOpen={isDiscoveryOpen} onClose={() => setIsDiscoveryOpen(false)} />
     </section>
   );
 }
+
+export default Services;

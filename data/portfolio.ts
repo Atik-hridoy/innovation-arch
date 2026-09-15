@@ -3,6 +3,9 @@ export interface Project {
   title: string;
   subtitle: string;
   description: string;
+  problem: string;
+  solution: string;
+  impact: string;
   tags: string[];
   mockups: string[];
   metrics: { value: string; label: string };
@@ -11,59 +14,47 @@ export interface Project {
 export const PROJECTS: Project[] = [
   {
     id: '01',
-    title: 'Mettro Bazar',
-    subtitle: 'READY-TO-COOK E-COMMERCE PLATFORM',
-    description: 'A premium e-commerce solution for the ready-to-cook food market emphasizing freshness, hygiene, and local culinary traditions.',
-    tags: ['E-Commerce', 'Tailwind CSS', 'OTP Auth'],
+    title: 'BoiKhoj',
+    subtitle: 'LOCATION-BASED P2P BOOK MARKETPLACE',
+    description: 'A location-based peer-to-peer marketplace built to connect book buyers and sellers locally.',
+    problem: 'Book lovers lacked a secure, hyper-local platform to discover, buy, and sell used books in near proximity without high platform fees.',
+    solution: 'Built with Flutter & Django to handle real-time location-based search, instant messaging, and secure data syncing seamlessly.',
+    impact: 'Achieved sub-800ms page load speeds and enabled over 5,000+ localized book listings within the first month.',
+    tags: ['Flutter', 'Django', 'PostgreSQL', 'P2P Marketplace'],
     mockups: [
-      '/mettro_bazar/home.png',
-      '/mettro_bazar/product_details.png',
-      '/mettro_bazar/checkout.png',
-      '/mettro_bazar/order.png',
-      '/mettro_bazar/dashboard.png'
+      '/images/boikhoj_mockup.jpg',
+      '/images/boikhoj_mockup.jpg'
     ],
-    metrics: { value: '16+', label: 'High-Fidelity Screens' },
+    metrics: { value: '<0.8s', label: 'Page Load Speed' },
   },
   {
     id: '02',
-    title: 'Wanderly',
-    subtitle: 'LUXURY TRAVEL DISCOVERY',
-    description: 'A complete travel discovery ecosystem with high-performance booking engines, real-time trip scheduling, and localized recommendations.',
-    tags: ['Flutter', 'Firebase', 'Maps API', 'Payment Gateways'],
+    title: 'Voyanta',
+    subtitle: 'AI-POWERED TRAVEL OPERATING SYSTEM',
+    description: 'An intelligent travel OS combining smart itinerary generation with real-time booking recommendations.',
+    problem: 'Travelers suffered from fragmented booking channels and high latency during trip planning.',
+    solution: 'Integrated smart AI itinerary generation with a fluid, crash-free Flutter mobile interface and offline itinerary caching.',
+    impact: 'Sub-100ms API response time and zero mobile crashes across 100K+ monthly trip searches.',
+    tags: ['Flutter', 'AI Integration', 'Firebase', 'Maps API'],
     mockups: [
-      '/images/wanderly_left.webp',
-      '/images/wanderly_center.webp',
-      '/images/wanderly_left.webp',
-      '/images/wanderly_center.webp'
+      '/images/voyanta_mockup.jpg',
+      '/images/voyanta_mockup.jpg'
     ],
-    metrics: { value: '150K+', label: 'Monthly Active Users' },
-  },
-  {
-    id: '04',
-    title: 'Apex Analytics',
-    subtitle: 'REAL-TIME DATA DECISION ENGINE',
-    description: 'A high-fidelity financial dashboard and modeling framework capable of rendering volumetric risk analysis with ultra-low latency.',
-    tags: ['Next.js', 'WebGL', 'Tailwind CSS', 'WebSockets'],
-    mockups: [
-      '/images/wanderly_center.webp',
-      '/images/wanderly_left.webp',
-      '/images/wanderly_center.webp',
-      '/images/wanderly_left.webp'
-    ],
-    metrics: { value: '99.9%', label: 'Prediction Accuracy' },
+    metrics: { value: '100K+', label: 'Monthly Trip Searches' },
   },
   {
     id: '03',
-    title: 'Zenith AI',
-    subtitle: 'COGNITIVE NEURAL OPERATION HUB',
-    description: 'Custom cognitive agent orchestrator executing complex enterprise operations, scaling efficiency, and automating workflows.',
-    tags: ['Python', 'LLM Agents', 'FastAPI', 'Kubernetes'],
+    title: 'Mettro Bazar',
+    subtitle: 'READY-TO-COOK E-COMMERCE PLATFORM',
+    description: 'A fresh food e-commerce platform emphasizing quality, local culinary traditions, and fast delivery.',
+    problem: 'Slow checkout friction and cart abandonments for fresh perishable food orders.',
+    solution: 'Built with Next.js & OTP authentication for a frictionless 2-step checkout system and instant cart caching.',
+    impact: '+45% increase in checkout conversion rates across 16+ custom high-fidelity screens delivered on schedule.',
+    tags: ['Next.js', 'Tailwind CSS', 'OTP Auth', 'PostgreSQL'],
     mockups: [
-      '/images/wanderly_left.webp',
-      '/images/wanderly_center.webp',
-      '/images/wanderly_left.webp',
-      '/images/wanderly_center.webp'
+      '/images/mettro_bazar_mockup.jpg',
+      '/images/mettro_bazar_mockup.jpg'
     ],
-    metrics: { value: '4.8x', label: 'Efficiency Increase' },
+    metrics: { value: '+45%', label: 'Checkout Conversion' },
   },
 ];

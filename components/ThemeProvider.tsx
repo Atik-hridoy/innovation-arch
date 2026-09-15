@@ -13,26 +13,8 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>('dark');
+  const [theme, setThemeState] = useState<Theme>('light');
   const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    
-    const updateThemeFromSystem = (e?: MediaQueryListEvent | MediaQueryList) => {
-      const prefersDark = e ? e.matches : mediaQuery.matches;
-      const activeTheme: Theme = prefersDark ? 'dark' : 'light';
-      setThemeState(activeTheme);
-      applyThemeClass(activeTheme);
-    };
-
-    updateThemeFromSystem(mediaQuery);
-
-    mediaQuery.addEventListener('change', updateThemeFromSystem);
-    return () => mediaQuery.removeEventListener('change', updateThemeFromSystem);
-  }, []);
 
   const applyThemeClass = (newTheme: Theme) => {
     const root = document.documentElement;
@@ -44,6 +26,25 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       root.classList.add('light');
     }
   };
+
+  useEffect(() => {
+    setMounted(true);
+    const savedTheme = localStorage.getItem('theme') as Theme | null;
+    const isDocDark = document.documentElement.classList.contains('dark');
+    
+    let activeTheme: Theme = 'light';
+    if (savedTheme === 'dark' || savedTheme === 'light') {
+      activeTheme = savedTheme;
+    } else if (isDocDark) {
+      activeTheme = 'dark';
+    } else {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      activeTheme = prefersDark ? 'dark' : 'light';
+    }
+
+    setThemeState(activeTheme);
+    applyThemeClass(activeTheme);
+  }, []);
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);

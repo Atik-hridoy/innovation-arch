@@ -129,14 +129,14 @@ export function SpotlightNavbar({
             <nav
                 ref={navRef}
                 className={cn(
-                    "relative h-12 rounded-full transition-all duration-300 overflow-hidden px-1.5 flex items-center",
-                    "border border-emerald-500/25 dark:border-white/12 bg-emerald-950/80 dark:bg-[#070709]/80 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.35),inset_0_1px_1px_rgba(255,255,255,0.15)]"
+                    "relative h-11 rounded-full transition-all duration-300 overflow-hidden px-1.5 flex items-center",
+                    "border border-slate-200/90 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl shadow-xs"
                 )}
             >
                 {/* 🌟 Animated Sliding Active Pill Background 🌟 */}
                 <div
                     ref={activePillRef}
-                    className="absolute top-1 bottom-1 left-0 rounded-full bg-gradient-to-r from-emerald-500/25 via-teal-500/20 to-emerald-500/25 dark:from-emerald-500/30 dark:via-teal-500/25 dark:to-emerald-500/30 border border-emerald-400/50 dark:border-emerald-400/50 shadow-[0_0_20px_rgba(52,211,153,0.35)] dark:shadow-[0_0_20px_rgba(52,211,153,0.35)] pointer-events-none z-[5] will-change-transform"
+                    className="absolute top-1 bottom-1 left-0 rounded-full bg-slate-900 dark:bg-blue-600 shadow-xs pointer-events-none z-[5] will-change-transform"
                 />
 
                 {/* Nav Items List */}
@@ -157,15 +157,15 @@ export function SpotlightNavbar({
                                         }
                                     }}
                                     className={cn(
-                                        "relative px-4 py-2 text-[11px] sm:text-[12.5px] font-mono uppercase tracking-[0.14em] transition-all duration-300 rounded-full select-none cursor-pointer flex items-center gap-1.5",
-                                        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400",
+                                        "relative px-4 py-1.5 text-[11px] sm:text-[12px] font-sans font-bold uppercase tracking-wider transition-all duration-200 rounded-full select-none cursor-pointer flex items-center gap-1.5",
+                                        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600",
                                         isActive
-                                            ? "text-white font-black drop-shadow-[0_0_10px_rgba(52,211,153,0.8)] dark:drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]"
-                                            : "text-emerald-100/65 dark:text-white/55 hover:text-white dark:hover:text-white font-semibold"
+                                            ? "text-white font-extrabold"
+                                            : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-semibold"
                                     )}
                                 >
                                     {isActive && (
-                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 dark:bg-primary animate-pulse shrink-0" />
+                                        <span className="w-1.5 h-1.5 rounded-full bg-blue-400 dark:bg-white animate-pulse shrink-0" />
                                     )}
                                     <span>{item.label}</span>
                                 </a>

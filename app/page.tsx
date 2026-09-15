@@ -7,10 +7,13 @@ import Lenis from 'lenis';
 import { Header } from '@/components/Header';
 import { GlobalOverlays } from '@/components/GlobalOverlays';
 import { SectionStage } from '@/components/SectionStage';
-import { AboutUsScrollytelling } from '@/components/sections/AboutUsScrollytelling';
+import { Hero } from '@/components/sections/Hero';
+import { StatsSection } from '@/components/sections/StatsSection';
 import { Services } from '@/components/sections/Services';
 import { Process } from '@/components/sections/Process';
 import { Portfolio } from '@/components/sections/Portfolio';
+import { FounderProfile } from '@/components/sections/FounderProfile';
+import { Testimonials } from '@/components/sections/Testimonials';
 import { TechStack } from '@/components/sections/TechStack';
 import { CTA } from '@/components/sections/CTA';
 import { CookieConsent } from '@/components/ui/CookieConsent';
@@ -22,9 +25,8 @@ export default function Home() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
-    // 1. Initialize Lenis Smooth Scrolling hooked to GSAP Ticker
     const lenis = new Lenis({
-      duration: 1.25,
+      duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       smoothWheel: true,
@@ -41,7 +43,6 @@ export default function Home() {
     gsap.ticker.add(updateLenis);
     gsap.ticker.lagSmoothing(0);
 
-    // 2. Hardware-accelerated Smooth Cursor Follower (Desktop only)
     let cursorRafId: number | null = null;
     const isFinePointer = window.matchMedia('(pointer: fine)').matches;
 
@@ -76,234 +77,7 @@ export default function Home() {
       cursorRafId = requestAnimationFrame(updateCursor);
     }
 
-    // 3. Smooth Section Entrance Reveals & Scroll Choreography
-    const ctx = gsap.context(() => {
-      const isDesktop = window.innerWidth >= 768;
-
-      // B. Services (#services) - Dual Split & Converge Assembly
-      const svcSection = containerRef.current?.querySelector('#services');
-      if (svcSection) {
-        const leftCard = svcSection.querySelector('.lg\\:col-span-7');
-        const rightCard = svcSection.querySelector('.lg\\:col-span-5');
-        const bottomRow = svcSection.querySelector('.col-span-1.lg\\:col-span-12');
-
-        if (leftCard && isDesktop) {
-          gsap.fromTo(
-            leftCard,
-            { x: -110, opacity: 0.3, rotateY: 6 },
-            {
-              x: 0,
-              opacity: 1,
-              rotateY: 0,
-              duration: 1.1,
-              ease: 'power3.out',
-              scrollTrigger: {
-                trigger: svcSection,
-                start: 'top 75%',
-                toggleActions: 'play none none reverse',
-              },
-            }
-          );
-        }
-
-        if (rightCard && isDesktop) {
-          gsap.fromTo(
-            rightCard,
-            { x: 110, opacity: 0.3, rotateY: -6 },
-            {
-              x: 0,
-              opacity: 1,
-              rotateY: 0,
-              duration: 1.1,
-              ease: 'power3.out',
-              scrollTrigger: {
-                trigger: svcSection,
-                start: 'top 75%',
-                toggleActions: 'play none none reverse',
-              },
-            }
-          );
-        }
-
-        if (bottomRow) {
-          gsap.fromTo(
-            bottomRow,
-            { y: 50, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 1,
-              delay: 0.15,
-              ease: 'power3.out',
-              scrollTrigger: {
-                trigger: svcSection,
-                start: 'top 70%',
-                toggleActions: 'play none none reverse',
-              },
-            }
-          );
-        }
-      }
-
-      // C. Process (#process) - Headline Left-to-Right Surge
-      const processSection = containerRef.current?.querySelector('#process');
-      if (processSection) {
-        const processHeader = processSection.querySelector('h2');
-        if (processHeader) {
-          gsap.fromTo(
-            processHeader,
-            { x: -80, opacity: 0 },
-            {
-              x: 0,
-              opacity: 1,
-              duration: 1,
-              ease: 'power3.out',
-              scrollTrigger: {
-                trigger: processSection,
-                start: 'top 80%',
-                toggleActions: 'play none none reverse',
-              },
-            }
-          );
-        }
-      }
-
-      // D. Work (#work) - Right-to-Left Magnetic Card Glide
-      const workSection = containerRef.current?.querySelector('#work');
-      if (workSection) {
-        const workCards = workSection.querySelectorAll('.snap-center');
-        const workHeader = workSection.querySelector('h2');
-
-        if (workHeader) {
-          gsap.fromTo(
-            workHeader,
-            { x: -80, opacity: 0 },
-            {
-              x: 0,
-              opacity: 1,
-              duration: 1,
-              ease: 'power3.out',
-              scrollTrigger: {
-                trigger: workSection,
-                start: 'top 80%',
-                toggleActions: 'play none none reverse',
-              },
-            }
-          );
-        }
-
-        if (workCards && workCards.length > 0 && isDesktop) {
-          gsap.fromTo(
-            workCards,
-            { x: 140, opacity: 0.4, rotateZ: 2 },
-            {
-              x: 0,
-              opacity: 1,
-              rotateZ: 0,
-              stagger: 0.12,
-              duration: 1.2,
-              ease: 'power3.out',
-              scrollTrigger: {
-                trigger: workSection,
-                start: 'top 75%',
-                toggleActions: 'play none none reverse',
-              },
-            }
-          );
-        }
-      }
-
-      // E. Tech Stack (#tech) - Left Content / Right 3D Cylinder Assembly
-      const techSection = containerRef.current?.querySelector('#tech');
-      if (techSection) {
-        const leftText = techSection.querySelector('.flex-1.space-y-6');
-        const rightCylinder = techSection.querySelector('.perspective-\\[1200px\\]');
-
-        if (leftText && isDesktop) {
-          gsap.fromTo(
-            leftText,
-            { x: -120, opacity: 0 },
-            {
-              x: 0,
-              opacity: 1,
-              duration: 1.1,
-              ease: 'power3.out',
-              scrollTrigger: {
-                trigger: techSection,
-                start: 'top 75%',
-                toggleActions: 'play none none reverse',
-              },
-            }
-          );
-        }
-
-        if (rightCylinder && isDesktop) {
-          gsap.fromTo(
-            rightCylinder,
-            { x: 120, scale: 0.8, opacity: 0 },
-            {
-              x: 0,
-              scale: 1,
-              opacity: 1,
-              duration: 1.2,
-              ease: 'power3.out',
-              scrollTrigger: {
-                trigger: techSection,
-                start: 'top 75%',
-                toggleActions: 'play none none reverse',
-              },
-            }
-          );
-        }
-      }
-
-      // F. Contact (#contact) - Dual Split & Converge
-      const contactSection = containerRef.current?.querySelector('#contact');
-      if (contactSection) {
-        const leftFaq = contactSection.querySelector('.lg\\:col-span-5');
-        const rightForm = contactSection.querySelector('.lg\\:col-span-7');
-
-        if (leftFaq && isDesktop) {
-          gsap.fromTo(
-            leftFaq,
-            { x: -100, opacity: 0 },
-            {
-              x: 0,
-              opacity: 1,
-              duration: 1.1,
-              ease: 'power3.out',
-              scrollTrigger: {
-                trigger: contactSection,
-                start: 'top 75%',
-                toggleActions: 'play none none reverse',
-              },
-            }
-          );
-        }
-
-        if (rightForm && isDesktop) {
-          gsap.fromTo(
-            rightForm,
-            { x: 100, opacity: 0, rotateY: -8 },
-            {
-              x: 0,
-              opacity: 1,
-              rotateY: 0,
-              duration: 1.2,
-              ease: 'power3.out',
-              scrollTrigger: {
-                trigger: contactSection,
-                start: 'top 75%',
-                toggleActions: 'play none none reverse',
-              },
-            }
-          );
-        }
-      }
-    }, containerRef);
-
     return () => {
-      ctx.revert();
       gsap.ticker.remove(updateLenis);
       lenis.destroy();
       if (isFinePointer) {
@@ -318,35 +92,43 @@ export default function Home() {
   return (
     <div
       ref={containerRef}
-      className="min-h-screen flex flex-col relative overflow-x-hidden selection:bg-primary selection:text-white font-body-md text-body-md text-foreground bg-background antialiased transition-colors duration-400"
+      className="min-h-screen flex flex-col relative overflow-x-hidden selection:bg-[#0f172a] selection:text-white font-body-md text-body-md text-slate-900 dark:text-slate-100 bg-white dark:bg-[#0b0f19] antialiased transition-colors duration-300"
     >
       <div ref={cursorRef} className="cursor-follower hidden md:block" id="cursor" />
       <GlobalOverlays />
       <CookieConsent />
       <Header />
 
-      <main className="relative w-full z-10 bg-transparent transition-colors duration-400">
-        <SectionStage className="w-full bg-transparent dark:bg-[#080103]">
-          <AboutUsScrollytelling />
-        </SectionStage>
+      <main className="relative w-full z-10 bg-transparent transition-colors duration-300">
+        <Hero />
 
-        <SectionStage className="w-full bg-transparent dark:bg-[#080103]">
+        <StatsSection />
+
+        <SectionStage className="w-full bg-transparent">
           <Services />
         </SectionStage>
 
-        <SectionStage className="w-full bg-transparent dark:bg-[#080103]">
+        <SectionStage className="w-full bg-transparent">
           <Process />
         </SectionStage>
 
-        <SectionStage className="w-full bg-transparent dark:bg-[#080103]">
+        <SectionStage className="w-full bg-transparent">
           <Portfolio />
         </SectionStage>
 
-        <SectionStage className="w-full bg-transparent dark:bg-[#080103]">
+        <SectionStage className="w-full bg-transparent">
+          <FounderProfile />
+        </SectionStage>
+
+        <SectionStage className="w-full bg-transparent">
+          <Testimonials />
+        </SectionStage>
+
+        <SectionStage className="w-full bg-transparent">
           <TechStack />
         </SectionStage>
 
-        <SectionStage className="w-full bg-transparent dark:bg-[#080103]">
+        <SectionStage className="w-full bg-transparent">
           <CTA />
         </SectionStage>
       </main>

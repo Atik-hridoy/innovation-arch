@@ -5,73 +5,53 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 
-// Custom Animated SVGs for each process step to replace generic material symbols
 function DiscoverIcon() {
   return (
-    <svg className="w-6 h-6 text-primary group-hover:scale-110 transition-transform duration-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      {/* Radar rings */}
-      <circle cx="12" cy="12" r="9" className="stroke-primary/20" />
-      <circle cx="12" cy="12" r="5" className="stroke-primary/40" />
-      <circle cx="12" cy="12" r="2" className="fill-primary stroke-none" />
-      {/* Radar sweep line */}
-      <line x1="12" y1="12" x2="18" y2="6" className="stroke-primary origin-center animate-[spin_4s_linear_infinite]" />
+    <svg className="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <circle cx="12" cy="12" r="9" className="stroke-blue-200" />
+      <circle cx="12" cy="12" r="5" className="stroke-blue-400" />
+      <circle cx="12" cy="12" r="2" className="fill-blue-600 stroke-none" />
+      <line x1="12" y1="12" x2="18" y2="6" className="stroke-blue-600 origin-center animate-[spin_4s_linear_infinite]" />
     </svg>
   );
 }
 
 function DesignIcon() {
   return (
-    <svg className="w-6 h-6 text-primary group-hover:scale-110 transition-transform duration-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      {/* Bezier handle lines */}
-      <path d="M 4 20 L 12 4 L 20 20" className="stroke-white/10" strokeDasharray="2 2" />
-      {/* Vector curve */}
-      <path d="M 4 20 Q 12 4 20 20" className="stroke-primary" strokeWidth="2" />
-      {/* Anchor nodes */}
-      <rect x="2" y="18" width="4" height="4" className="fill-background stroke-primary" strokeWidth="1.5" />
-      <rect x="18" y="18" width="4" height="4" className="fill-background stroke-primary" strokeWidth="1.5" />
-      <circle cx="12" cy="4" r="3" className="fill-primary stroke-none" />
+    <svg className="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <path d="M 4 20 Q 12 4 20 20" className="stroke-blue-600" strokeWidth="2" />
+      <rect x="2" y="18" width="4" height="4" className="fill-white stroke-blue-600" strokeWidth="1.5" />
+      <rect x="18" y="18" width="4" height="4" className="fill-white stroke-blue-600" strokeWidth="1.5" />
+      <circle cx="12" cy="4" r="3" className="fill-blue-600 stroke-none" />
     </svg>
   );
 }
 
 function DevelopIcon() {
   return (
-    <svg className="w-6 h-6 text-primary group-hover:scale-110 transition-transform duration-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      {/* Code bracket structures */}
-      <path d="M 8 6 L 3 12 L 8 18" className="stroke-primary" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M 16 6 L 21 12 L 16 18" className="stroke-primary" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <line x1="14" y1="4" x2="10" y2="20" className="stroke-primary/60" strokeWidth="1.5" />
+    <svg className="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <path d="M 8 6 L 3 12 L 8 18" className="stroke-blue-600" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M 16 6 L 21 12 L 16 18" className="stroke-blue-600" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <line x1="14" y1="4" x2="10" y2="20" className="stroke-blue-400" strokeWidth="1.5" />
     </svg>
   );
 }
 
 function LaunchIcon() {
   return (
-    <svg className="w-6 h-6 text-primary group-hover:scale-110 transition-transform duration-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      {/* Rocket body */}
-      <path d="M12 2S8 7 8 12v3l4 3 4-3v-3c0-5-4-10-4-10z" className="stroke-primary" strokeWidth="2" fill="currentColor" fillOpacity="0.05" />
-      {/* Fins */}
-      <path d="M8 15l-4 2v-3l4-1" className="stroke-primary" />
-      <path d="M16 15l4 2v-3l-4-1" className="stroke-primary" />
-      {/* Fire thrust */}
-      <path d="M12 18v4" className="stroke-[#5eead4] animate-bounce" strokeWidth="2" />
-      <path d="M10 19v2" className="stroke-[#34d399] animate-pulse" />
-      <path d="M14 19v2" className="stroke-[#34d399] animate-pulse" />
+    <svg className="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <path d="M12 2S8 7 8 12v3l4 3 4-3v-3c0-5-4-10-4-10z" className="stroke-blue-600" strokeWidth="2" fill="currentColor" fillOpacity="0.08" />
+      <path d="M8 15l-4 2v-3l4-1" className="stroke-blue-600" />
+      <path d="M16 15l4 2v-3l-4-1" className="stroke-blue-600" />
     </svg>
   );
 }
 
 function GrowIcon() {
   return (
-    <svg className="w-6 h-6 text-primary group-hover:scale-110 transition-transform duration-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      {/* Upward trend grid lines */}
-      <path d="M 3 21 L 21 21" className="stroke-white/10" />
-      <path d="M 3 21 L 3 3" className="stroke-white/10" />
-      {/* Glowing upward curving trend */}
-      <path d="M 3 18 Q 10 16 14 10 T 21 3" className="stroke-primary" strokeWidth="2" strokeLinecap="round" />
-      {/* Pulsing end node */}
-      <circle cx="21" cy="3" r="3" className="fill-primary animate-ping" />
-      <circle cx="21" cy="3" r="2" className="fill-primary stroke-none" />
+    <svg className="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <path d="M 3 18 Q 10 16 14 10 T 21 3" className="stroke-blue-600" strokeWidth="2" strokeLinecap="round" />
+      <circle cx="21" cy="3" r="2" className="fill-blue-600 stroke-none" />
     </svg>
   );
 }
@@ -161,27 +141,6 @@ export function Process() {
             },
           },
         });
-
-        // Mobile ScrollTrigger: progressively fill line height and update active step
-        const mobileContainer = containerRef.current?.querySelector('.mobile-process-container');
-        const progressLine = containerRef.current?.querySelector('.mobile-progress-line') as HTMLElement;
-        if (mobileContainer && progressLine) {
-          ScrollTrigger.create({
-            trigger: mobileContainer,
-            start: 'top 60%',
-            end: 'bottom 40%',
-            scrub: 0.3,
-            invalidateOnRefresh: true,
-            onUpdate: (self) => {
-              progressLine.style.height = `${self.progress * 100}%`;
-              const stepIndex = Math.min(
-                steps.length - 1,
-                Math.floor(self.progress * steps.length)
-              );
-              setActiveStep((prev) => (prev !== stepIndex ? stepIndex : prev));
-            },
-          });
-        }
       }
     }, containerRef);
 
@@ -196,22 +155,7 @@ export function Process() {
   }, []);
 
   return (
-    <section ref={containerRef} id="process" className="process-section relative py-12 md:py-stack-xl px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20 z-10 overflow-hidden">
-      {/* Mobile-Visible Dynamic Color Motion Ambient Background */}
-      <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden animate-color-motion">
-        {/* Dynamic Color Motion Node 1 (Emerald / Mint Glow) */}
-        <div className="animate-aurora absolute top-[-10%] left-[-15%] w-[100vw] sm:w-[75vw] h-[100vw] sm:h-[75vw] rounded-full bg-gradient-to-tr from-emerald-500/35 via-teal-600/25 to-transparent blur-[70px] sm:blur-[140px] opacity-85" />
-        
-        {/* Dynamic Color Motion Node 2 (Deep Forest / Cyan Glow) */}
-        <div className="animate-aurora absolute bottom-[-10%] right-[-15%] w-[90vw] sm:w-[65vw] h-[90vw] sm:h-[65vw] rounded-full bg-gradient-to-bl from-secondary/30 via-emerald-500/20 to-transparent blur-[80px] sm:blur-[150px] opacity-80" style={{ animationDirection: 'reverse', animationDuration: '22s' }} />
-
-        {/* Center Spotlight */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] sm:w-[55vw] h-[70vw] sm:h-[55vw] rounded-full bg-radial from-emerald-500/20 via-transparent to-transparent blur-[60px] sm:blur-[110px]" />
-
-        {/* Clean background on mobile, subtle vignette on larger screens */}
-        <div className="absolute inset-0 hidden sm:dark:block bg-gradient-to-b from-[#050505] via-transparent to-[#050505] opacity-75" />
-      </div>
-
+    <section ref={containerRef} id="process" className="process-section relative py-12 md:py-24 px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20 z-10 bg-slate-50/50 dark:bg-slate-950">
       <div className="w-full max-w-[1720px] mx-auto">
         <SectionHeader
           eyebrow="METHODOLOGY & EXECUTION"
@@ -220,45 +164,30 @@ export function Process() {
         />
       </div>
 
-      {/* ================= DESKTOP LAYOUT (md and up) ================= */}
-      <div className="hidden md:flex w-full max-w-[1720px] mx-auto relative h-[450px] items-center justify-center overflow-visible mt-12 mb-16 z-20">
+      {/* DESKTOP LAYOUT */}
+      <div className="hidden md:flex w-full max-w-[1720px] mx-auto relative h-[420px] items-center justify-center overflow-visible mt-12 mb-16 z-20">
 
-        {/* Wave Path Container */}
         <svg className="absolute w-full h-full overflow-visible z-10" viewBox="0 0 1000 300" fill="none" preserveAspectRatio="none">
-          {/* Base Background Path */}
           <path
             d="M 50 100 Q 200 20 350 150 Q 500 280 650 150 Q 800 20 950 100"
-            stroke="currentColor"
-            className="text-black/10 dark:text-white/5"
-            strokeWidth="4"
+            className="stroke-slate-200 dark:stroke-slate-800"
+            strokeWidth="3"
             strokeLinecap="round"
           />
-          {/* Animated Scroll-Linked Path */}
           <path
             className="process-path"
             d="M 50 100 Q 200 20 350 150 Q 500 280 650 150 Q 800 20 950 100"
-            stroke="url(#process-wave-grad)"
-            strokeWidth="4.5"
+            stroke="#2563eb"
+            strokeWidth="4"
             strokeLinecap="round"
-            style={{ filter: 'drop-shadow(0 0 10px rgba(52,211,153,0.4))' }}
           />
-          {/* Custom Glowing Dot that follows path */}
           <circle
             className="process-progress-dot"
-            r="8"
-            fill="#34d399"
-            style={{ filter: 'drop-shadow(0 0 8px #34d399)' }}
+            r="7"
+            fill="#2563eb"
           />
-          <defs>
-            <linearGradient id="process-wave-grad" x1="0%" x2="100%" y1="0%" y2="0%">
-              <stop offset="0%" stopColor="#10b981"></stop>
-              <stop offset="50%" stopColor="#34d399"></stop>
-              <stop offset="100%" stopColor="#5eead4"></stop>
-            </linearGradient>
-          </defs>
         </svg>
 
-        {/* Staggered process steps absolute points on desktop */}
         {steps.map((step, idx) => (
           <div
             key={step.id}
@@ -271,25 +200,22 @@ export function Process() {
             onMouseEnter={() => setActiveStep(idx)}
             onMouseLeave={() => setActiveStep(null)}
           >
-            {/* Glow effect behind active node */}
-            <div className={`absolute -inset-4 rounded-full bg-primary/10 blur-md transition-opacity duration-500 pointer-events-none ${activeStep === idx ? 'opacity-100 scale-125' : 'opacity-0'}`} />
-
-            {/* Circular step node with custom SVG */}
-            <div className={`w-14 h-14 rounded-full flex items-center justify-center transition-all duration-500 cursor-pointer relative z-10 backdrop-blur-xl ${activeStep === idx
-                ? 'bg-emerald-500/25 border-2 border-emerald-400 shadow-[0_0_25px_rgba(52,211,153,0.5)] scale-115'
-                : 'bg-emerald-950/40 dark:bg-white/5 border border-white/15 dark:border-white/10 hover:border-emerald-400/40'
-              }`}>
+            <div className={`w-13 h-13 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer relative z-10 ${
+              activeStep === idx
+                ? 'bg-blue-50 dark:bg-blue-950 border-2 border-blue-600 dark:border-blue-400 shadow-md scale-110'
+                : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-400 shadow-xs'
+            }`}>
               {step.icon}
             </div>
 
-            {/* Premium Mini-card below/above step node */}
-            <div className={`absolute top-full mt-4 w-52 flex flex-col items-center text-center transition-all duration-500 pointer-events-none ${activeStep === idx ? 'opacity-100 translate-y-0 scale-100' : 'opacity-70 translate-y-1 scale-95'
-              }`}>
-              <div className="text-[10px] text-emerald-300 uppercase font-mono tracking-widest font-bold bg-emerald-500/15 px-2 py-0.5 rounded border border-emerald-500/30 mb-2 backdrop-blur-md">
+            <div className={`absolute top-full mt-3 w-52 flex flex-col items-center text-center transition-all duration-300 pointer-events-none ${
+              activeStep === idx ? 'opacity-100 translate-y-0' : 'opacity-80 translate-y-1'
+            }`}>
+              <div className="text-[9px] text-blue-700 dark:text-blue-300 uppercase font-mono tracking-widest font-bold bg-blue-50 dark:bg-blue-950/70 px-2 py-0.5 rounded border border-blue-200 dark:border-blue-900 mb-1.5">
                 {step.id} / {step.name}
               </div>
-              <h4 className="text-xs font-semibold text-white tracking-wide">{step.title}</h4>
-              <p className="text-[10px] text-emerald-100/80 dark:text-on-surface-variant/80 mt-1 leading-relaxed max-w-[180px]">
+              <h4 className="text-xs font-bold text-slate-900 dark:text-white tracking-tight">{step.title}</h4>
+              <p className="text-[10px] text-slate-600 dark:text-slate-300 mt-1 leading-relaxed max-w-[180px]">
                 {step.description}
               </p>
             </div>
@@ -297,7 +223,7 @@ export function Process() {
         ))}
       </div>
 
-      {/* ================= MOBILE LAYOUT (sm and below) - Modern Editorial Accordion ================= */}
+      {/* MOBILE ACCORDION */}
       <div className="mobile-process-container md:hidden relative w-full mt-4 mb-8 z-20 flex flex-col gap-3">
         {steps.map((step, idx) => {
           const isOpen = (activeStep === null ? 0 : activeStep) === idx;
@@ -305,48 +231,35 @@ export function Process() {
             <div
               key={step.id}
               onClick={() => setActiveStep(idx)}
-              className={`rounded-2xl border transition-all duration-500 overflow-hidden cursor-pointer backdrop-blur-xl ${
+              className={`rounded-xl border transition-all duration-300 overflow-hidden cursor-pointer ${
                 isOpen
-                  ? 'border-emerald-400/40 bg-emerald-950/60 dark:bg-white/[0.03] shadow-[0_10px_30px_rgba(52,211,153,0.15)]'
-                  : 'border-white/10 dark:border-white/8 bg-emerald-950/35 dark:bg-[#09090c]/70 hover:border-white/20 dark:hover:border-white/15'
+                  ? 'border-blue-500 bg-white dark:bg-slate-900 shadow-sm'
+                  : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300 dark:hover:border-slate-700'
               }`}
             >
-              {/* Accordion Bar Header */}
-              <div className="flex items-center justify-between p-4 sm:p-5">
-                <div className="flex items-center gap-3.5">
-                  <div className={`p-2.5 rounded-xl border transition-colors shrink-0 ${
-                    isOpen
-                      ? 'bg-emerald-500/15 border-emerald-400/40 text-emerald-300 shadow-[0_0_15px_rgba(52,211,153,0.2)]'
-                      : 'bg-white/5 dark:bg-white/5 border-white/10 dark:border-white/10 text-emerald-200/60 dark:text-white/40'
+              <div className="flex items-center justify-between p-4">
+                <div className="flex items-center gap-3">
+                  <div className={`p-2 rounded-lg border shrink-0 ${
+                    isOpen ? 'bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-900 text-blue-600 dark:text-blue-400' : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400'
                   }`}>
                     {step.icon}
                   </div>
                   <div>
-                    <span className="text-[8px] font-mono tracking-[0.2em] text-emerald-300 uppercase block font-semibold">
+                    <span className="text-[8px] font-mono tracking-widest text-blue-600 dark:text-blue-400 uppercase block font-bold">
                       {step.id} // {step.name}
                     </span>
-                    <h3 className="text-xs sm:text-sm font-bold text-white tracking-wide">
+                    <h3 className="text-xs font-bold text-slate-900 dark:text-white tracking-tight">
                       {step.title}
                     </h3>
                   </div>
                 </div>
-                <div className={`w-8 h-8 rounded-full border border-white/15 dark:border-white/10 flex items-center justify-center text-emerald-200/60 dark:text-white/50 transition-transform duration-500 shrink-0 ${
-                  isOpen ? 'rotate-180 text-emerald-300 border-emerald-400/30 bg-emerald-500/15' : ''
-                }`}>
-                  <span className="material-symbols-outlined text-sm">expand_more</span>
-                </div>
               </div>
 
-              {/* Accordion Expanded Content */}
               {isOpen && (
-                <div className="px-4 sm:px-5 pb-5 pt-2 border-t border-white/5 flex flex-col gap-3 animate-[fadeSlideIn_0.3s_ease-out]">
-                  <p className="text-[11px] text-on-surface-variant/90 leading-relaxed font-normal">
+                <div className="px-4 pb-4 pt-1 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-2">
+                  <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
                     {step.description}
                   </p>
-                  <div className="flex items-center gap-2 pt-2 text-[9px] font-mono text-primary/80 uppercase tracking-widest font-semibold">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary animate-ping" />
-                    <span>Phase 0{idx + 1} Deliverable Executing</span>
-                  </div>
                 </div>
               )}
             </div>

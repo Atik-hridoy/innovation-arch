@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { Logo } from '@/components/Logo';
 import { SpotlightNavbar } from '@/components/ui/spotlight-navbar';
-import { RadialGlowButton } from '@/components/ui/radial-glow-button';
+import { DiscoveryModal } from '@/components/ui/DiscoveryModal';
+import { useTheme } from '@/components/ThemeProvider';
 
 const navItems = [
   { label: 'Overview', href: '#home' },
@@ -20,6 +21,8 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isPastHero, setIsPastHero] = useState(false);
   const [activeSectionIndex, setActiveSectionIndex] = useState(0);
+  const [isDiscoveryOpen, setIsDiscoveryOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   const progressBarRef = useRef<HTMLDivElement>(null);
   const isPastHeroRef = useRef(false);
@@ -39,14 +42,12 @@ export function Header() {
         progressBarRef.current.style.width = `${progress}%`;
       }
 
-      // Header backdrop activates past 50px
-      const newPastHero = scrollY > 50;
+      const newPastHero = scrollY > 20;
       if (newPastHero !== isPastHeroRef.current) {
         isPastHeroRef.current = newPastHero;
         setIsPastHero(newPastHero);
       }
 
-      // Bottom of the page activates Contact
       if (scrollY + vh >= docHeight - 80) {
         if (activeIdxRef.current !== sectionIds.length - 1) {
           activeIdxRef.current = sectionIds.length - 1;
@@ -55,7 +56,6 @@ export function Header() {
         return;
       }
 
-      // Target focal point is 40% of viewport height
       const focalPoint = vh * 0.4;
       let activeIdx = 0;
 
@@ -102,43 +102,55 @@ export function Header() {
   return (
     <>
       <nav
-        className={`fixed top-0 w-full z-50 flex justify-between items-center px-4 sm:px-8 md:px-12 lg:px-16 py-3.5 sm:py-4 transition-all duration-500 ${
+        className={`fixed top-0 w-full z-50 flex justify-between items-center px-4 sm:px-8 md:px-12 lg:px-16 py-3.5 sm:py-4 transition-all duration-300 ${
           isPastHero
-            ? 'bg-emerald-950/85 dark:bg-[#070104]/85 backdrop-blur-2xl border-b border-emerald-500/20 dark:border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.35)]'
-            : 'bg-transparent backdrop-blur-none border-b border-transparent'
+            ? 'bg-white/90 dark:bg-[#0b0f19]/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 shadow-sm'
+            : 'bg-white/70 dark:bg-[#0b0f19]/70 backdrop-blur-sm border-b border-slate-100 dark:border-slate-800/80'
         }`}
       >
-        {/* Real-time Smooth Scroll Indicator Bar (Mobile Only) */}
-        <div className="md:hidden absolute bottom-0 inset-x-0 h-[2px] bg-transparent overflow-hidden pointer-events-none">
+        {/* Scroll Progress Bar (Mobile Only) */}
+        <div className="md:hidden absolute bottom-0 inset-x-0 h-[2px] bg-slate-100 dark:bg-slate-800 overflow-hidden pointer-events-none">
           <div
             ref={progressBarRef}
-            className="h-full bg-gradient-to-r from-emerald-600 via-emerald-400 to-teal-300 dark:from-emerald-500 dark:via-teal-400 dark:to-emerald-300 shadow-[0_0_10px_rgba(52,211,153,0.8)] transition-all duration-75 ease-out"
+            className="h-full bg-blue-600 transition-all duration-75 ease-out"
             style={{ width: '0%' }}
           />
         </div>
 
         <Logo isHero={!isPastHero} />
 
-        {/* Center Navbar: Always visible & interactive with animated active state */}
+        {/* Center Navbar */}
         <div className="hidden md:flex flex-1 justify-center transition-all duration-500 ease-out opacity-100 translate-y-0 pointer-events-auto">
           <SpotlightNavbar items={navItems} activeIndex={activeSectionIndex} />
         </div>
 
-        {/* Right CTA Actions: Always visible */}
-        <div className="flex items-center gap-3 sm:gap-4 transition-all duration-500 ease-out opacity-100 translate-y-0 pointer-events-auto">
-          <a
-            className="hidden sm:inline-block"
-            href="#contact"
+        {/* Right Actions: Theme Switcher & Book Call CTA */}
+        <div className="flex items-center gap-2.5 sm:gap-3.5 transition-all duration-500 ease-out opacity-100 translate-y-0 pointer-events-auto">
+          
+          {/* Theme Toggle Button */}
+          <button
+            onClick={toggleTheme}
+            className="w-9 h-9 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center transition-colors cursor-pointer"
+            aria-label="Toggle Dark/Light Mode"
+            title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
           >
-            <RadialGlowButton size="sm" className="font-semibold text-xs tracking-wider !min-w-[110px] !min-h-[38px]">
-              Let&apos;s Talk
-            </RadialGlowButton>
-          </a>
+            <span className="material-symbols-outlined text-lg">
+              {theme === 'dark' ? 'light_mode' : 'dark_mode'}
+            </span>
+          </button>
+
+          {/* Book Call Button */}
+          <button
+            onClick={() => setIsDiscoveryOpen(true)}
+            className="hidden sm:inline-flex items-center justify-center font-sans font-semibold text-xs tracking-wider uppercase bg-[#0f172a] hover:bg-black text-white dark:bg-blue-600 dark:hover:bg-blue-700 px-4 sm:px-5 py-2.5 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer active:scale-95"
+          >
+            Book Free Call
+          </button>
         </div>
 
-        {/* Mobile menu trigger */}
+        {/* Mobile Menu Trigger */}
         <button
-          className="md:hidden text-foreground cursor-pointer p-1 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-all duration-300 opacity-100 pointer-events-auto"
+          className="md:hidden text-slate-900 dark:text-white cursor-pointer p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
           aria-label="Toggle Menu"
           onClick={() => setMobileMenuOpen((prev) => !prev)}
         >
@@ -148,8 +160,9 @@ export function Header() {
         </button>
       </nav>
 
+      {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-[45] bg-emerald-950/95 dark:bg-[#050505]/95 backdrop-blur-2xl flex flex-col items-center justify-center gap-6 md:hidden animate-[fadeSlideIn_0.25s_ease-out]">
+        <div className="fixed inset-0 z-[45] bg-white/98 dark:bg-[#0b0f19]/98 backdrop-blur-xl flex flex-col items-center justify-center gap-6 md:hidden animate-[fadeIn_0.2s_ease-out]">
           {navItems.map((item, idx) => {
             const isActive = activeSectionIndex === idx;
             return (
@@ -157,10 +170,10 @@ export function Header() {
                 key={item.label}
                 href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`font-sans font-extrabold text-2xl uppercase tracking-wider transition-colors duration-300 ${
+                className={`font-sans font-bold text-2xl uppercase tracking-wider transition-colors duration-200 ${
                   isActive
-                    ? 'text-emerald-400 dark:text-primary drop-shadow-[0_0_12px_rgba(52,211,153,0.6)]'
-                    : 'text-foreground/80 hover:text-primary'
+                    ? 'text-blue-600 dark:text-blue-400'
+                    : 'text-slate-800 dark:text-slate-200 hover:text-blue-600'
                 }`}
               >
                 {item.label}
@@ -168,17 +181,31 @@ export function Header() {
             );
           })}
 
-          <a
-            href="#contact"
-            onClick={() => setMobileMenuOpen(false)}
-            className="mt-4"
-          >
-            <RadialGlowButton size="md" className="font-semibold text-sm tracking-wider">
-              Let&apos;s Talk
-            </RadialGlowButton>
-          </a>
+          <div className="flex items-center gap-3 mt-4">
+            <button
+              onClick={toggleTheme}
+              className="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 flex items-center justify-center"
+              title="Toggle Theme"
+            >
+              <span className="material-symbols-outlined text-xl">
+                {theme === 'dark' ? 'light_mode' : 'dark_mode'}
+              </span>
+            </button>
+
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                setIsDiscoveryOpen(true);
+              }}
+              className="font-sans font-semibold text-sm tracking-wider uppercase bg-[#0f172a] dark:bg-blue-600 text-white px-7 py-3 rounded-xl shadow-md"
+            >
+              Book Free Call
+            </button>
+          </div>
         </div>
       )}
+
+      <DiscoveryModal isOpen={isDiscoveryOpen} onClose={() => setIsDiscoveryOpen(false)} />
     </>
   );
 }
