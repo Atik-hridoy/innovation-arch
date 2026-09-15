@@ -99,20 +99,20 @@ export function LocationMapSection() {
               </div>
             </div>
 
-            {/* Direct Contact Links List */}
+            {/* Studio Operating Status List */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2 font-mono text-xs pt-1">
               <div className="flex items-center justify-between p-2.5 sm:p-3 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800">
-                <span className="text-slate-500 dark:text-slate-400 text-[11px]">Email Support:</span>
-                <a href={`mailto:${emailAddr}`} className="font-bold text-amber-600 dark:text-amber-400 hover:underline text-[11px] truncate ml-2">
-                  {emailAddr}
-                </a>
+                <span className="text-slate-500 dark:text-slate-400 text-[11px]">Studio Schedule:</span>
+                <span className="font-bold text-slate-900 dark:text-white text-[11px]">
+                  Mon - Sat (09:00 AM - 08:00 PM)
+                </span>
               </div>
 
               <div className="flex items-center justify-between p-2.5 sm:p-3 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800">
-                <span className="text-slate-500 dark:text-slate-400 text-[11px]">Direct Hotline:</span>
-                <a href={callUrl} className="font-bold text-slate-900 dark:text-white hover:underline text-[11px]">
-                  {phoneNum}
-                </a>
+                <span className="text-slate-500 dark:text-slate-400 text-[11px]">Consultations:</span>
+                <span className="font-bold text-emerald-600 dark:text-emerald-400 text-[11px]">
+                  Open for Strategy Calls
+                </span>
               </div>
             </div>
 

@@ -248,9 +248,9 @@ Sent directly from InnovationArk Embedded Studio Widget.
                     </div>
 
                     <div className="flex items-center gap-1.5 text-[10px] sm:text-xs font-mono">
-                      <span className="text-slate-500 hidden sm:inline">Direct Delivery:</span>
-                      <span className="font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/60 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-900">
-                        hello@innovationark.co
+                      <span className="text-slate-500 hidden sm:inline">Engine Status:</span>
+                      <span className="font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-900">
+                        🟢 Active & Live
                       </span>
                     </div>
                   </div>
@@ -462,10 +462,10 @@ Sent directly from InnovationArk Embedded Studio Widget.
                       <span>Need a custom signed NDA prior to call?</span>
                     </div>
                     <a
-                      href="mailto:hello@innovationark.co?subject=Request%20Pre-Call%20NDA"
+                      href="#contact"
                       className="w-full sm:w-auto text-center px-4 py-2 bg-white text-slate-950 font-bold rounded-xl hover:bg-slate-200 transition-colors"
                     >
-                      Email hello@innovationark.co →
+                      Request Signed NDA →
                     </a>
                   </div>
                 </div>
@@ -473,7 +473,7 @@ Sent directly from InnovationArk Embedded Studio Widget.
 
               {/* Lodgify Style Disclaimer Caption */}
               <div className="text-[9px] sm:text-[10px] font-mono text-center text-slate-400 dark:text-slate-500 pt-1 border-t border-slate-200/80 dark:border-slate-800/80">
-                Interactive master studio portal. All reserved strategy calls trigger instant email alerts to <span className="text-amber-500 font-bold">hello@innovationark.co</span>.
+                Interactive master studio portal. Direct technical strategy session booking engine.
               </div>
 
             </div>

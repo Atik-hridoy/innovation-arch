@@ -209,7 +209,7 @@ Sent directly from InnovationArk Custom Live Booking Engine.
             Book 30-Min Strategy Call
           </h2>
           <p className="text-xs sm:text-sm text-slate-400 max-w-xl font-normal">
-            Directly reserve a live technical scoping session with our lead architects. Details will be delivered to <span className="text-amber-400 font-mono font-medium">hello@innovationark.co</span> instantly.
+            Directly reserve a live technical scoping session with our lead architects.
           </p>
         </div>
 
@@ -241,13 +241,9 @@ Sent directly from InnovationArk Custom Live Booking Engine.
                   {selectedDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
                 </span>
               </div>
-              <div className="flex justify-between border-b border-slate-800 pb-2 text-slate-300">
+              <div className="flex justify-between text-slate-300">
                 <span className="text-slate-500 font-mono uppercase">Time Slot:</span>
                 <span className="font-semibold text-amber-400">{TIME_SLOTS.find(s=>s.id===selectedSlot)?.label}</span>
-              </div>
-              <div className="flex justify-between text-slate-300">
-                <span className="text-slate-500 font-mono uppercase">Email Sent To:</span>
-                <span className="font-mono text-emerald-400">hello@innovationark.co</span>
               </div>
             </div>
 
