@@ -104,7 +104,7 @@ export function Portfolio() {
   }, [isLoading, projects]);
 
   return (
-    <section ref={sectionRef} id="work" className="relative py-16 md:py-28 px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20 z-10 bg-white dark:bg-[#070609] transition-colors duration-300">
+    <section ref={sectionRef} id="work" className="relative py-16 md:py-28 px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20 z-10 bg-transparent transition-colors duration-300">
       
       {/* Subtle ambient light/dark background */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-30 dark:opacity-100">

@@ -12,7 +12,7 @@ export function Services() {
   return (
     <section
       id="services"
-      className="relative w-full py-16 sm:py-20 md:py-32 px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20 z-10 bg-white dark:bg-[#070709] transition-colors duration-300"
+      className="relative w-full py-16 sm:py-20 md:py-32 px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20 z-10 bg-transparent transition-colors duration-300"
     >
       <div className="relative z-10 w-full max-w-[1720px] mx-auto">
         
@@ -33,7 +33,7 @@ export function Services() {
             return (
               <div
                 key={slide.title}
-                className="group relative rounded-3xl border border-slate-200/90 dark:border-slate-800/80 bg-slate-50/70 dark:bg-[#111116]/90 hover:bg-white dark:hover:bg-[#14141a] p-5 sm:p-8 flex flex-col justify-between shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 cursor-pointer overflow-hidden"
+                className="group relative rounded-3xl border border-slate-200/90 dark:border-slate-800/80 bg-slate-50/80 dark:bg-[#111116]/80 backdrop-blur-md hover:bg-white/95 dark:hover:bg-[#14141a]/95 p-5 sm:p-8 flex flex-col justify-between shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 cursor-pointer overflow-hidden"
                 onClick={() => setActiveModalSlide(idx)}
               >
                 {/* Subtle Ambient Hover Glow */}

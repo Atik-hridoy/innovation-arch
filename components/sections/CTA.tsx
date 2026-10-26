@@ -83,7 +83,7 @@ export function CTA() {
   }, []);
 
   return (
-    <section id="contact" className="relative w-full pt-12 sm:pt-16 md:pt-20 pb-8 flex flex-col items-center justify-center overflow-hidden bg-slate-50 dark:bg-[#0f172a] text-slate-900 dark:text-white z-10 transition-colors duration-300">
+    <section id="contact" className="relative w-full pt-12 sm:pt-16 md:pt-20 pb-8 flex flex-col items-center justify-center overflow-hidden bg-transparent text-slate-900 dark:text-white z-10 transition-colors duration-300">
 
       <div ref={containerRef} className="relative z-20 w-full max-w-[1720px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20 flex flex-col gap-10 lg:gap-16">
 

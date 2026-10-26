@@ -217,7 +217,7 @@ export function FounderProfile() {
   );
 
   return (
-    <section id="about" className="w-full relative z-10 py-12 md:py-24 bg-slate-50/80 dark:bg-[#070709] border-y border-slate-200/80 dark:border-slate-800/80 transition-colors duration-300">
+    <section id="about" className="w-full relative z-10 py-12 md:py-24 bg-transparent border-y border-slate-200/40 dark:border-slate-800/40 transition-colors duration-300">
       <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20">
         
         <SectionHeader

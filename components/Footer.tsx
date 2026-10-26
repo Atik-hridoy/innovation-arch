@@ -32,7 +32,7 @@ export function Footer() {
   const mailUrl = settings?.email_address ? `mailto:${settings.email_address}` : "mailto:hello@innovationark.co";
 
   return (
-    <footer className="w-full bg-slate-50 dark:bg-[#070709] border-t border-slate-200/80 dark:border-slate-800/80 pt-8 sm:pt-10 pb-0 relative z-20 overflow-hidden transition-colors duration-300">
+    <footer className="w-full bg-transparent border-t border-slate-200/40 dark:border-slate-800/40 pt-8 sm:pt-10 pb-0 relative z-20 overflow-hidden transition-colors duration-300">
       <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20 pb-4 md:pb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         
         {/* Brand Info */}

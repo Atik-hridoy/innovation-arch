@@ -63,7 +63,7 @@ const TESTIMONIALS: Testimonial[] = [
 
 export function Testimonials() {
   return (
-    <section className="w-full relative z-10 py-16 md:py-24 overflow-hidden bg-white dark:bg-[#070709] transition-colors duration-300">
+    <section className="w-full relative z-10 py-16 md:py-24 overflow-hidden bg-transparent transition-colors duration-300">
       <div className="max-w-[1720px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20 mb-10 sm:mb-12">
         <SectionHeader
           eyebrow="CLIENT REVIEWS & TRUST"
@@ -76,8 +76,8 @@ export function Testimonials() {
       <div className="relative w-full overflow-hidden select-none py-2">
         
         {/* Faded Left & Right Gradient Overlays */}
-        <div className="absolute top-0 bottom-0 left-0 w-16 sm:w-36 z-20 bg-gradient-to-r from-white dark:from-[#070709] via-white/80 dark:via-[#070709]/80 to-transparent pointer-events-none" />
-        <div className="absolute top-0 bottom-0 right-0 w-16 sm:w-36 z-20 bg-gradient-to-l from-white dark:from-[#070709] via-white/80 dark:via-[#070709]/80 to-transparent pointer-events-none" />
+        <div className="absolute top-0 bottom-0 left-0 w-16 sm:w-36 z-20 bg-gradient-to-r from-white/60 dark:from-[#070709]/60 via-white/30 dark:via-[#070709]/30 to-transparent pointer-events-none" />
+        <div className="absolute top-0 bottom-0 right-0 w-16 sm:w-36 z-20 bg-gradient-to-l from-white/60 dark:from-[#070709]/60 via-white/30 dark:via-[#070709]/30 to-transparent pointer-events-none" />
 
         {/* Marquee Track (Double array for seamless looping) */}
         <div className="animate-marquee flex gap-6 items-stretch w-max hover:[animation-play-state:paused]">

@@ -25,7 +25,7 @@ export function StatsSection() {
   ];
 
   return (
-    <div className="w-full relative z-20 py-12 md:py-16 bg-slate-50/80 dark:bg-slate-950/60 border-y border-slate-200/80 dark:border-slate-800 transition-colors duration-300">
+    <div className="w-full relative z-20 py-12 md:py-16 bg-transparent border-y border-slate-200/40 dark:border-slate-800/40 transition-colors duration-300">
       <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20">
         
         {/* Section Label */}
@@ -43,7 +43,7 @@ export function StatsSection() {
           {stats.map((stat, idx) => (
             <div
               key={idx}
-              className="bg-white dark:bg-slate-900/90 rounded-2xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-8 shadow-sm flex flex-col justify-between hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200"
+              className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md rounded-2xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-8 shadow-sm flex flex-col justify-between hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200"
             >
               <div>
                 <span className="font-mono text-[9px] uppercase tracking-widest text-blue-700 dark:text-blue-300 font-bold bg-blue-50 dark:bg-blue-950/70 border border-blue-200 dark:border-blue-900 px-3 py-1 rounded-full inline-block mb-4">

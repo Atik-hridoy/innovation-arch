@@ -104,8 +104,8 @@ export function Header() {
       <nav
         className={`fixed top-0 w-full z-50 flex justify-between items-center px-4 sm:px-8 md:px-12 lg:px-16 py-3.5 sm:py-4 transition-all duration-300 ${
           isPastHero
-            ? 'bg-white/90 dark:bg-[#0b0f19]/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 shadow-sm'
-            : 'bg-white/70 dark:bg-[#0b0f19]/70 backdrop-blur-sm border-b border-slate-100 dark:border-slate-800/80'
+            ? 'bg-white/85 dark:bg-[#070709]/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 shadow-sm'
+            : 'bg-white/60 dark:bg-[#070709]/60 backdrop-blur-sm border-b border-slate-100 dark:border-slate-800/50'
         }`}
       >
         {/* Scroll Progress Bar (Mobile Only) */}

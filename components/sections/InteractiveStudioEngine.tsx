@@ -82,7 +82,7 @@ Sent directly from InnovationArk Embedded Studio Widget.
   };
 
   return (
-    <section className="w-full py-8 sm:py-16 md:py-20 bg-slate-50/50 dark:bg-[#07090e] relative overflow-hidden transition-colors duration-300 border-y border-slate-200/80 dark:border-slate-800/80">
+    <section className="w-full py-8 sm:py-16 md:py-20 bg-transparent relative overflow-hidden transition-colors duration-300 border-y border-slate-200/40 dark:border-slate-800/40">
       
       {/* Dynamic ambient radial glows */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] sm:w-[600px] md:w-[850px] h-[300px] sm:h-[450px] md:h-[550px] bg-gradient-to-r from-blue-600/15 via-amber-500/15 to-purple-600/15 blur-3xl pointer-events-none rounded-full" />

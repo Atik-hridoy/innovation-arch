@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import dynamic from 'next/dynamic';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
@@ -18,6 +19,7 @@ import { TechStack } from '@/components/sections/TechStack';
 import { InteractiveStudioEngine } from '@/components/sections/InteractiveStudioEngine';
 import { CTA } from '@/components/sections/CTA';
 import { CookieConsent } from '@/components/ui/CookieConsent';
+
 
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -93,7 +95,7 @@ export default function Home() {
   return (
     <div
       ref={containerRef}
-      className="min-h-screen flex flex-col relative overflow-x-hidden selection:bg-[#0f172a] selection:text-white font-body-md text-body-md text-slate-900 dark:text-slate-100 bg-white dark:bg-[#0b0f19] antialiased transition-colors duration-300"
+      className="min-h-screen flex flex-col relative overflow-x-hidden selection:bg-[#0f172a] selection:text-white font-body-md text-body-md text-slate-900 dark:text-slate-100 bg-white dark:bg-[#070709] antialiased transition-colors duration-300"
     >
       <div ref={cursorRef} className="cursor-follower hidden md:block" id="cursor" />
       <GlobalOverlays />

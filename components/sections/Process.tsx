@@ -155,7 +155,7 @@ export function Process() {
   }, []);
 
   return (
-    <section ref={containerRef} id="process" className="process-section relative py-12 md:py-24 px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20 z-10 bg-slate-50/50 dark:bg-slate-950">
+    <section ref={containerRef} id="process" className="process-section relative py-12 md:py-24 px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20 z-10 bg-transparent">
       <div className="w-full max-w-[1720px] mx-auto">
         <SectionHeader
           eyebrow="METHODOLOGY & EXECUTION"
