@@ -9,8 +9,8 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Innovative Ark - Premium Digital Studio",
-  description: "Immersive digital product design and engineering studio. We build high-performance web products.",
+  title: "Innovation Ark — Digital Product Studio",
+  description: "Strategy, design, and engineering for web platforms, mobile products, and practical AI systems.",
   icons: {
     icon: '/icon.svg',
   },

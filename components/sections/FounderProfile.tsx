@@ -221,9 +221,9 @@ export function FounderProfile() {
       <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20">
         
         <SectionHeader
-          eyebrow="LEADERSHIP & ENGINEERING RIGOR"
-          title="MEET OUR LEADERSHIP"
-          description="Combining global computer science research, robust backend engineering, and production AI architecture."
+          eyebrow="Leadership"
+          title="Senior attention where it matters."
+          description="Product and engineering leadership stays close to the work, from early decisions through delivery."
         />
 
         {/* ========================================================= */}

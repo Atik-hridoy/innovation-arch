@@ -27,16 +27,13 @@ export function Logo({ className = '', showText = true, layout = 'horizontal' }:
       {showText && (
         <div className={`${isVertical ? 'flex flex-col items-center' : 'hidden sm:flex flex-col items-start'}`}>
           <div className="flex items-center gap-1.5 leading-none">
-            <span className="font-sans font-black uppercase tracking-tight text-slate-900 dark:text-white text-lg sm:text-xl">
-              INNOVATION
+            <span className="font-sans font-semibold tracking-[-0.03em] text-slate-900 dark:text-white text-lg sm:text-xl">
+              Innovation
             </span>
-            <span className="font-sans font-black uppercase tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-400 dark:from-blue-400 dark:via-cyan-300 dark:to-sky-200 text-lg sm:text-xl">
-              ARK
+            <span className="font-sans font-semibold tracking-[-0.03em] text-blue-600 dark:text-blue-400 text-lg sm:text-xl">
+              Ark
             </span>
           </div>
-          <span className="font-mono text-[8px] sm:text-[9px] tracking-[0.22em] text-slate-500 dark:text-slate-300 uppercase font-bold mt-1">
-            TECH PLATFORM
-          </span>
         </div>
       )}
     </a>

@@ -90,16 +90,13 @@ export function CTA() {
         {/* Top Section */}
         <div className="w-full gsap-fade-up opacity-0">
           <SectionHeader
-            eyebrow="GET IN TOUCH & COLLABORATE"
+            eyebrow="Contact"
             title={
               <>
-                LET&apos;S BUILD YOUR <br className="hidden sm:block" />
-                <span className="text-blue-600">
-                  NEXT SOLUTION.
-                </span>
+                Let&apos;s talk about what you&apos;re building.
               </>
             }
-            description="Got a project in mind? Drop us a line or schedule a free discovery call. We turn ambitious ideas into high-performance digital reality."
+            description="Share the context, the challenge, and where you want to go. We&apos;ll reply with a thoughtful next step."
             className="!mb-0"
           />
         </div>

@@ -1,128 +1,41 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Bebas_Neue, Righteous, Syne } from 'next/font/google';
+import { useEffect, useState } from 'react';
 import { Logo } from '@/components/Logo';
-import { CONFIG } from '../lib/config';
+import { CONFIG } from '@/lib/config';
 
-const bebasNeue = Bebas_Neue({ weight: '400', subsets: ['latin'] });
-const righteous = Righteous({ weight: '400', subsets: ['latin'] });
-const syne = Syne({ weight: '800', subsets: ['latin'] });
-
-interface SiteSettings {
-  facebook_url: string;
-  whatsapp_number: string;
-  phone_number: string;
-  email_address: string;
-}
+interface SiteSettings { facebook_url: string; whatsapp_number: string; phone_number: string; email_address: string; }
 
 export function Footer() {
   const [settings, setSettings] = useState<SiteSettings | null>(null);
 
   useEffect(() => {
-    fetch(`${CONFIG.API_BASE_URL}/settings/`)
-      .then(res => res.json())
-      .then(data => setSettings(data))
-      .catch(err => console.error("Failed to load settings:", err));
+    fetch(`${CONFIG.API_BASE_URL}/settings/`).then((response) => response.json()).then(setSettings).catch(() => undefined);
   }, []);
 
-  const fbUrl = settings?.facebook_url || "https://facebook.com";
-  const waUrl = settings?.whatsapp_number ? `https://wa.me/${settings.whatsapp_number.replace(/[^0-9+]/g, '')}` : "https://wa.me/";
-  const callUrl = settings?.phone_number ? `tel:${settings.phone_number.replace(/[^0-9+]/g, '')}` : "tel:+1234567890";
-  const mailUrl = settings?.email_address ? `mailto:${settings.email_address}` : "mailto:hello@innovationark.co";
+  const links = [
+    settings?.email_address && { label: 'Email', href: `mailto:${settings.email_address}` },
+    settings?.phone_number && { label: 'Call', href: `tel:${settings.phone_number.replace(/[^0-9+]/g, '')}` },
+    settings?.whatsapp_number && { label: 'WhatsApp', href: `https://wa.me/${settings.whatsapp_number.replace(/[^0-9]/g, '')}` },
+    settings?.facebook_url && { label: 'Facebook', href: settings.facebook_url },
+  ].filter(Boolean) as { label: string; href: string }[];
 
   return (
-    <footer className="w-full bg-transparent border-t border-slate-200/40 dark:border-slate-800/40 pt-8 sm:pt-10 pb-0 relative z-20 overflow-hidden transition-colors duration-300">
-      <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20 pb-4 md:pb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-        
-        {/* Brand Info */}
-        <div className="flex flex-col gap-2">
-          <Logo layout="horizontal" />
-          <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm font-normal">
-            Building high-performance digital products, mobile apps, and enterprise AI engines with zero agency overhead.
-          </p>
+    <footer className="border-t border-slate-200 py-8 dark:border-white/10 sm:py-10">
+      <div className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <Logo />
+          <p className="mt-4 max-w-md text-sm leading-6 text-slate-500 dark:text-slate-400">Strategy, design, and engineering for useful digital products.</p>
         </div>
-
-        {/* Social & Contact Links */}
-        <div className="flex flex-wrap items-center gap-5 sm:gap-7">
-          <a
-            className="text-xs text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-white transition-colors duration-200 font-semibold"
-            href={fbUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Facebook
-          </a>
-          <a
-            className="text-xs text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-white transition-colors duration-200 font-semibold"
-            href={waUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            WhatsApp
-          </a>
-          <a
-            className="text-xs text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-white transition-colors duration-200 font-semibold"
-            href={callUrl}
-          >
-            Call Direct
-          </a>
-          <a
-            className="text-xs text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-white transition-colors duration-200 font-semibold"
-            href={mailUrl}
-          >
-            Email Us
-          </a>
-        </div>
-
-        {/* Copyright */}
-        <div className="text-left md:text-right font-mono text-[10px] text-slate-400 dark:text-slate-500">
-          © 2026 InnovationArk Tech Platform.<br />
-          All Rights Reserved.
+        <div className="flex flex-wrap gap-x-6 gap-y-3">
+          {links.map((link) => <a key={link.label} href={link.href} className="text-sm text-slate-600 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-white" target={link.href.startsWith('http') ? '_blank' : undefined} rel={link.href.startsWith('http') ? 'noreferrer' : undefined}>{link.label}</a>)}
         </div>
       </div>
-
-      {/* ========================================================= */}
-      {/* 🚀 3D MONUMENTAL FOOTER TYPOGRAPHY (InnovationArk) */}
-      {/* ========================================================= */}
-      <div className="w-full overflow-hidden select-none pointer-events-none leading-none pt-4 pb-2 flex justify-center items-center">
-        <div className="relative w-full max-w-full px-2 text-center">
-          <h1 
-            className={`${righteous.className} relative inline-block text-center tracking-normal text-[10vw] sm:text-[11vw] md:text-[11.5vw] leading-none uppercase select-none transition-transform duration-300 hover:scale-[1.01]`}
-          >
-            {/* Base 3D Solid Extrusion & Depth Shadow Layer */}
-            <span 
-              aria-hidden="true"
-              className="absolute inset-0 block text-amber-700 dark:text-amber-900 pointer-events-none translate-y-[2px]"
-              style={{
-                textShadow: `
-                  1px 1px 0 #d97706,
-                  2px 2px 0 #b45309,
-                  3px 3px 0 #92400e,
-                  4px 4px 0 #78350f,
-                  5px 5px 0 #451a03,
-                  6px 6px 0 #270e02,
-                  7px 7px 0 #180701,
-                  8px 12px 20px rgba(0,0,0,0.6),
-                  0 0 50px rgba(245,158,11,0.25)
-                `
-              }}
-            >
-              InnovationArk
-            </span>
-
-            {/* Top Gradient Metallic 3D Face Layer */}
-            <span className="relative z-10 block text-transparent bg-clip-text bg-gradient-to-b from-yellow-200 via-amber-300 to-amber-500 dark:from-yellow-100 dark:via-yellow-300 dark:to-amber-500 filter drop-shadow-[0_1px_2px_rgba(255,255,255,0.4)]">
-              InnovationArk
-            </span>
-          </h1>
-        </div>
+      <div className="mt-10 flex flex-col gap-2 border-t border-slate-200 pt-5 text-xs text-slate-400 dark:border-white/10 sm:flex-row sm:justify-between">
+        <span>© {new Date().getFullYear()} Innovation Ark.</span><span>Dhaka, Bangladesh · Working globally</span>
       </div>
-
     </footer>
   );
 }
 
 export default Footer;
-
-

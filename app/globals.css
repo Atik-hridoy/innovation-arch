@@ -11,6 +11,28 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+}
+
+.site-container {
+  width: min(100% - 2.5rem, 1520px);
+  margin-inline: auto;
+}
+
+.section-shell {
+  position: relative;
+  padding-block: clamp(5rem, 9vw, 9rem);
+}
+
+@media (min-width: 640px) {
+  .site-container { width: min(100% - 4rem, 1520px); }
+}
+
 html.dark body,
 .dark body {
   background-color: #070709 !important;

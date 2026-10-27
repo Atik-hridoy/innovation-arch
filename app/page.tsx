@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import dynamic from 'next/dynamic';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
@@ -14,9 +13,8 @@ import { Services } from '@/components/sections/Services';
 import { Process } from '@/components/sections/Process';
 import { Portfolio } from '@/components/sections/Portfolio';
 import { FounderProfile } from '@/components/sections/FounderProfile';
-import { Testimonials } from '@/components/sections/Testimonials';
 import { TechStack } from '@/components/sections/TechStack';
-import { InteractiveStudioEngine } from '@/components/sections/InteractiveStudioEngine';
+import { BookingSection } from '@/components/sections/BookingSection';
 import { CTA } from '@/components/sections/CTA';
 import { CookieConsent } from '@/components/ui/CookieConsent';
 
@@ -108,10 +106,6 @@ export default function Home() {
         <StatsSection />
 
         <SectionStage className="w-full bg-transparent">
-          <InteractiveStudioEngine />
-        </SectionStage>
-
-        <SectionStage className="w-full bg-transparent">
           <Services />
         </SectionStage>
 
@@ -128,11 +122,11 @@ export default function Home() {
         </SectionStage>
 
         <SectionStage className="w-full bg-transparent">
-          <Testimonials />
+          <TechStack />
         </SectionStage>
 
         <SectionStage className="w-full bg-transparent">
-          <TechStack />
+          <BookingSection />
         </SectionStage>
 
         <SectionStage className="w-full bg-transparent">

@@ -115,9 +115,9 @@ export function Portfolio() {
       {/* Section Header */}
       <div ref={headerRef} className="w-full max-w-[1720px] mx-auto mb-16 sm:mb-20 lg:mb-24">
         <SectionHeader
-          eyebrow="OUR WORK // SELECTED CASE STUDIES"
-          title="PROVEN DIGITAL IMPACT"
-          description="A showcase of enterprise-grade platforms, intelligent mobile apps, and high-conversion software solutions built for our clients."
+          eyebrow="Selected work"
+          title="Products shaped around real operational needs."
+          description="A closer look at platforms, applications, and digital systems we have helped bring to life."
         />
       </div>
 

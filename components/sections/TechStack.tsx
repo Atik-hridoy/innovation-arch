@@ -4,12 +4,12 @@ import React from 'react';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 
 const TECH_ITEMS = [
-  { name: 'Flutter', desc: 'Cross-Platform Mobile Engine', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg' },
-  { name: 'Next.js', desc: 'High-Throughput Web SSR', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg' },
-  { name: 'Django', desc: 'Enterprise REST Backend', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg' },
-  { name: 'PostgreSQL', desc: 'Sub-10ms Indexed Database', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg' },
-  { name: 'Vercel', desc: 'Global Edge CDN Hosting', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vercel/vercel-original.svg' },
-  { name: 'AWS Cloud', desc: 'Cloud Infrastructure & S3', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg' },
+  { name: 'Flutter', desc: 'Mobile applications', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg' },
+  { name: 'Next.js', desc: 'Web applications', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg' },
+  { name: 'Django', desc: 'Backend systems', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg' },
+  { name: 'PostgreSQL', desc: 'Relational data', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg' },
+  { name: 'Vercel', desc: 'Web deployment', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vercel/vercel-original.svg' },
+  { name: 'AWS Cloud', desc: 'Cloud infrastructure', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg' },
 ];
 
 export function TechStack() {
@@ -17,9 +17,9 @@ export function TechStack() {
     <div id="tech" className="relative z-10 bg-transparent py-12 md:py-20 px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20 overflow-hidden border-t border-slate-200/40 dark:border-slate-800/40 transition-colors duration-300">
       <div className="max-w-[1720px] w-full mx-auto">
         <SectionHeader
-          eyebrow="BUILT ON ENTERPRISE-GRADE TECHNOLOGY"
-          title="PROVEN STACK & INTEGRATIONS"
-          description="We build strictly on industry-standard, battle-tested technologies that ensure sub-second performance, long-term maintainability, and zero vendor lock-in."
+          eyebrow="Technology"
+          title="Modern tools, selected for the product."
+          description="We choose familiar, maintainable technology around the needs of each project—not around a fixed stack."
         />
 
         {/* 6 Clean Tech Cards Grid */}

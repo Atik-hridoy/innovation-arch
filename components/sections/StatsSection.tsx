@@ -1,68 +1,61 @@
 'use client';
 
-import React from 'react';
+import { motion } from 'framer-motion';
+
+const PRINCIPLES = [
+  {
+    number: '01',
+    title: 'Clarity before code',
+    description: 'We define the problem, priorities and constraints before committing to a technical direction.',
+  },
+  {
+    number: '02',
+    title: 'Senior people stay close',
+    description: 'The people making decisions remain involved from early discovery through delivery.',
+  },
+  {
+    number: '03',
+    title: 'Built for continuity',
+    description: 'Clear systems, maintainable code and practical documentation support the product after launch.',
+  },
+];
 
 export function StatsSection() {
-  const stats = [
-    {
-      value: '2X',
-      title: 'Faster Time-to-Market',
-      description: 'Single-codebase Flutter mobile apps & Next.js SSR platforms engineered for rapid deployment without technical debt.',
-      badge: 'FLUTTER & NEXT.JS',
-    },
-    {
-      value: '99.9%',
-      title: 'Guaranteed System Uptime',
-      description: 'High-availability infrastructure hosted on Vercel & CloudPanel/AWS with automated backup & monitoring.',
-      badge: 'VERCEL / AWS CLOUD',
-    },
-    {
-      value: 'Zero',
-      title: 'Communication Gap',
-      description: 'Direct access to the lead architect & founder. No account manager delays, miscommunications, or bloated agency overhead.',
-      badge: 'DIRECT FOUNDER ACCESS',
-    },
-  ];
-
   return (
-    <div className="w-full relative z-20 py-12 md:py-16 bg-transparent border-y border-slate-200/40 dark:border-slate-800/40 transition-colors duration-300">
-      <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20">
-        
-        {/* Section Label */}
-        <div className="flex flex-col items-center text-center mb-10">
-          <span className="font-mono text-[10px] sm:text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 font-bold mb-2">
-            THE NUMBERS SPEAK
-          </span>
-          <h2 className="font-sans font-extrabold text-2xl sm:text-3xl md:text-4xl text-slate-900 dark:text-white tracking-tight">
-            Engineered for Measurable Business Growth
+    <section className="relative z-20 -mt-px overflow-hidden bg-slate-950 text-white dark:bg-[#0b0d12]">
+      <div className="mx-auto w-full max-w-[1440px] px-5 py-16 sm:px-8 md:px-12 md:py-24 lg:px-16 lg:py-28">
+        <motion.div
+          initial={{ opacity: 0, y: 22 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.35 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="grid gap-8 border-b border-white/12 pb-12 md:grid-cols-12 md:items-end md:pb-16"
+        >
+          <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-blue-300 md:col-span-3">
+            How we work
+          </p>
+          <h2 className="max-w-4xl text-balance text-3xl font-semibold leading-tight tracking-[-0.035em] text-white sm:text-4xl md:col-span-9 md:text-5xl lg:text-[3.5rem]">
+            Good software starts with sound decisions—and stays useful long after launch.
           </h2>
-        </div>
+        </motion.div>
 
-        {/* 3 Large Stat Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {stats.map((stat, idx) => (
-            <div
-              key={idx}
-              className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md rounded-2xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-8 shadow-sm flex flex-col justify-between hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200"
+        <div className="grid md:grid-cols-3">
+          {PRINCIPLES.map((principle, index) => (
+            <motion.article
+              key={principle.number}
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.45 }}
+              transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+              className="border-b border-white/10 py-8 last:border-b-0 md:border-b-0 md:border-r md:px-8 md:first:pl-0 md:last:border-r-0 md:last:pr-0 lg:py-10"
             >
-              <div>
-                <span className="font-mono text-[9px] uppercase tracking-widest text-blue-700 dark:text-blue-300 font-bold bg-blue-50 dark:bg-blue-950/70 border border-blue-200 dark:border-blue-900 px-3 py-1 rounded-full inline-block mb-4">
-                  {stat.badge}
-                </span>
-                <div className="font-sans font-black text-4xl sm:text-5xl text-slate-900 dark:text-white tracking-tight leading-none mb-3">
-                  {stat.value}
-                </div>
-                <h3 className="font-sans font-bold text-base sm:text-lg text-slate-900 dark:text-white mb-2">
-                  {stat.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-                  {stat.description}
-                </p>
-              </div>
-            </div>
+              <span className="font-mono text-[10px] text-white/35">{principle.number}</span>
+              <h3 className="mt-8 text-lg font-semibold tracking-[-0.015em] text-white">{principle.title}</h3>
+              <p className="mt-3 max-w-sm text-sm leading-6 text-slate-400">{principle.description}</p>
+            </motion.article>
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 }

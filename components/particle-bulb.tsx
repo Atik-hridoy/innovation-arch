@@ -252,11 +252,15 @@ function buildScene(
   const width = container.clientWidth
   const height = container.clientHeight
 
-  const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "high-performance" })
+  const renderer = new THREE.WebGLRenderer({
+    antialias: false,
+    alpha: true,
+    powerPreference: "high-performance",
+  })
   const pixelRatio = Math.min(window.devicePixelRatio, 2)
   renderer.setPixelRatio(pixelRatio)
   renderer.setSize(width, height)
-  renderer.setClearColor(0x000000, 1)
+  renderer.setClearColor(0x000000, 0)
   container.appendChild(renderer.domElement)
 
   const scene = new THREE.Scene()
@@ -299,6 +303,7 @@ function buildScene(
   })
 
   const points = new THREE.Points(geometry, material)
+  points.position.x = width < 768 ? 0.35 : 2.15
   scene.add(points)
 
   const composer = new EffectComposer(renderer)
@@ -314,13 +319,14 @@ function buildScene(
     composer.setSize(w, h)
     bloom.setSize(w, h)
     fitCamera(w / h)
+    points.position.x = w < 768 ? 0.35 : 2.15
   }
 
   window.addEventListener("resize", onResize)
 
-  const clock = new THREE.Clock()
+  const startedAt = performance.now()
   const tick = () => {
-    const elapsed = clock.getElapsedTime()
+    const elapsed = (performance.now() - startedAt) / 1000
     uniforms.uTime.value = elapsed
     if (!reducedMotion) {
       uniforms.uProgress.value = assemblyProgress(elapsed)
