@@ -9,11 +9,20 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://innovationark.co"),
   title: "Innovation Ark — Digital Product Studio",
   description: "Strategy, design, and engineering for web platforms, mobile products, and practical AI systems.",
   icons: {
     icon: '/icon.svg',
   },
+  openGraph: {
+    type: "website",
+    siteName: "Innovation Ark",
+    title: "Innovation Ark — Digital Product Studio",
+    description: "Strategy, design, and engineering for web platforms, mobile products, and practical AI systems.",
+    images: ["/images/hero_abstract_bg.jpg"],
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({
@@ -48,6 +57,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
       </head>
       <body className="min-h-full flex flex-col font-sans bg-background text-foreground transition-colors duration-400">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ '@context': 'https://schema.org', '@type': 'ProfessionalService', name: 'Innovation Ark', url: 'https://innovationark.co', email: 'hello@innovationark.co', areaServed: 'Worldwide', address: { '@type': 'PostalAddress', addressCountry: 'BD' }, sameAs: [] }) }} />
         <ThemeProvider>
           {children}
         </ThemeProvider>

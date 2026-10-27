@@ -10,15 +10,15 @@ const steps = [
 
 export function Process() {
   return (
-    <section id="process" className="section-shell bg-slate-950 text-white dark:bg-[#0b0e13]">
+    <section id="process" className="section-shell bg-[#f7f2e9] text-slate-950 transition-colors dark:bg-[#12100d] dark:text-white">
       <div className="site-container">
         <SectionHeader eyebrow="How we work" title="A clear process, with decisions made in the open." description="Short feedback loops keep the work focused and give your team visibility from the first conversation through launch." />
-        <div className="border-t border-white/15">
+        <div className="border-t border-slate-300/80 dark:border-white/15">
           {steps.map(([number, title, description]) => (
-            <div key={number} className="grid gap-3 border-b border-white/15 py-7 sm:grid-cols-[5rem_14rem_1fr] sm:items-start sm:gap-6 md:py-9">
-              <span className="text-xs font-medium text-blue-400">{number}</span>
+            <div key={number} className="grid gap-3 border-b border-slate-300/80 py-7 dark:border-white/15 sm:grid-cols-[5rem_14rem_1fr] sm:items-start sm:gap-6 md:py-9">
+              <span className="text-xs font-medium text-blue-600 dark:text-blue-400">{number}</span>
               <h3 className="text-xl font-medium tracking-tight">{title}</h3>
-              <p className="max-w-2xl text-sm leading-7 text-slate-400">{description}</p>
+              <p className="max-w-2xl text-sm leading-7 text-slate-600 dark:text-slate-400">{description}</p>
             </div>
           ))}
         </div>

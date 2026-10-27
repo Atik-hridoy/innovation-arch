@@ -1,0 +1,6 @@
+import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
+
+export function LegalPage({ eyebrow, title, intro, sections }: { eyebrow: string; title: string; intro: string; sections: { title: string; body: string }[] }) {
+  return <div className="min-h-screen bg-white text-slate-950 dark:bg-[#07090d] dark:text-white"><Header /><main className="site-container pb-24 pt-36 sm:pt-44"><p className="text-[10px] font-semibold uppercase tracking-[.2em] text-blue-600">{eyebrow}</p><h1 className="mt-5 text-5xl font-semibold tracking-[-.05em] sm:text-6xl">{title}</h1><p className="mt-6 max-w-2xl text-base leading-8 text-slate-600 dark:text-slate-400">{intro}</p><p className="mt-4 text-xs text-slate-400">Last updated: October 27, 2026</p><div className="mt-16 max-w-3xl border-t border-slate-200 dark:border-white/10">{sections.map(section => <section key={section.title} className="border-b border-slate-200 py-8 dark:border-white/10"><h2 className="text-xl font-semibold tracking-tight">{section.title}</h2><p className="mt-4 whitespace-pre-line text-sm leading-7 text-slate-600 dark:text-slate-400">{section.body}</p></section>)}</div></main><div className="site-container"><Footer /></div></div>;
+}

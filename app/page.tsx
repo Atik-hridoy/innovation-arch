@@ -9,6 +9,7 @@ import { GlobalOverlays } from '@/components/GlobalOverlays';
 import { SectionStage } from '@/components/SectionStage';
 import { Hero } from '@/components/sections/Hero';
 import { StatsSection } from '@/components/sections/StatsSection';
+import { ClientMarks } from '@/components/sections/ClientMarks';
 import { Services } from '@/components/sections/Services';
 import { Process } from '@/components/sections/Process';
 import { Portfolio } from '@/components/sections/Portfolio';
@@ -104,6 +105,8 @@ export default function Home() {
         <Hero />
 
         <StatsSection />
+
+        <ClientMarks />
 
         <SectionStage className="w-full bg-transparent">
           <Services />

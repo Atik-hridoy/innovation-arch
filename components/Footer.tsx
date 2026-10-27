@@ -28,6 +28,9 @@ export function Footer() {
           <p className="mt-4 max-w-md text-sm leading-6 text-slate-500 dark:text-slate-400">Strategy, design, and engineering for useful digital products.</p>
         </div>
         <div className="flex flex-wrap gap-x-6 gap-y-3">
+          <a href="/about" className="text-sm text-slate-600 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-white">About</a>
+          <a href="/privacy" className="text-sm text-slate-600 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-white">Privacy</a>
+          <a href="/terms" className="text-sm text-slate-600 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-white">Terms</a>
           {links.map((link) => <a key={link.label} href={link.href} className="text-sm text-slate-600 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-white" target={link.href.startsWith('http') ? '_blank' : undefined} rel={link.href.startsWith('http') ? 'noreferrer' : undefined}>{link.label}</a>)}
         </div>
       </div>

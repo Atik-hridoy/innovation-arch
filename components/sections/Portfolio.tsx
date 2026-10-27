@@ -104,16 +104,10 @@ export function Portfolio() {
   }, [isLoading, projects]);
 
   return (
-    <section ref={sectionRef} id="work" className="relative py-16 md:py-28 px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20 z-10 bg-transparent transition-colors duration-300">
-      
-      {/* Subtle ambient light/dark background */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-30 dark:opacity-100">
-        <div className="absolute top-1/3 -left-1/4 w-[90vw] h-[90vw] rounded-full bg-gradient-to-tr from-blue-500/10 via-transparent to-transparent blur-[100px]" />
-        <div className="absolute bottom-1/3 -right-1/4 w-[80vw] h-[80vw] rounded-full bg-gradient-to-bl from-slate-200/50 dark:from-[#28623A]/30 via-transparent to-transparent blur-[120px]" />
-      </div>
+    <section ref={sectionRef} id="work" className="section-shell relative z-10 border-t border-slate-200/70 bg-[#f6f7f9] transition-colors dark:border-white/10 dark:bg-[#090d13]">
 
       {/* Section Header */}
-      <div ref={headerRef} className="w-full max-w-[1720px] mx-auto mb-16 sm:mb-20 lg:mb-24">
+      <div ref={headerRef} className="site-container mb-16 sm:mb-20 lg:mb-24">
         <SectionHeader
           eyebrow="Selected work"
           title="Products shaped around real operational needs."
@@ -122,12 +116,12 @@ export function Portfolio() {
       </div>
 
       {/* Vertical Zig-Zag Projects Container */}
-      <div className="w-full max-w-[1720px] mx-auto flex flex-col gap-20 sm:gap-28 lg:gap-36 relative z-10">
+      <div className="site-container relative z-10 flex flex-col gap-20 sm:gap-28 lg:gap-36">
         {isLoading ? (
           <div className="w-full flex items-center justify-center min-h-[300px]">
             <div className="flex flex-col items-center gap-4 text-slate-400 dark:text-white/50">
               <span className="material-symbols-outlined text-4xl animate-spin">refresh</span>
-              <p className="font-mono text-sm tracking-widest">LOADING CASE STUDIES...</p>
+              <p className="text-sm">Loading selected work...</p>
             </div>
           </div>
         ) : (

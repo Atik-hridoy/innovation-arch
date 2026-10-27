@@ -14,7 +14,7 @@ const TECH_ITEMS = [
 
 export function TechStack() {
   return (
-    <div id="tech" className="relative z-10 bg-transparent py-12 md:py-20 px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-20 overflow-hidden border-t border-slate-200/40 dark:border-slate-800/40 transition-colors duration-300">
+    <div id="tech" className="relative z-10 overflow-hidden border-t border-slate-200/60 bg-[#faf6ef] px-4 py-12 transition-colors duration-300 dark:border-white/10 dark:bg-[#12100d] sm:px-8 md:px-12 md:py-20 lg:px-16 2xl:px-20">
       <div className="max-w-[1720px] w-full mx-auto">
         <SectionHeader
           eyebrow="Technology"

@@ -6,11 +6,11 @@ import { DiscoveryModal } from '@/components/ui/DiscoveryModal';
 import { useTheme } from '@/components/ThemeProvider';
 
 const navItems = [
-  { label: 'Services', href: '#services' },
-  { label: 'Process', href: '#process' },
-  { label: 'Work', href: '#work' },
-  { label: 'About', href: '#about' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Services', href: '/#services' },
+  { label: 'Process', href: '/#process' },
+  { label: 'Work', href: '/#work' },
+  { label: 'About', href: '/about' },
+  { label: 'Contact', href: '/#contact' },
 ];
 
 export function Header() {
