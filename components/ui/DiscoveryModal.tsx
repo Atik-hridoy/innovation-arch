@@ -3,7 +3,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { CONFIG } from '@/lib/config';
 
-interface DiscoveryModalProps { isOpen: boolean; onClose: () => void; }
+interface DiscoveryModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
 
 const TIME_SLOTS = ['09:30 AM', '11:00 AM', '02:00 PM', '03:30 PM', '05:00 PM'];
 const DAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
@@ -87,70 +90,243 @@ export function DiscoveryModal({ isOpen, onClose }: DiscoveryModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] overflow-y-auto bg-slate-950/65 p-3 backdrop-blur-sm sm:p-6" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
-      <div role="dialog" aria-modal="true" aria-labelledby="booking-title" className="relative mx-auto my-4 w-full max-w-5xl overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl dark:border-white/10 dark:bg-[#0b0e13] sm:my-8">
-        <button type="button" onClick={onClose} className="absolute right-4 top-4 z-20 grid h-10 w-10 place-items-center rounded-md border border-slate-200 bg-white text-slate-500 transition-colors hover:text-slate-950 dark:border-white/10 dark:bg-[#0b0e13] dark:hover:text-white" aria-label="Close booking dialog">
-          <span className="material-symbols-outlined text-xl">close</span>
+    <div
+      className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-slate-950/70 p-0 sm:p-4 backdrop-blur-sm animate-in fade-in duration-200"
+      role="presentation"
+      onMouseDown={(event) => event.target === event.currentTarget && onClose()}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="booking-title"
+        className="relative mx-auto w-full max-w-4xl max-h-[92vh] sm:max-h-[88vh] overflow-y-auto rounded-t-3xl sm:rounded-2xl border border-slate-200 bg-white shadow-2xl dark:border-white/10 dark:bg-[#0b0e13]"
+      >
+        {/* Sticky Close Button */}
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute right-3.5 top-3.5 z-30 grid h-9 w-9 place-items-center rounded-lg border border-slate-200 bg-white/90 text-slate-500 backdrop-blur-md transition-colors hover:text-slate-950 dark:border-white/10 dark:bg-[#0b0e13]/90 dark:hover:text-white active:scale-95"
+          aria-label="Close booking dialog"
+        >
+          <span className="material-symbols-outlined text-lg">close</span>
         </button>
 
         {success ? (
-          <div className="mx-auto flex min-h-[520px] max-w-xl flex-col items-center justify-center px-6 py-16 text-center">
-            <div className="grid h-12 w-12 place-items-center rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-300"><span className="material-symbols-outlined">check</span></div>
-            <p className="mt-7 text-xs font-semibold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">Request received</p>
-            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 dark:text-white">We’ll confirm the time by email.</h2>
-            <p className="mt-4 text-sm leading-7 text-slate-600 dark:text-slate-400">Your preferred session is {dateLabel} at {selectedTime}. This is a request until our team confirms availability.</p>
-            <button type="button" onClick={onClose} className="mt-8 rounded-md bg-slate-950 px-6 py-3 text-sm font-semibold text-white dark:bg-white dark:text-slate-950">Close</button>
+          <div className="mx-auto flex min-h-[460px] max-w-md flex-col items-center justify-center p-6 text-center">
+            <div className="grid h-14 w-14 place-items-center rounded-full bg-emerald-50 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400">
+              <span className="material-symbols-outlined text-3xl">check_circle</span>
+            </div>
+            <p className="mt-5 text-xs font-mono font-semibold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">
+              Request received
+            </p>
+            <h2 className="mt-2 text-2xl sm:text-3xl font-semibold tracking-tight text-slate-950 dark:text-white">
+              We’ll confirm by email shortly.
+            </h2>
+            <p className="mt-3 text-xs sm:text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+              Your requested session is for <strong className="text-slate-900 dark:text-white">{dateLabel}</strong> at <strong className="text-slate-900 dark:text-white">{selectedTime}</strong>. We will send the Google Meet invitation to your email.
+            </p>
+            <button
+              type="button"
+              onClick={onClose}
+              className="mt-6 rounded-xl bg-slate-950 px-6 py-3 text-xs font-semibold text-white dark:bg-white dark:text-slate-950 active:scale-98"
+            >
+              Close this window
+            </button>
           </div>
         ) : (
-          <div className="grid lg:grid-cols-[1.05fr_.95fr]">
-            <section className="border-b border-slate-200 bg-slate-50/70 p-5 dark:border-white/10 dark:bg-white/[0.025] sm:p-8 lg:border-b-0 lg:border-r lg:border-white/10">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">30-minute discovery call</p>
-              <h2 id="booking-title" className="mt-3 max-w-md text-3xl font-semibold tracking-[-0.04em] text-slate-950 dark:text-white sm:text-4xl">Choose a time that works for you.</h2>
-              <p className="mt-4 max-w-md text-sm leading-6 text-slate-600 dark:text-slate-400">A focused conversation about your product, priorities, and whether we are the right team to help.</p>
+          <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_.9fr]">
+            
+            {/* Calendar & Time Section */}
+            <section className="border-b border-slate-200 bg-slate-50/70 p-5 sm:p-7 dark:border-white/10 dark:bg-white/[0.025] lg:border-b-0 lg:border-r">
+              <span className="text-[10px] font-mono font-semibold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">
+                30-min discovery call
+              </span>
+              <h2 id="booking-title" className="mt-1.5 text-xl sm:text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">
+                Choose a time that suits you.
+              </h2>
+              <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                A focused discussion about your product goals, timeline, and whether we are the right team to help.
+              </p>
 
-              <div className="mt-8 rounded-lg border border-slate-200 bg-white p-4 dark:border-white/10 dark:bg-[#0b0e13] sm:p-5">
-                <div className="mb-5 flex items-center justify-between">
-                  <h3 className="text-sm font-semibold text-slate-950 dark:text-white">{visibleMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</h3>
+              {/* Month & Day Picker */}
+              <div className="mt-5 rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 dark:border-white/10 dark:bg-[#0b0e13]">
+                <div className="mb-3 flex items-center justify-between">
+                  <h3 className="text-xs sm:text-sm font-semibold text-slate-950 dark:text-white">
+                    {visibleMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                  </h3>
                   <div className="flex gap-1">
-                    <button type="button" disabled={isCurrentMonth} onClick={() => setVisibleMonth(new Date(year, month - 1, 1))} className="grid h-8 w-8 place-items-center rounded-md text-slate-500 hover:bg-slate-100 disabled:opacity-25 dark:hover:bg-white/5" aria-label="Previous month"><span className="material-symbols-outlined text-lg">chevron_left</span></button>
-                    <button type="button" onClick={() => setVisibleMonth(new Date(year, month + 1, 1))} className="grid h-8 w-8 place-items-center rounded-md text-slate-500 hover:bg-slate-100 dark:hover:bg-white/5" aria-label="Next month"><span className="material-symbols-outlined text-lg">chevron_right</span></button>
+                    <button
+                      type="button"
+                      disabled={isCurrentMonth}
+                      onClick={() => setVisibleMonth(new Date(year, month - 1, 1))}
+                      className="grid h-7 w-7 place-items-center rounded-md text-slate-500 hover:bg-slate-100 disabled:opacity-25 dark:hover:bg-white/5"
+                      aria-label="Previous month"
+                    >
+                      <span className="material-symbols-outlined text-base">chevron_left</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setVisibleMonth(new Date(year, month + 1, 1))}
+                      className="grid h-7 w-7 place-items-center rounded-md text-slate-500 hover:bg-slate-100 dark:hover:bg-white/5"
+                      aria-label="Next month"
+                    >
+                      <span className="material-symbols-outlined text-base">chevron_right</span>
+                    </button>
                   </div>
                 </div>
-                <div className="grid grid-cols-7 text-center text-[10px] font-semibold uppercase tracking-wider text-slate-400">{DAYS.map(day => <span key={day} className="pb-3">{day}</span>)}</div>
+
+                <div className="grid grid-cols-7 text-center text-[9px] font-mono font-bold uppercase text-slate-400 mb-1.5">
+                  {DAYS.map((day) => (
+                    <span key={day}>{day}</span>
+                  ))}
+                </div>
+
                 <div className="grid grid-cols-7 gap-1">
-                  {Array.from({ length: firstDay }, (_, index) => <span key={`blank-${index}`} />)}
+                  {Array.from({ length: firstDay }, (_, index) => (
+                    <span key={`blank-${index}`} />
+                  ))}
                   {Array.from({ length: daysInMonth }, (_, index) => {
                     const day = index + 1;
                     const date = new Date(year, month, day);
                     const disabled = date < today;
                     const selected = date.getTime() === selectedDate.getTime();
-                    return <button key={day} type="button" disabled={disabled} onClick={() => selectDay(day)} className={`aspect-square rounded-md text-xs font-medium transition-colors ${selected ? 'bg-blue-600 text-white' : disabled ? 'text-slate-300 dark:text-slate-700' : 'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5'}`}>{day}</button>;
+                    return (
+                      <button
+                        key={day}
+                        type="button"
+                        disabled={disabled}
+                        onClick={() => selectDay(day)}
+                        className={`aspect-square min-h-[32px] sm:min-h-[36px] rounded-lg text-xs font-medium transition-colors ${
+                          selected
+                            ? 'bg-blue-600 text-white font-bold'
+                            : disabled
+                            ? 'text-slate-300 dark:text-slate-700'
+                            : 'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5'
+                        }`}
+                      >
+                        {day}
+                      </button>
+                    );
                   })}
                 </div>
               </div>
 
-              <div className="mt-5">
-                <p className="mb-3 text-xs font-semibold text-slate-700 dark:text-slate-300">Preferred time <span className="font-normal text-slate-400">· Asia/Dhaka</span></p>
-                <div className="grid grid-cols-3 gap-2 sm:grid-cols-5 lg:grid-cols-3">
-                  {TIME_SLOTS.map(time => <button key={time} type="button" onClick={() => setSelectedTime(time)} className={`rounded-md border px-2 py-2.5 text-xs font-medium transition-colors ${selectedTime === time ? 'border-blue-600 bg-blue-50 text-blue-700 dark:bg-blue-400/10 dark:text-blue-300' : 'border-slate-200 text-slate-600 hover:border-slate-400 dark:border-white/10 dark:text-slate-400 dark:hover:border-white/25'}`}>{time}</button>)}
+              {/* Time Slots */}
+              <div className="mt-4">
+                <p className="mb-2 text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  Preferred time <span className="font-normal text-slate-400">· Asia/Dhaka</span>
+                </p>
+                <div className="grid grid-cols-3 sm:grid-cols-5 gap-1.5">
+                  {TIME_SLOTS.map((time) => (
+                    <button
+                      key={time}
+                      type="button"
+                      onClick={() => setSelectedTime(time)}
+                      className={`rounded-lg border px-2 py-2 text-xs font-semibold transition-all ${
+                        selectedTime === time
+                          ? 'border-blue-600 bg-blue-50 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300 dark:border-blue-400'
+                          : 'border-slate-200 text-slate-600 hover:border-slate-400 dark:border-white/10 dark:text-slate-400'
+                      }`}
+                    >
+                      {time}
+                    </button>
+                  ))}
                 </div>
               </div>
             </section>
 
-            <form onSubmit={submit} className="flex flex-col p-5 pt-16 sm:p-8 sm:pt-16 lg:p-10 lg:pt-24">
-              <div className="mb-7 flex items-center gap-3 border-b border-slate-200 pb-5 text-sm dark:border-white/10">
+            {/* Input Details Form */}
+            <form onSubmit={submit} className="flex flex-col p-5 sm:p-7">
+              <div className="mb-4 flex items-center gap-2.5 rounded-lg border border-slate-200/80 dark:border-white/10 bg-slate-50 dark:bg-white/[0.02] p-2.5 text-xs">
                 <span className="material-symbols-outlined text-blue-600 dark:text-blue-400">event</span>
-                <div><p className="font-semibold text-slate-950 dark:text-white">{dateLabel} · {selectedTime}</p><p className="mt-0.5 text-xs text-slate-500">30 minutes · Video call</p></div>
+                <div>
+                  <p className="font-semibold text-slate-900 dark:text-white">
+                    {dateLabel} at {selectedTime}
+                  </p>
+                  <p className="text-[10px] text-slate-500">30 minutes · Video conference</p>
+                </div>
               </div>
-              <div className="space-y-5">
-                <label className="block"><span className="mb-2 block text-xs font-medium text-slate-700 dark:text-slate-300">Name</span><input required autoComplete="name" value={name} onChange={e => setName(e.target.value)} placeholder="Your name" className="w-full rounded-md border border-slate-200 bg-transparent px-4 py-3 text-sm outline-none transition-colors placeholder:text-slate-400 focus:border-blue-600 dark:border-white/10" /></label>
-                <label className="block"><span className="mb-2 block text-xs font-medium text-slate-700 dark:text-slate-300">Work email</span><input required type="email" autoComplete="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@company.com" className="w-full rounded-md border border-slate-200 bg-transparent px-4 py-3 text-sm outline-none transition-colors placeholder:text-slate-400 focus:border-blue-600 dark:border-white/10" /></label>
-                <label className="block"><span className="mb-2 block text-xs font-medium text-slate-700 dark:text-slate-300">What are you considering?</span><select value={service} onChange={e => setService(e.target.value)} className="w-full rounded-md border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-blue-600 dark:border-white/10 dark:bg-[#0b0e13]">{SERVICES.map(item => <option key={item}>{item}</option>)}</select></label>
-                <label className="block"><span className="mb-2 block text-xs font-medium text-slate-700 dark:text-slate-300">A little context <span className="font-normal text-slate-400">(optional)</span></span><textarea rows={4} value={brief} onChange={e => setBrief(e.target.value)} placeholder="The problem, timeline, or current stage" className="w-full resize-none rounded-md border border-slate-200 bg-transparent px-4 py-3 text-sm leading-6 outline-none placeholder:text-slate-400 focus:border-blue-600 dark:border-white/10" /></label>
+
+              <div className="space-y-3">
+                <div>
+                  <label htmlFor="modal-name" className="mb-1 block text-xs font-medium text-slate-700 dark:text-slate-300">
+                    Your Name
+                  </label>
+                  <input
+                    id="modal-name"
+                    required
+                    autoComplete="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="e.g. Alex Vance"
+                    className="w-full rounded-xl border border-slate-200 bg-transparent px-3.5 py-2.5 text-base sm:text-sm outline-none transition-colors placeholder:text-slate-400 focus:border-blue-600 dark:border-white/10"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="modal-email" className="mb-1 block text-xs font-medium text-slate-700 dark:text-slate-300">
+                    Work Email
+                  </label>
+                  <input
+                    id="modal-email"
+                    required
+                    type="email"
+                    autoComplete="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@company.com"
+                    className="w-full rounded-xl border border-slate-200 bg-transparent px-3.5 py-2.5 text-base sm:text-sm outline-none transition-colors placeholder:text-slate-400 focus:border-blue-600 dark:border-white/10"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="modal-service" className="mb-1 block text-xs font-medium text-slate-700 dark:text-slate-300">
+                    What are you looking to build?
+                  </label>
+                  <select
+                    id="modal-service"
+                    value={service}
+                    onChange={(e) => setService(e.target.value)}
+                    className="w-full rounded-xl border border-slate-200 bg-white dark:bg-[#0b0e13] px-3.5 py-2.5 text-base sm:text-sm outline-none focus:border-blue-600 dark:border-white/10"
+                  >
+                    {SERVICES.map((item) => (
+                      <option key={item}>{item}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label htmlFor="modal-brief" className="mb-1 block text-xs font-medium text-slate-700 dark:text-slate-300">
+                    Context <span className="font-normal text-slate-400">(optional)</span>
+                  </label>
+                  <textarea
+                    id="modal-brief"
+                    rows={2}
+                    value={brief}
+                    onChange={(e) => setBrief(e.target.value)}
+                    placeholder="Brief problem or current stage"
+                    className="w-full resize-none rounded-xl border border-slate-200 bg-transparent px-3.5 py-2.5 text-base sm:text-sm leading-relaxed outline-none placeholder:text-slate-400 focus:border-blue-600 dark:border-white/10"
+                  />
+                </div>
               </div>
-              {error && <p role="alert" className="mt-4 text-xs leading-5 text-rose-600 dark:text-rose-400">{error}</p>}
-              <button type="submit" disabled={submitting} className="mt-6 rounded-md bg-slate-950 px-5 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 disabled:cursor-wait disabled:opacity-60 dark:bg-white dark:text-slate-950 dark:hover:bg-blue-100">{submitting ? 'Sending request…' : 'Request this time'}</button>
-              <p className="mt-3 text-center text-[11px] leading-5 text-slate-400">We’ll confirm availability by email. No sales pressure.</p>
+
+              {error && (
+                <p role="alert" className="mt-2 text-xs text-rose-600 dark:text-rose-400">
+                  {error}
+                </p>
+              )}
+
+              <button
+                type="submit"
+                disabled={submitting}
+                className="mt-4 w-full rounded-xl bg-slate-950 py-3 text-xs sm:text-sm font-semibold text-white shadow-sm transition-all hover:bg-blue-600 active:scale-98 disabled:opacity-60 dark:bg-white dark:text-slate-950"
+              >
+                {submitting ? 'Sending request…' : 'Request This Time'}
+              </button>
+
+              <p className="mt-2 text-center text-[10px] text-slate-400">
+                We’ll confirm by email. No sales pressure.
+              </p>
             </form>
           </div>
         )}

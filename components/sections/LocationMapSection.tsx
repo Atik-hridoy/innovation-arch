@@ -3,15 +3,29 @@
 import { useEffect, useState } from 'react';
 import { CONFIG } from '@/lib/config';
 
-interface SiteSettings { phone_number?: string; email_address?: string; }
+interface SiteSettings {
+  phone_number?: string;
+  email_address?: string;
+}
 
 export function LocationMapSection() {
   const [settings, setSettings] = useState<SiteSettings | null>(null);
   const [localTime, setLocalTime] = useState('');
 
   useEffect(() => {
-    fetch(`${CONFIG.API_BASE_URL}/settings/`).then(response => response.json()).then(setSettings).catch(() => undefined);
-    const update = () => setLocalTime(new Date().toLocaleTimeString('en-US', { timeZone: 'Asia/Dhaka', hour: '2-digit', minute: '2-digit' }));
+    fetch(`${CONFIG.API_BASE_URL}/settings/`)
+      .then((response) => response.json())
+      .then(setSettings)
+      .catch(() => undefined);
+
+    const update = () =>
+      setLocalTime(
+        new Date().toLocaleTimeString('en-US', {
+          timeZone: 'Asia/Dhaka',
+          hour: '2-digit',
+          minute: '2-digit',
+        })
+      );
     update();
     const timer = window.setInterval(update, 60000);
     return () => window.clearInterval(timer);
@@ -23,19 +37,89 @@ export function LocationMapSection() {
   const directions = `https://www.google.com/maps/dir/?api=1&destination=${coordinates}`;
 
   return (
-    <section className="mt-16 border-t border-slate-200 pt-12 dark:border-white/10 sm:mt-24 sm:pt-16">
-      <div className="mb-8 grid gap-5 md:grid-cols-2 md:items-end">
-        <div><p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">Studio and contact</p><h3 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 dark:text-white sm:text-4xl">Based in Bangladesh.<br />Working without borders.</h3></div>
-        <p className="max-w-lg text-sm leading-7 text-slate-600 dark:text-slate-400">Meet remotely or arrange a visit. For project enquiries, email is usually the best place to begin.</p>
-      </div>
-      <div className="grid overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-white/10 dark:bg-[#0d1118] lg:grid-cols-[.72fr_1.28fr]">
-        <div className="flex flex-col p-6 sm:p-8">
-          <div className="flex items-center justify-between border-b border-slate-200 pb-5 dark:border-white/10"><span className="text-xs font-medium text-slate-500">Innovation Ark studio</span><span className="text-xs text-slate-400">{localTime} local</span></div>
-          <address className="mt-7 not-italic"><p className="text-lg font-medium text-slate-950 dark:text-white">Bangladesh</p><p className="mt-2 text-sm text-slate-500">25.817626° N, 89.237485° E</p></address>
-          <div className="mt-8 space-y-3 text-sm"><a href={`mailto:${email}`} className="block text-slate-700 transition-colors hover:text-blue-600 dark:text-slate-300">{email}</a><a href={`tel:${phone.replace(/[^0-9+]/g, '')}`} className="block text-slate-700 transition-colors hover:text-blue-600 dark:text-slate-300">{phone}</a></div>
-          <a href={directions} target="_blank" rel="noreferrer" className="group mt-10 inline-flex items-center gap-2 text-sm font-semibold text-slate-950 dark:text-white lg:mt-auto">Get directions <span className="transition-transform group-hover:translate-x-1">→</span></a>
+    <section className="mt-12 sm:mt-20 border-t border-slate-200 pt-10 sm:pt-16 dark:border-white/10">
+      
+      {/* Header */}
+      <div className="mb-6 sm:mb-8 grid gap-4 md:grid-cols-2 md:items-end">
+        <div>
+          <p className="text-[10px] font-mono font-semibold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">
+            Studio & Headquarters
+          </p>
+          <h3 className="mt-2 text-2xl xs:text-3xl sm:text-4xl font-semibold tracking-[-0.035em] text-slate-950 dark:text-white">
+            Based in Bangladesh.<br />Delivering globally.
+          </h3>
         </div>
-        <div className="relative min-h-80 overflow-hidden bg-slate-200 dark:bg-slate-900 lg:min-h-[430px]"><iframe title="Innovation Ark studio location" src={`https://maps.google.com/maps?q=${coordinates}&t=m&z=14&ie=UTF8&iwloc=&output=embed`} className="absolute inset-0 h-full w-full border-0 grayscale-[.25] contrast-[1.05]" loading="lazy" allowFullScreen /><div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-black/5" /></div>
+        <p className="max-w-lg text-xs sm:text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          Meet remotely via Google Meet or arrange a visit to our engineering studio. For new project inquiries, email is the fastest way to get started.
+        </p>
+      </div>
+
+      {/* Studio Info & Map */}
+      <div className="grid overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-white/10 dark:bg-[#0d1118] lg:grid-cols-[.8fr_1.2fr]">
+        
+        {/* Info Column */}
+        <div className="flex flex-col p-5 sm:p-7 md:p-8">
+          <div className="flex items-center justify-between border-b border-slate-200 pb-4 dark:border-white/10">
+            <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+              Innovation Ark Studio
+            </span>
+            <span className="inline-flex items-center gap-1.5 text-xs font-mono text-slate-400">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              {localTime || '12:00 PM'} local
+            </span>
+          </div>
+
+          <address className="mt-5 not-italic">
+            <p className="text-base sm:text-lg font-semibold text-slate-950 dark:text-white">
+              Rangpur & Dhaka, Bangladesh
+            </p>
+            <p className="mt-1 text-xs font-mono text-slate-500">
+              25.8176° N, 89.2375° E
+            </p>
+          </address>
+
+          {/* Quick Contact Touch Pills */}
+          <div className="mt-5 space-y-2 text-xs sm:text-sm">
+            <a
+              href={`mailto:${email}`}
+              className="flex items-center gap-2 rounded-xl border border-slate-200/80 bg-slate-50/70 p-3 text-slate-700 transition-colors hover:border-blue-400 hover:text-blue-600 dark:border-white/10 dark:bg-white/[0.02] dark:text-slate-300"
+            >
+              <span className="material-symbols-outlined text-base text-blue-500">mail</span>
+              <span className="truncate">{email}</span>
+            </a>
+            <a
+              href={`tel:${phone.replace(/[^0-9+]/g, '')}`}
+              className="flex items-center gap-2 rounded-xl border border-slate-200/80 bg-slate-50/70 p-3 text-slate-700 transition-colors hover:border-blue-400 hover:text-blue-600 dark:border-white/10 dark:bg-white/[0.02] dark:text-slate-300"
+            >
+              <span className="material-symbols-outlined text-base text-emerald-500">call</span>
+              <span>{phone}</span>
+            </a>
+          </div>
+
+          <div className="mt-6 pt-2 lg:mt-auto">
+            <a
+              href={directions}
+              target="_blank"
+              rel="noreferrer"
+              className="group inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-950 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            >
+              <span>Get directions on Google Maps</span>
+              <span className="transition-transform group-hover:translate-x-1">→</span>
+            </a>
+          </div>
+        </div>
+
+        {/* Embedded Interactive Map */}
+        <div className="relative h-60 sm:h-72 lg:h-auto min-h-[240px] overflow-hidden bg-slate-200 dark:bg-slate-900">
+          <iframe
+            title="Innovation Ark studio location"
+            src={`https://maps.google.com/maps?q=${coordinates}&t=m&z=14&ie=UTF8&iwloc=&output=embed`}
+            className="absolute inset-0 h-full w-full border-0 grayscale-[.25] contrast-[1.05]"
+            loading="lazy"
+            allowFullScreen
+          />
+          <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-black/5" />
+        </div>
       </div>
     </section>
   );

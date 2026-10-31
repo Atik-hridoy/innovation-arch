@@ -11,36 +11,39 @@ export function Logo({ className = '', showText = true, layout = 'horizontal' }:
   const isVertical = layout === 'vertical';
 
   return (
-    <a href="/" className={`flex ${isVertical ? 'flex-col items-center text-center gap-4' : 'items-center gap-3'} group select-none ${className}`}>
-      
-      {/* Official 3D Ribbon iA Emblem Logo Mark (High-Visibility Dark Mode Filters) */}
-      <div className={`relative flex items-center justify-center transition-all duration-300 group-hover:scale-105 rounded-xl p-0.5 dark:bg-blue-500/10 dark:border dark:border-blue-500/20 ${
-        isVertical ? 'w-16 h-16 sm:w-20 sm:h-20' : 'w-8 h-8 sm:w-10 sm:h-10'
-      }`}>
+    <a
+      href="/"
+      aria-label="Innovation Ark home"
+      className={`group inline-flex shrink-0 items-center rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-4 dark:focus-visible:ring-offset-[#07090d] ${className}`}
+    >
+      {showText ? (
+        <span
+          className={`relative block overflow-visible ${
+            isVertical
+              ? 'w-[220px] sm:w-[280px]'
+              : 'w-[158px] sm:w-[205px]'
+          }`}
+        >
+          <img
+            src="/images/innovation-ark-wordmark.png"
+            alt=""
+            className="block h-auto w-full transition-opacity duration-200 group-hover:opacity-80 dark:hidden"
+          />
+          <img
+            src="/images/innovation-ark-wordmark-dark.png"
+            alt=""
+            className="hidden h-auto w-full transition-opacity duration-200 group-hover:opacity-80 dark:block"
+          />
+        </span>
+      ) : (
         <img
           src="/images/logo_mark.png"
-          alt="Innovation Ark Logo Mark"
-          className="w-full h-full object-contain transition-all duration-300 filter drop-shadow-[0_0_6px_rgba(37,99,235,0.4)] dark:brightness-125 dark:contrast-125 dark:drop-shadow-[0_0_14px_rgba(59,130,246,0.8)]"
+          alt=""
+          className={`${isVertical ? 'h-20 w-20' : 'h-9 w-9'} object-contain`}
         />
-      </div>
-
-      {showText && (
-        <div className={`${isVertical ? 'flex flex-col items-center' : 'hidden sm:flex flex-col items-start'}`}>
-          <div className="flex items-center gap-1.5 leading-none">
-            <span className="font-sans font-semibold tracking-[-0.03em] text-slate-900 dark:text-white text-lg sm:text-xl">
-              Innovation
-            </span>
-            <span className="font-sans font-semibold tracking-[-0.03em] text-blue-600 dark:text-blue-400 text-lg sm:text-xl">
-              Ark
-            </span>
-          </div>
-        </div>
       )}
     </a>
   );
 }
 
 export default Logo;
-
-
-

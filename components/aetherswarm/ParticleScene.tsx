@@ -14,6 +14,7 @@ export interface ParticleSceneProps {
   colorTorus?: string;
   turbulenceIntensity?: number;
   pointSize?: number;
+  motionSpeed?: number;
   className?: string;
   onMorphChange?: (morphValue: number) => void;
   showScrollIndicator?: boolean;
@@ -368,6 +369,7 @@ interface SwarmParticlesProps {
   colorTorus: string;
   turbulenceIntensity: number;
   pointSize: number;
+  motionSpeed: number;
   onMorphChange?: (morphValue: number) => void;
   autoPlay?: boolean;
   embedded?: boolean;
@@ -381,6 +383,7 @@ const SwarmParticles: React.FC<SwarmParticlesProps> = ({
   colorTorus,
   turbulenceIntensity,
   pointSize,
+  motionSpeed,
   onMorphChange,
   autoPlay = false,
   embedded = false,
@@ -531,11 +534,14 @@ const SwarmParticles: React.FC<SwarmParticlesProps> = ({
   useFrame(({ clock }) => {
     if (!materialRef.current) return;
 
+    const responsiveSpeed = size.width < 768 ? 0.48 : 1;
+    const elapsed = clock.getElapsedTime() * motionSpeed * responsiveSpeed;
+
     // Read Framer Motion scroll directly without triggering React re-renders!
     const progress = typeof scrollYProgress?.get === 'function' ? scrollYProgress.get() : 0.0;
     // Embedded hero mode loops through all original AetherSwarm formations
     // without requiring the archive's standalone 300vh demo layout.
-    const cycle = clock.getElapsedTime() % 25.5;
+    const cycle = elapsed % 25.5;
     let autoMorph = 0;
     if (cycle < 4.0) autoMorph = 0;
     else if (cycle < 6.5) autoMorph = (cycle - 4.0) / 2.5;
@@ -559,7 +565,7 @@ const SwarmParticles: React.FC<SwarmParticlesProps> = ({
     const lerpedMorph = THREE.MathUtils.lerp(currentMorph, targetMorph, 0.08);
     materialRef.current.uniforms.uMorph.value = lerpedMorph;
 
-    materialRef.current.uniforms.uTime.value = clock.getElapsedTime();
+    materialRef.current.uniforms.uTime.value = elapsed;
 
     // Smooth mouse parallax lerp
     mouseRef.current.lerp(targetMouseRef.current, 0.05);
@@ -573,9 +579,9 @@ const SwarmParticles: React.FC<SwarmParticlesProps> = ({
       const sphereWeight = Math.max(0, 1.0 - Math.min(1.0, lerpedMorph));
       const torusWeight = Math.max(0, Math.min(1.0, lerpedMorph - 1.0));
 
-      pointsRef.current.rotation.y = clock.getElapsedTime() * 0.035 * sphereWeight;
-      pointsRef.current.rotation.z = clock.getElapsedTime() * 0.05 * torusWeight;
-      pointsRef.current.rotation.x = Math.sin(clock.getElapsedTime() * 0.02) * 0.03;
+      pointsRef.current.rotation.y = elapsed * 0.035 * sphereWeight;
+      pointsRef.current.rotation.z = elapsed * 0.05 * torusWeight;
+      pointsRef.current.rotation.x = Math.sin(elapsed * 0.02) * 0.03;
       pointsRef.current.position.x = embedded ? (size.width < 768 ? 0.35 : 2.15) : 0;
     }
 
@@ -632,6 +638,7 @@ export default function ParticleScene({
   colorTorus = '#fb923c',
   turbulenceIntensity = 1.0,
   pointSize = 38.0,
+  motionSpeed = 1.0,
   className = '',
   onMorphChange,
   showScrollIndicator = true,
@@ -669,6 +676,7 @@ export default function ParticleScene({
             colorTorus={colorTorus}
             turbulenceIntensity={turbulenceIntensity}
             pointSize={pointSize}
+            motionSpeed={motionSpeed}
             onMorphChange={onMorphChange}
             autoPlay={autoPlay}
             embedded
@@ -704,7 +712,8 @@ export default function ParticleScene({
             colorWave={colorWave}
             colorTorus={colorTorus}
             turbulenceIntensity={turbulenceIntensity}
-            pointSize={pointSize}
+          pointSize={pointSize}
+          motionSpeed={motionSpeed}
             onMorphChange={onMorphChange}
           />
         </Canvas>

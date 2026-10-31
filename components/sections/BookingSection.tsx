@@ -30,10 +30,20 @@ export function BookingSection() {
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
     setStatus('sending');
-    const fullDate = selectedDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-    const message = ['Discovery call request', `Preferred date: ${fullDate}`, `Preferred time: ${selectedTime} (Asia/Dhaka)`, `Project: ${project}`, '', brief || 'No additional context provided.'].join('\n');
     try {
-      const response = await fetch(`${CONFIG.API_BASE_URL}/contacts/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, email, message }) });
+      const response = await fetch(`${CONFIG.API_BASE_URL}/bookings/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          email,
+          project_type: project,
+          preferred_date: selectedDate.toISOString().slice(0, 10),
+          preferred_time: selectedTime,
+          timezone: 'Asia/Dhaka',
+          brief,
+        }),
+      });
       if (!response.ok) throw new Error();
       setStatus('sent');
     } catch {
@@ -42,78 +52,292 @@ export function BookingSection() {
   };
 
   return (
-    <section id="book" className="relative overflow-hidden border-t border-slate-200 bg-[#f4f6f8] py-20 dark:border-white/10 dark:bg-[#080b10] sm:py-28 lg:py-36">
+    <section id="book" className="relative overflow-hidden border-t border-slate-200 bg-[#f4f6f8] py-14 sm:py-24 lg:py-32 dark:border-white/10 dark:bg-[#080b10]">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent" />
       <div className="site-container">
-        <div className="mb-12 grid gap-6 lg:grid-cols-[1fr_.72fr] lg:items-end">
+        
+        {/* Section Heading */}
+        <div className="mb-8 sm:mb-12 grid gap-4 sm:gap-6 lg:grid-cols-[1fr_.72fr] lg:items-end">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-blue-600 dark:text-blue-400">Schedule a conversation</p>
-            <h2 className="mt-5 max-w-3xl text-balance text-4xl font-semibold leading-[1.03] tracking-[-0.045em] text-slate-950 dark:text-white sm:text-5xl lg:text-6xl">A useful first conversation starts with context.</h2>
+            <span className="inline-block font-mono text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">
+              Schedule a consultation
+            </span>
+            <h2 className="mt-3 text-balance text-2xl xs:text-3xl sm:text-4xl lg:text-5xl font-semibold leading-tight tracking-[-0.035em] sm:tracking-[-0.045em] text-slate-950 dark:text-white">
+              A useful first conversation starts with context.
+            </h2>
           </div>
-          <p className="max-w-xl text-sm leading-7 text-slate-600 dark:text-slate-400 sm:text-base">Choose a preferred time and share what you are working through. We will review it before the call and confirm availability by email.</p>
+          <p className="max-w-xl text-xs sm:text-sm md:text-base leading-relaxed text-slate-600 dark:text-slate-400">
+            Choose a preferred date and time, then share what you are working on. We will review your context and confirm availability by email.
+          </p>
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_30px_90px_rgba(15,23,42,0.09)] dark:border-white/10 dark:bg-[#0d1118] dark:shadow-[0_30px_90px_rgba(0,0,0,0.24)]">
-          <div className="grid xl:grid-cols-[260px_1fr_390px]">
-            <aside className="flex flex-col border-b border-slate-200 bg-slate-950 p-7 text-white dark:border-white/10 xl:border-b-0 xl:border-r xl:border-white/10">
-              <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-blue-300"><span className="h-1.5 w-1.5 rounded-full bg-blue-400" />Discovery session</div>
-              <h3 className="mt-7 text-2xl font-semibold tracking-[-0.03em]">Product and technical consultation</h3>
-              <p className="mt-4 text-sm leading-6 text-slate-400">A focused introduction to understand the challenge, current stage, and most useful next step.</p>
-              <dl className="mt-8 space-y-5 border-t border-white/10 pt-6 text-sm">
-                <div className="flex gap-3"><span className="material-symbols-outlined text-lg text-slate-500">schedule</span><div><dt className="text-xs text-slate-500">Duration</dt><dd className="mt-1 text-slate-200">30 minutes</dd></div></div>
-                <div className="flex gap-3"><span className="material-symbols-outlined text-lg text-slate-500">videocam</span><div><dt className="text-xs text-slate-500">Format</dt><dd className="mt-1 text-slate-200">Video call</dd></div></div>
-                <div className="flex gap-3"><span className="material-symbols-outlined text-lg text-slate-500">language</span><div><dt className="text-xs text-slate-500">Timezone</dt><dd className="mt-1 text-slate-200">Asia / Dhaka</dd></div></div>
+        {/* Booking Container: Mobile Stacked, Desktop 3-Column */}
+        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl dark:border-white/10 dark:bg-[#0d1118]">
+          <div className="grid grid-cols-1 xl:grid-cols-[260px_1fr_380px]">
+            
+            {/* Step 0: Aside Info & Selection Pill */}
+            <aside className="hidden xl:flex flex-col border-b border-slate-200 bg-slate-950 p-7 text-white dark:border-white/10 xl:border-b-0 xl:border-r">
+              <div className="flex items-center gap-2 text-[10px] font-mono font-semibold uppercase tracking-[0.2em] text-blue-400">
+                <span className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse" />
+                Discovery session
+              </div>
+
+              <h3 className="mt-4 sm:mt-6 text-xl sm:text-2xl font-semibold tracking-tight">
+                Product & technical consultation
+              </h3>
+              <p className="mt-2.5 text-xs sm:text-sm leading-relaxed text-slate-400">
+                A focused 30-minute introduction to understand your challenge, current stage, and the most useful next step.
+              </p>
+
+              <dl className="mt-6 space-y-3 sm:space-y-4 border-t border-white/10 pt-4 text-xs sm:text-sm">
+                <div className="flex items-center gap-3">
+                  <span className="material-symbols-outlined text-base text-blue-400">schedule</span>
+                  <div>
+                    <span className="text-[11px] text-slate-400">Duration: </span>
+                    <span className="font-semibold text-slate-200">30 minutes</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="material-symbols-outlined text-base text-blue-400">videocam</span>
+                  <div>
+                    <span className="text-[11px] text-slate-400">Format: </span>
+                    <span className="font-semibold text-slate-200">Google Meet / Video</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="material-symbols-outlined text-base text-blue-400">language</span>
+                  <div>
+                    <span className="text-[11px] text-slate-400">Timezone: </span>
+                    <span className="font-semibold text-slate-200">Asia / Dhaka (GMT+6)</span>
+                  </div>
+                </div>
               </dl>
-              <div className="mt-8 rounded-lg border border-white/10 bg-white/[0.04] p-4 xl:mt-auto">
-                <p className="text-[10px] uppercase tracking-[0.16em] text-slate-500">Your selection</p>
-                <p className="mt-2 text-sm font-semibold">{dateLabel}</p>
-                <p className="mt-1 text-sm text-blue-300">{selectedTime}</p>
+
+              {/* Selection Summary Pill */}
+              <div className="mt-6 rounded-xl border border-white/15 bg-white/[0.06] p-3 sm:p-4 xl:mt-auto">
+                <p className="text-[10px] font-mono uppercase tracking-[0.16em] text-slate-400">
+                  Selected Session
+                </p>
+                <div className="mt-1 flex items-center justify-between">
+                  <span className="text-sm font-semibold text-white">{dateLabel}</span>
+                  <span className="rounded-md bg-blue-600/30 border border-blue-400/40 px-2 py-0.5 text-xs font-mono font-bold text-blue-300">
+                    {selectedTime}
+                  </span>
+                </div>
               </div>
             </aside>
 
-            <div className="border-b border-slate-200 p-5 dark:border-white/10 sm:p-8 xl:border-b-0 xl:border-r xl:border-white/10">
+            {/* Step 1: Calendar & Time Picker */}
+            <div className="order-1 border-b border-slate-200 p-4 sm:p-7 md:p-8 dark:border-white/10 xl:order-none xl:border-b-0 xl:border-r">
+              <div className="mb-5 flex items-center justify-between rounded-xl bg-slate-950 px-4 py-3 text-white xl:hidden"><div><p className="text-[9px] font-semibold uppercase tracking-[.16em] text-blue-300">30-minute discovery call</p><p className="mt-1 text-xs text-slate-300">Video · Asia/Dhaka</p></div><div className="text-right"><p className="text-xs font-semibold">{dateLabel}</p><p className="mt-1 text-[10px] text-blue-300">{selectedTime}</p></div></div>
               <div className="flex items-center justify-between">
-                <div><p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">01 / Date and time</p><h3 className="mt-2 text-xl font-semibold tracking-tight text-slate-950 dark:text-white">{visibleMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</h3></div>
-                <div className="flex gap-2">
-                  <button type="button" disabled={isCurrentMonth} onClick={() => setVisibleMonth(new Date(year, month - 1, 1))} className="grid h-9 w-9 place-items-center rounded-md border border-slate-200 text-slate-500 transition-colors hover:bg-slate-50 disabled:opacity-25 dark:border-white/10 dark:hover:bg-white/5" aria-label="Previous month"><span className="material-symbols-outlined text-lg">chevron_left</span></button>
-                  <button type="button" onClick={() => setVisibleMonth(new Date(year, month + 1, 1))} className="grid h-9 w-9 place-items-center rounded-md border border-slate-200 text-slate-500 transition-colors hover:bg-slate-50 dark:border-white/10 dark:hover:bg-white/5" aria-label="Next month"><span className="material-symbols-outlined text-lg">chevron_right</span></button>
+                <div>
+                  <p className="text-[10px] font-mono font-semibold uppercase tracking-[0.18em] text-blue-600 dark:text-blue-400">
+                    Step 01 / Select Date
+                  </p>
+                  <h3 className="mt-1 text-lg sm:text-xl font-semibold tracking-tight text-slate-950 dark:text-white">
+                    {visibleMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                  </h3>
+                </div>
+                <div className="flex gap-1.5">
+                  <button
+                    type="button"
+                    disabled={isCurrentMonth}
+                    onClick={() => setVisibleMonth(new Date(year, month - 1, 1))}
+                    className="grid h-8 w-8 sm:h-9 sm:w-9 place-items-center rounded-lg border border-slate-200 text-slate-600 transition-colors hover:bg-slate-50 disabled:opacity-25 active:scale-95 dark:border-white/10 dark:text-slate-300 dark:hover:bg-white/5"
+                    aria-label="Previous month"
+                  >
+                    <span className="material-symbols-outlined text-base">chevron_left</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setVisibleMonth(new Date(year, month + 1, 1))}
+                    className="grid h-8 w-8 sm:h-9 sm:w-9 place-items-center rounded-lg border border-slate-200 text-slate-600 transition-colors hover:bg-slate-50 active:scale-95 dark:border-white/10 dark:text-slate-300 dark:hover:bg-white/5"
+                    aria-label="Next month"
+                  >
+                    <span className="material-symbols-outlined text-base">chevron_right</span>
+                  </button>
                 </div>
               </div>
-              <div className="mt-8 grid grid-cols-7 text-center text-[9px] font-semibold tracking-[0.12em] text-slate-400">{DAYS.map(day => <span key={day} className="pb-4">{day}</span>)}</div>
+
+              {/* Day Labels */}
+              <div className="mt-5 sm:mt-6 grid grid-cols-7 text-center text-[9px] font-mono font-bold tracking-wider text-slate-400">
+                {DAYS.map((day) => (
+                  <span key={day} className="pb-2">
+                    {day}
+                  </span>
+                ))}
+              </div>
+
+              {/* Day Grid with Touch Targets */}
               <div className="grid grid-cols-7 gap-1 sm:gap-1.5">
-                {Array.from({ length: firstDay }, (_, index) => <span key={`empty-${index}`} />)}
+                {Array.from({ length: firstDay }, (_, index) => (
+                  <span key={`empty-${index}`} />
+                ))}
                 {Array.from({ length: daysInMonth }, (_, index) => {
                   const day = index + 1;
                   const candidate = new Date(year, month, day);
                   const disabled = candidate < today;
                   const selected = candidate.getTime() === selectedDate.getTime();
                   const isToday = candidate.getTime() === today.getTime();
-                  return <button key={day} type="button" disabled={disabled} onClick={() => setSelectedDate(candidate)} aria-label={`${candidate.toLocaleDateString()}${selected ? ', selected' : ''}`} className={`relative aspect-square rounded-lg text-sm font-medium transition-all ${selected ? 'bg-blue-600 text-white shadow-[0_8px_22px_rgba(37,99,235,.28)]' : disabled ? 'cursor-not-allowed text-slate-300 dark:text-slate-700' : 'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5'}`}>{day}{isToday && !selected && <span className="absolute bottom-1.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-blue-500" />}</button>;
+
+                  return (
+                    <button
+                      key={day}
+                      type="button"
+                      disabled={disabled}
+                      onClick={() => setSelectedDate(candidate)}
+                      aria-label={`${candidate.toLocaleDateString()}${selected ? ', selected' : ''}`}
+                      className={`relative aspect-square min-h-[36px] sm:min-h-[40px] rounded-lg text-xs sm:text-sm font-medium transition-all active:scale-95 ${
+                        selected
+                          ? 'bg-blue-600 text-white font-bold shadow-[0_4px_14px_rgba(37,99,235,.4)]'
+                          : disabled
+                          ? 'cursor-not-allowed text-slate-300 dark:text-slate-700'
+                          : 'text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/5'
+                      }`}
+                    >
+                      {day}
+                      {isToday && !selected && (
+                        <span className="absolute bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-blue-500" />
+                      )}
+                    </button>
+                  );
                 })}
               </div>
-              <div className="mt-8 border-t border-slate-200 pt-6 dark:border-white/10">
-                <div className="mb-3 flex items-center justify-between"><p className="text-xs font-semibold text-slate-800 dark:text-slate-200">Preferred time</p><span className="text-[10px] text-slate-400">Times shown in Asia/Dhaka</span></div>
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                  {TIMES.map(time => <button key={time} type="button" onClick={() => setSelectedTime(time)} className={`rounded-md border px-3 py-3 text-xs font-semibold transition-all ${selectedTime === time ? 'border-blue-600 bg-blue-50 text-blue-700 dark:bg-blue-400/10 dark:text-blue-300' : 'border-slate-200 text-slate-600 hover:border-slate-400 dark:border-white/10 dark:text-slate-400 dark:hover:border-white/25'}`}>{time}</button>)}
+
+              {/* Time Slots */}
+              <div className="mt-6 border-t border-slate-200 pt-5 dark:border-white/10">
+                <div className="mb-3 flex items-center justify-between">
+                  <p className="text-xs font-semibold text-slate-800 dark:text-slate-200">
+                    Preferred Time Slot
+                  </p>
+                  <span className="text-[10px] font-mono text-slate-400">GMT+6 Dhaka</span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {TIMES.map((time) => (
+                    <button
+                      key={time}
+                      type="button"
+                      onClick={() => setSelectedTime(time)}
+                      className={`rounded-lg border px-2.5 py-2.5 sm:py-3 text-xs font-semibold transition-all active:scale-95 ${
+                        selectedTime === time
+                          ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-xs dark:bg-blue-500/20 dark:text-blue-300 dark:border-blue-400'
+                          : 'border-slate-200 text-slate-600 hover:border-slate-400 dark:border-white/10 dark:text-slate-400 dark:hover:border-white/25'
+                      }`}
+                    >
+                      {time}
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>
 
-            <form onSubmit={submit} className="flex min-h-full flex-col p-5 sm:p-8">
-              <div><p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">02 / Your context</p><h3 className="mt-2 text-xl font-semibold tracking-tight text-slate-950 dark:text-white">Help us prepare.</h3></div>
+            {/* Step 2: Form with iOS-safe 16px inputs */}
+            <form onSubmit={submit} className="order-2 flex min-h-full flex-col p-4 sm:p-7 md:p-8 xl:order-none">
+              <div>
+                <p className="text-[10px] font-mono font-semibold uppercase tracking-[0.18em] text-blue-600 dark:text-blue-400">
+                  Step 02 / Your Details
+                </p>
+                <h3 className="mt-1 text-lg sm:text-xl font-semibold tracking-tight text-slate-950 dark:text-white">
+                  Help us prepare.
+                </h3>
+              </div>
+
               {status === 'sent' ? (
-                <div className="flex flex-1 flex-col justify-center py-12"><div className="grid h-11 w-11 place-items-center rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-300"><span className="material-symbols-outlined">check</span></div><h3 className="mt-6 text-2xl font-semibold tracking-tight">Request received.</h3><p className="mt-3 text-sm leading-6 text-slate-500">We will review your note and confirm the selected time by email.</p></div>
+                <div className="flex flex-1 flex-col items-center justify-center py-10 text-center">
+                  <div className="grid h-12 w-12 place-items-center rounded-full bg-emerald-50 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400">
+                    <span className="material-symbols-outlined text-2xl">check_circle</span>
+                  </div>
+                  <h3 className="mt-4 text-xl sm:text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">
+                    Request received!
+                  </h3>
+                  <p className="mt-2 text-xs sm:text-sm leading-relaxed text-slate-600 dark:text-slate-400 max-w-xs">
+                    We will review your note and confirm your session for {dateLabel} at {selectedTime} by email.
+                  </p>
+                </div>
               ) : (
                 <>
-                  <div className="mt-7 space-y-4">
-                    <label className="block"><span className="mb-2 block text-xs font-medium">Name</span><input required autoComplete="name" value={name} onChange={event => setName(event.target.value)} placeholder="Your name" className="w-full rounded-md border border-slate-200 bg-transparent px-4 py-3 text-sm outline-none placeholder:text-slate-400 focus:border-blue-600 dark:border-white/10" /></label>
-                    <label className="block"><span className="mb-2 block text-xs font-medium">Work email</span><input required type="email" autoComplete="email" value={email} onChange={event => setEmail(event.target.value)} placeholder="you@company.com" className="w-full rounded-md border border-slate-200 bg-transparent px-4 py-3 text-sm outline-none placeholder:text-slate-400 focus:border-blue-600 dark:border-white/10" /></label>
-                    <label className="block"><span className="mb-2 block text-xs font-medium">Project type</span><select value={project} onChange={event => setProject(event.target.value)} className="w-full rounded-md border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-blue-600 dark:border-white/10 dark:bg-[#0d1118]">{PROJECTS.map(item => <option key={item}>{item}</option>)}</select></label>
-                    <label className="block"><span className="mb-2 block text-xs font-medium">What should we know? <span className="font-normal text-slate-400">(optional)</span></span><textarea rows={3} value={brief} onChange={event => setBrief(event.target.value)} placeholder="The challenge, current stage, or timeline" className="w-full resize-none rounded-md border border-slate-200 bg-transparent px-4 py-3 text-sm leading-6 outline-none placeholder:text-slate-400 focus:border-blue-600 dark:border-white/10" /></label>
+                  <div className="mt-5 space-y-3.5">
+                    <div>
+                      <label htmlFor="book-name" className="mb-1 block text-xs font-medium text-slate-700 dark:text-slate-300">
+                        Your Name
+                      </label>
+                      <input
+                        id="book-name"
+                        required
+                        autoComplete="name"
+                        value={name}
+                        onChange={(event) => setName(event.target.value)}
+                        placeholder="e.g. Alex Vance"
+                        className="w-full rounded-xl border border-slate-200 bg-slate-50/50 dark:bg-slate-900/50 px-3.5 py-3 text-base sm:text-sm outline-none transition-colors placeholder:text-slate-400 focus:border-blue-600 focus:bg-white dark:border-white/10 dark:focus:border-blue-500 dark:focus:bg-slate-900"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="book-email" className="mb-1 block text-xs font-medium text-slate-700 dark:text-slate-300">
+                        Work Email
+                      </label>
+                      <input
+                        id="book-email"
+                        required
+                        type="email"
+                        autoComplete="email"
+                        value={email}
+                        onChange={(event) => setEmail(event.target.value)}
+                        placeholder="you@company.com"
+                        className="w-full rounded-xl border border-slate-200 bg-slate-50/50 dark:bg-slate-900/50 px-3.5 py-3 text-base sm:text-sm outline-none transition-colors placeholder:text-slate-400 focus:border-blue-600 focus:bg-white dark:border-white/10 dark:focus:border-blue-500 dark:focus:bg-slate-900"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="book-project" className="mb-1 block text-xs font-medium text-slate-700 dark:text-slate-300">
+                        Project Type
+                      </label>
+                      <select
+                        id="book-project"
+                        value={project}
+                        onChange={(event) => setProject(event.target.value)}
+                        className="w-full rounded-xl border border-slate-200 bg-white dark:bg-slate-900 px-3.5 py-3 text-base sm:text-sm outline-none focus:border-blue-600 dark:border-white/10"
+                      >
+                        {PROJECTS.map((item) => (
+                          <option key={item}>{item}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label htmlFor="book-brief" className="mb-1 block text-xs font-medium text-slate-700 dark:text-slate-300">
+                        A Little Context <span className="font-normal text-slate-400">(optional)</span>
+                      </label>
+                      <textarea
+                        id="book-brief"
+                        rows={3}
+                        value={brief}
+                        onChange={(event) => setBrief(event.target.value)}
+                        placeholder="What challenge or timeline are you working through?"
+                        className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50/50 dark:bg-slate-900/50 px-3.5 py-3 text-base sm:text-sm leading-relaxed outline-none placeholder:text-slate-400 focus:border-blue-600 focus:bg-white dark:border-white/10 dark:focus:border-blue-500 dark:focus:bg-slate-900"
+                      />
+                    </div>
                   </div>
-                  {status === 'error' && <p role="alert" className="mt-4 text-xs leading-5 text-rose-600 dark:text-rose-400">We could not send the request. Please try again or email hello@innovationark.co.</p>}
-                  <button type="submit" disabled={status === 'sending'} className="mt-5 flex items-center justify-center gap-2 rounded-md bg-slate-950 px-5 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 disabled:cursor-wait disabled:opacity-60 dark:bg-white dark:text-slate-950 dark:hover:bg-blue-100">{status === 'sending' ? 'Sending request...' : 'Request this time'}<span className="material-symbols-outlined text-base">arrow_forward</span></button>
-                  <p className="mt-3 text-center text-[10px] leading-5 text-slate-400">No commitment. Your details are used only to arrange this conversation.</p>
+
+                  {status === 'error' && (
+                    <p role="alert" className="mt-3 text-xs text-rose-600 dark:text-rose-400">
+                      We could not send the request. Please email hello@innovationark.co directly.
+                    </p>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={status === 'sending'}
+                    className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-slate-950 py-3.5 px-5 text-sm font-semibold text-white shadow-md active:scale-98 transition-all hover:bg-blue-600 disabled:cursor-wait disabled:opacity-60 dark:bg-white dark:text-slate-950 dark:hover:bg-blue-100"
+                  >
+                    <span>{status === 'sending' ? 'Sending request…' : 'Request This Time'}</span>
+                    <span className="material-symbols-outlined text-base">arrow_forward</span>
+                  </button>
+
+                  <p className="mt-2.5 text-center text-[10px] leading-relaxed text-slate-400">
+                    No commitment or pushy sales calls. Confirmation sent via email.
+                  </p>
                 </>
               )}
             </form>
