@@ -28,13 +28,30 @@ export function Portfolio() {
         const data = await res.json();
         if (data && data.length > 0) {
           const mappedProjects: Project[] = data.map((apiProj: any) => {
-            const mockups = [
-              apiProj.mockup_1, 
-              apiProj.mockup_2, 
-              apiProj.mockup_3, 
-              apiProj.mockup_4
-            ].filter(Boolean);
-            
+            const rawMockups: string[] =
+              Array.isArray(apiProj.mockups) && apiProj.mockups.length > 0
+                ? apiProj.mockups
+                : Array.isArray(apiProj.images) && apiProj.images.length > 0
+                ? apiProj.images
+                    .map((img: any) =>
+                      typeof img === 'string' ? img : img.image_url || img.image
+                    )
+                    .filter(Boolean)
+                : [
+                    apiProj.mockup_1,
+                    apiProj.mockup_2,
+                    apiProj.mockup_3,
+                    apiProj.mockup_4,
+                  ].filter(Boolean);
+
+            const serverBase = CONFIG.API_BASE_URL.replace(/\/api\/?$/, '');
+            const mockups = rawMockups.map((url: string) => {
+              if (url && url.startsWith('/')) {
+                return `${serverBase}${url}`;
+              }
+              return url;
+            });
+
             if (mockups.length === 0) mockups.push(CONFIG.FALLBACK_IMAGE);
 
             return {
