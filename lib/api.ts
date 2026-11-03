@@ -480,3 +480,39 @@ export async function deleteContentBlock(id: number): Promise<void> {
     method: 'DELETE',
   });
 }
+
+// -------------------------------------------------------------
+// 8. Admin Notifications API (/api/notifications/)
+// -------------------------------------------------------------
+
+export interface AdminNotification {
+  id: number;
+  title: string;
+  body: string;
+  category: 'booking' | 'contact' | 'system';
+  reference_id?: number | null;
+  is_read: boolean;
+  created_at: string;
+}
+
+export async function getNotifications(): Promise<AdminNotification[]> {
+  return request<AdminNotification[]>('/notifications/');
+}
+
+export async function getUnreadNotifications(): Promise<AdminNotification[]> {
+  return request<AdminNotification[]>('/notifications/unread/');
+}
+
+export async function markNotificationRead(id: number): Promise<void> {
+  return request<void>(`/notifications/${id}/`, {
+    method: 'PATCH',
+    body: JSON.stringify({ is_read: true }),
+  });
+}
+
+export async function markAllNotificationsRead(): Promise<void> {
+  return request<void>('/notifications/mark-all-read/', {
+    method: 'POST',
+  });
+}
+
