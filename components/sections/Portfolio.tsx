@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { PROJECTS, Project } from '../../data/portfolio';
+import { getProjects } from '@/lib/api';
 import { CONFIG } from '../../lib/config';
 import { ProjectCard } from './ProjectCard';
 import { SectionHeader } from '@/components/ui/SectionHeader';
@@ -22,66 +23,36 @@ export function Portfolio() {
   useEffect(() => {
     async function fetchProjects() {
       try {
-        const res = await fetch(`${CONFIG.API_BASE_URL}/projects/`);
-        if (!res.ok) throw new Error('Failed to load projects');
-        
-        const data = await res.json();
+        const data = await getProjects();
         if (data && data.length > 0) {
-          const mappedProjects: Project[] = data.map((apiProj: any) => {
-            const rawMockups: string[] =
-              Array.isArray(apiProj.mockups) && apiProj.mockups.length > 0
-                ? apiProj.mockups
-                : Array.isArray(apiProj.images) && apiProj.images.length > 0
-                ? apiProj.images
-                    .map((img: any) =>
-                      typeof img === 'string' ? img : img.image_url || img.image
-                    )
-                    .filter(Boolean)
-                : [
-                    apiProj.mockup_1,
-                    apiProj.mockup_2,
-                    apiProj.mockup_3,
-                    apiProj.mockup_4,
-                  ].filter(Boolean);
-
-            const serverBase = CONFIG.API_BASE_URL.replace(/\/api\/?$/, '');
-            const mockups = rawMockups.map((url: string) => {
-              if (url && url.startsWith('/')) {
-                return `${serverBase}${url}`;
-              }
-              return url;
-            });
-
-            if (mockups.length === 0) mockups.push(CONFIG.FALLBACK_IMAGE);
-
-            return {
-              id: apiProj.id.toString(),
-              title: apiProj.title || 'Untitled Project',
-              subtitle: apiProj.subtitle || 'Category',
-              description: apiProj.description || '',
-              problem: apiProj.problem || '',
-              solution: apiProj.solution || '',
-              impact: apiProj.impact || '',
-              tags: apiProj.tags || [],
-              mockups: mockups,
-              metrics: {
-                value: apiProj.metric_value || '-',
-                label: apiProj.metric_label || 'Metric'
-              }
-            };
-          });
+          const published = data.filter((p) => p.is_published !== false);
+          const mappedProjects: Project[] = (published.length > 0 ? published : data).map((apiProj) => ({
+            id: apiProj.id.toString(),
+            title: apiProj.title || 'Untitled Project',
+            subtitle: apiProj.subtitle || 'Category',
+            description: apiProj.description || '',
+            problem: apiProj.problem || '',
+            solution: apiProj.solution || '',
+            impact: apiProj.impact || '',
+            tags: apiProj.tags || [],
+            mockups: apiProj.mockups && apiProj.mockups.length > 0 ? apiProj.mockups : [CONFIG.FALLBACK_IMAGE],
+            metrics: {
+              value: apiProj.metric_value || '-',
+              label: apiProj.metric_label || 'Metric',
+            },
+          }));
           setProjects(mappedProjects);
         } else {
           setProjects(PROJECTS);
         }
       } catch (err) {
-        console.warn("Using fallback local projects array:", err);
+        console.warn('Using fallback local projects array:', err);
         setProjects(PROJECTS);
       } finally {
         setIsLoading(false);
       }
     }
-    
+
     fetchProjects();
   }, []);
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { CONFIG } from '@/lib/config';
+import { createBooking } from '@/lib/api';
 
 const DAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 const TIMES = ['09:30 AM', '11:00 AM', '02:00 PM', '03:30 PM', '05:00 PM'];
@@ -31,20 +31,15 @@ export function BookingSection() {
     event.preventDefault();
     setStatus('sending');
     try {
-      const response = await fetch(`${CONFIG.API_BASE_URL}/bookings/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name,
-          email,
-          project_type: project,
-          preferred_date: selectedDate.toISOString().slice(0, 10),
-          preferred_time: selectedTime,
-          timezone: 'Asia/Dhaka',
-          brief,
-        }),
+      await createBooking({
+        name,
+        email,
+        project_type: project,
+        preferred_date: selectedDate.toISOString().slice(0, 10),
+        preferred_time: selectedTime,
+        timezone: 'Asia/Dhaka',
+        brief,
       });
-      if (!response.ok) throw new Error();
       setStatus('sent');
     } catch {
       setStatus('error');

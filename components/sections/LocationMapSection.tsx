@@ -1,22 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { CONFIG } from '@/lib/config';
-
-interface SiteSettings {
-  phone_number?: string;
-  email_address?: string;
-}
+import { getSiteSettings, SiteSettings, DEFAULT_SITE_SETTINGS } from '@/lib/api';
 
 export function LocationMapSection() {
-  const [settings, setSettings] = useState<SiteSettings | null>(null);
+  const [settings, setSettings] = useState<SiteSettings>(DEFAULT_SITE_SETTINGS);
   const [localTime, setLocalTime] = useState('');
 
   useEffect(() => {
-    fetch(`${CONFIG.API_BASE_URL}/settings/`)
-      .then((response) => response.json())
-      .then(setSettings)
-      .catch(() => undefined);
+    getSiteSettings().then(setSettings).catch(() => undefined);
 
     const update = () =>
       setLocalTime(
@@ -31,10 +23,14 @@ export function LocationMapSection() {
     return () => window.clearInterval(timer);
   }, []);
 
-  const phone = settings?.phone_number || '+880 1744-807689';
-  const email = settings?.email_address || 'hello@innovationark.co';
-  const coordinates = '25.817626,89.237485';
-  const directions = `https://www.google.com/maps/dir/?api=1&destination=${coordinates}`;
+  const phone = settings.phone_number || '+880 1744-807689';
+  const email = settings.email_address || 'hello@innovationark.co';
+  const address = settings.office_address || 'Rangpur & Dhaka, Bangladesh';
+  const defaultCoordinates = '25.817626,89.237485';
+  const mapSrc = settings.map_url && settings.map_url.trim() !== ''
+    ? settings.map_url
+    : `https://maps.google.com/maps?q=${defaultCoordinates}&t=m&z=14&ie=UTF8&iwloc=&output=embed`;
+  const directions = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`;
 
   return (
     <section className="mt-12 sm:mt-20 border-t border-slate-200 pt-10 sm:pt-16 dark:border-white/10">
@@ -71,7 +67,7 @@ export function LocationMapSection() {
 
           <address className="mt-5 not-italic">
             <p className="text-base sm:text-lg font-semibold text-slate-950 dark:text-white">
-              Rangpur & Dhaka, Bangladesh
+              {address}
             </p>
             <p className="mt-1 text-xs font-mono text-slate-500">
               25.8176° N, 89.2375° E
@@ -113,7 +109,7 @@ export function LocationMapSection() {
         <div className="relative h-60 sm:h-72 lg:h-auto min-h-[240px] overflow-hidden bg-slate-200 dark:bg-slate-900">
           <iframe
             title="Innovation Ark studio location"
-            src={`https://maps.google.com/maps?q=${coordinates}&t=m&z=14&ie=UTF8&iwloc=&output=embed`}
+            src={mapSrc}
             className="absolute inset-0 h-full w-full border-0 grayscale-[.25] contrast-[1.05]"
             loading="lazy"
             allowFullScreen

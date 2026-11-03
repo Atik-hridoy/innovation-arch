@@ -1,8 +1,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useContentBlocks } from '@/lib/content';
 
-const PRINCIPLES = [
+const DEFAULT_PRINCIPLES = [
   {
     number: '01',
     title: 'Clarity before code',
@@ -27,6 +28,10 @@ const PRINCIPLES = [
 ];
 
 export function StatsSection() {
+  const { getBlockValue } = useContentBlocks();
+  const customHeading = getBlockValue<string>('stats_heading', 'Good software starts with sound decisions—and stays useful long after launch.');
+  const customPrinciples = getBlockValue<typeof DEFAULT_PRINCIPLES>('principles', DEFAULT_PRINCIPLES);
+  const principles = Array.isArray(customPrinciples) && customPrinciples.length > 0 ? customPrinciples : DEFAULT_PRINCIPLES;
   return (
     <section className="relative z-20 -mt-px overflow-hidden bg-[#f0f4f8] text-slate-950 transition-colors dark:bg-[#0b0d12] dark:text-white">
       <div className="mx-auto w-full max-w-[1440px] px-4 py-14 sm:px-8 sm:py-20 md:px-12 md:py-24 lg:px-16 lg:py-28">
@@ -45,13 +50,13 @@ export function StatsSection() {
             </span>
           </div>
           <h2 className="max-w-4xl text-balance text-2xl xs:text-3xl sm:text-4xl md:col-span-9 md:text-5xl lg:text-[3.25rem] font-semibold leading-snug sm:leading-tight tracking-[-0.03em] sm:tracking-[-0.035em] text-slate-950 dark:text-white">
-            Good software starts with sound decisions—and stays useful long after launch.
+            {customHeading}
           </h2>
         </motion.div>
 
         {/* 3 Principles Cards - Mobile Stacked Cards with Clean Borders, Desktop 3-Col */}
         <div className="mt-6 sm:mt-0 grid grid-cols-1 gap-4 sm:gap-0 md:grid-cols-3">
-          {PRINCIPLES.map((principle, index) => (
+          {principles.map((principle, index) => (
             <motion.article
               key={principle.number}
               initial={{ opacity: 0, y: 18 }}

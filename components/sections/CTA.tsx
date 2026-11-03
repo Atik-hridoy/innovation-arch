@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
-import { CONFIG } from '../../lib/config';
+import { createContact, getFaqs, FAQItem } from '@/lib/api';
 import { Footer } from '@/components/Footer';
 import { LocationMapSection } from '@/components/sections/LocationMapSection';
 import { SectionHeader } from '@/components/ui/SectionHeader';
@@ -61,16 +61,7 @@ export function CTA() {
     setSubmitSuccess(false);
 
     try {
-      const res = await fetch(`${CONFIG.API_BASE_URL}/contacts/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, email, message }),
-      });
-
-      if (!res.ok) throw new Error('Failed to send message.');
-
+      await createContact({ name, email, message });
       setSubmitSuccess(true);
       setName('');
       setEmail('');
@@ -95,20 +86,15 @@ export function CTA() {
       );
     }
 
-    const fetchFaqs = async () => {
-      try {
-        const res = await fetch(`${CONFIG.API_BASE_URL}/faqs/`);
-        if (res.ok) {
-          const data = await res.json();
-          if (Array.isArray(data) && data.length > 0) {
-            setFaqs(data.sort((a: FAQ, b: FAQ) => a.order - b.order));
-          }
+    getFaqs()
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setFaqs(data);
         }
-      } catch (err) {
+      })
+      .catch(() => {
         // Keep default FAQs
-      }
-    };
-    fetchFaqs();
+      });
   }, []);
 
   return (

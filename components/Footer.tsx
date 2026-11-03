@@ -2,23 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { Logo } from '@/components/Logo';
-import { CONFIG } from '@/lib/config';
-
-interface SiteSettings {
-  facebook_url?: string;
-  whatsapp_number?: string;
-  phone_number?: string;
-  email_address?: string;
-}
+import { getSiteSettings, SiteSettings } from '@/lib/api';
 
 export function Footer() {
   const [settings, setSettings] = useState<SiteSettings | null>(null);
 
   useEffect(() => {
-    fetch(`${CONFIG.API_BASE_URL}/settings/`)
-      .then((response) => response.json())
-      .then(setSettings)
-      .catch(() => undefined);
+    getSiteSettings().then(setSettings).catch(() => undefined);
   }, []);
 
   const scrollToTop = () => {

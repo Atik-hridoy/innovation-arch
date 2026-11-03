@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { CONFIG } from '@/lib/config';
+import { createBooking } from '@/lib/api';
 
 interface DiscoveryModalProps {
   isOpen: boolean;
@@ -64,26 +64,19 @@ export function DiscoveryModal({ isOpen, onClose }: DiscoveryModalProps) {
     event.preventDefault();
     setSubmitting(true);
     setError('');
-    const appointment = selectedDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-    const message = [
-      'Discovery call request',
-      `Preferred date: ${appointment}`,
-      `Preferred time: ${selectedTime} (Asia/Dhaka)`,
-      `Project type: ${service}`,
-      '',
-      brief || 'No additional brief provided.',
-    ].join('\n');
-
     try {
-      const response = await fetch(`${CONFIG.API_BASE_URL}/contacts/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, message }),
+      await createBooking({
+        name,
+        email,
+        project_type: service,
+        preferred_date: selectedDate.toISOString().slice(0, 10),
+        preferred_time: selectedTime,
+        timezone: 'Asia/Dhaka',
+        brief,
       });
-      if (!response.ok) throw new Error();
       setSuccess(true);
-    } catch {
-      setError('We could not send the request. Please try again or email hello@innovationark.co.');
+    } catch (err: any) {
+      setError(err?.message || 'We could not send the request. Please try again or email hello@innovationark.co.');
     } finally {
       setSubmitting(false);
     }

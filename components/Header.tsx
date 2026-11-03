@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Logo } from '@/components/Logo';
 import { DiscoveryModal } from '@/components/ui/DiscoveryModal';
 import { useTheme } from '@/components/ThemeProvider';
+import { getSiteSettings, SiteSettings, DEFAULT_SITE_SETTINGS } from '@/lib/api';
 
 const navItems = [
   { label: 'Services', href: '/#services', desc: 'Capabilities & engineering' },
@@ -17,9 +18,11 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [discoveryOpen, setDiscoveryOpen] = useState(false);
+  const [settings, setSettings] = useState<SiteSettings>(DEFAULT_SITE_SETTINGS);
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
+    getSiteSettings().then(setSettings).catch(() => undefined);
     const onScroll = () => setScrolled(window.scrollY > 16);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -174,14 +177,14 @@ export function Header() {
 
               <div className="grid grid-cols-2 gap-2 text-center text-xs">
                 <a
-                  href="mailto:hello@innovationark.co"
-                  className="rounded-lg border border-slate-200 dark:border-white/10 py-2.5 text-slate-700 dark:text-slate-300 font-medium active:bg-slate-100 dark:active:bg-white/5 transition-colors"
+                  href={`mailto:${settings.email_address || 'hello@innovationark.co'}`}
+                  className="rounded-lg border border-slate-200 dark:border-white/10 py-2.5 text-slate-700 dark:text-slate-300 font-medium active:bg-slate-100 dark:active:bg-white/5 transition-colors truncate px-2"
                 >
                   ✉ Email Us
                 </a>
                 <a
-                  href="tel:+8801744807689"
-                  className="rounded-lg border border-slate-200 dark:border-white/10 py-2.5 text-slate-700 dark:text-slate-300 font-medium active:bg-slate-100 dark:active:bg-white/5 transition-colors"
+                  href={`tel:${(settings.phone_number || '+8801744807689').replace(/[^0-9+]/g, '')}`}
+                  className="rounded-lg border border-slate-200 dark:border-white/10 py-2.5 text-slate-700 dark:text-slate-300 font-medium active:bg-slate-100 dark:active:bg-white/5 transition-colors truncate px-2"
                 >
                   📞 Call Studio
                 </a>

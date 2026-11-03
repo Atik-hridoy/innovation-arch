@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { DiscoveryModal } from '@/components/ui/DiscoveryModal';
+import { useContentBlocks } from '@/lib/content';
 
 const AetherSwarm = dynamic(() => import('@/components/aetherswarm/ParticleScene'), { ssr: false });
 
@@ -24,6 +25,10 @@ export function Hero() {
   const [isDark, setIsDark] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const particleLayerRef = useRef<HTMLDivElement>(null);
+  const { getBlockValue } = useContentBlocks();
+
+  const heroBlock = getBlockValue<any>('hero', null);
+  const announcement = getBlockValue<any>('announcement', null);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -88,23 +93,32 @@ export function Hero() {
 
       <div className="relative z-10 mx-auto grid w-full max-w-[1440px] flex-1 grid-cols-1 items-start px-4 pb-6 pt-20 sm:px-8 sm:pb-8 sm:pt-24 md:grid-cols-12 md:px-12 md:pb-8 md:pt-24 lg:px-16">
         <div className="flex max-w-2xl flex-col items-start text-left md:col-span-7 lg:col-span-6">
+          {announcement && (
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-blue-600/30 bg-blue-50/70 px-3 py-1 text-xs text-blue-700 dark:bg-blue-500/10 dark:text-blue-300">
+              <span className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse" />
+              <span>{typeof announcement === 'string' ? announcement : announcement.text || announcement.title}</span>
+            </div>
+          )}
+
           <div className="mb-4 inline-flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400 sm:mb-6 sm:text-[11px]">
             <span className="h-px w-8 bg-blue-600 dark:bg-blue-400" />
-            Product strategy, design and engineering
+            {heroBlock?.eyebrow || 'Product strategy, design and engineering'}
           </div>
 
           <h1 className="max-w-[820px] text-balance font-sans text-[2.65rem] font-semibold leading-[0.96] tracking-[-0.055em] text-[#111827] dark:text-[#f5f5f4] xs:text-5xl sm:text-6xl md:text-[4.25rem] lg:text-[4.8rem]">
-            Digital products.
-            <span className="block text-slate-500 dark:text-slate-400">Built to do real work.</span>
+            {heroBlock?.title || 'Digital products.'}
+            <span className="block text-slate-500 dark:text-slate-400">
+              {heroBlock?.subtitle || 'Built to do real work.'}
+            </span>
           </h1>
 
           <p className="mt-4 max-w-xl text-pretty text-[13px] leading-6 text-slate-600 dark:text-slate-300 sm:mt-5 sm:text-base sm:leading-7 md:text-[17px] md:leading-7">
-            We help ambitious teams turn complex ideas into useful, dependable software&mdash;from the first product decision through launch and continued growth.
+            {heroBlock?.description || 'We help ambitious teams turn complex ideas into useful, dependable software—from the first product decision through launch and continued growth.'}
           </p>
 
           <div className="mt-5 grid w-full grid-cols-[1fr_auto] items-stretch gap-2.5 sm:mt-7 sm:flex sm:w-auto sm:flex-row sm:items-center sm:gap-3">
             <button type="button" onClick={() => setIsModalOpen(true)} className="group inline-flex min-h-12 items-center justify-center rounded-[10px] bg-[#111827] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(15,23,42,.14)] transition-all hover:bg-blue-700 active:scale-98 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:bg-[#f5f5f4] dark:text-[#111827] dark:hover:bg-white">
-              Discuss a project
+              {heroBlock?.cta_text || 'Discuss a project'}
               <span className="material-symbols-outlined ml-2 text-base transition-transform group-hover:translate-x-1">arrow_forward</span>
             </button>
             <a href="#work" className="group inline-flex min-h-12 items-center justify-center rounded-[10px] border border-slate-300/80 bg-transparent px-4 py-3 text-sm font-semibold text-slate-700 transition-colors hover:border-slate-500 hover:bg-white/60 active:scale-98 dark:border-white/15 dark:text-slate-300 dark:hover:bg-white/[0.06] sm:px-6">
@@ -114,7 +128,7 @@ export function Hero() {
           </div>
 
           <p className="mt-4 text-[11px] leading-5 text-slate-500 dark:text-slate-500 sm:mt-5 sm:text-xs">
-            Based in Bangladesh. Working with teams wherever good products are being built.
+            {heroBlock?.footer_note || 'Based in Bangladesh. Working with teams wherever good products are being built.'}
           </p>
         </div>
 

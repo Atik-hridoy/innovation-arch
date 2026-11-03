@@ -2,10 +2,56 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { PROJECTS } from '@/data/portfolio';
+import { PROJECTS, Project } from '@/data/portfolio';
+import { getProject, getProjects, ApiProject } from '@/lib/api';
+import { CONFIG } from '@/lib/config';
 
-export function generateStaticParams() {
-  return PROJECTS.map((project) => ({ id: project.id }));
+export const dynamicParams = true;
+
+async function resolveProject(id: string): Promise<Project | null> {
+  // 1. Try to fetch from Backend API
+  try {
+    const apiProj: ApiProject = await getProject(id);
+    if (apiProj && apiProj.id) {
+      return {
+        id: apiProj.id.toString(),
+        title: apiProj.title || 'Untitled Project',
+        subtitle: apiProj.subtitle || 'Category',
+        description: apiProj.description || '',
+        problem: apiProj.problem || 'Details coming soon.',
+        solution: apiProj.solution || 'Details coming soon.',
+        impact: apiProj.impact || 'Details coming soon.',
+        tags: apiProj.tags || [],
+        mockups: apiProj.mockups && apiProj.mockups.length > 0 ? apiProj.mockups : [CONFIG.FALLBACK_IMAGE],
+        metrics: {
+          value: apiProj.metric_value || '-',
+          label: apiProj.metric_label || 'Metric',
+        },
+      };
+    }
+  } catch (err) {
+    // Fall back to local mock data
+  }
+
+  // 2. Fall back to static mock projects
+  const staticFound =
+    PROJECTS.find((item) => item.id === id) ||
+    PROJECTS.find((item) => item.id === id.padStart(2, '0')) ||
+    PROJECTS.find((item) => item.id.replace(/^0+/, '') === id);
+
+  return staticFound || null;
+}
+
+export async function generateStaticParams() {
+  try {
+    const apiProjects = await getProjects();
+    const ids = new Set<string>();
+    PROJECTS.forEach((p) => ids.add(p.id));
+    apiProjects.forEach((p) => ids.add(p.id.toString()));
+    return Array.from(ids).map((id) => ({ id }));
+  } catch {
+    return PROJECTS.map((project) => ({ id: project.id }));
+  }
 }
 
 export async function generateMetadata({
@@ -14,7 +60,7 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const project = PROJECTS.find((item) => item.id === id);
+  const project = await resolveProject(id);
   if (!project) return {};
   return {
     title: `${project.title} — Case Study — Innovation Ark`,
@@ -33,7 +79,7 @@ export default async function CaseStudyPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const project = PROJECTS.find((item) => item.id === id);
+  const project = await resolveProject(id);
   if (!project) notFound();
 
   return (
@@ -91,6 +137,17 @@ export default async function CaseStudyPage({
                   </span>
                 ))}
               </div>
+
+              {project.metrics && project.metrics.value && (
+                <div className="mt-6 rounded-2xl border border-slate-200/80 bg-slate-50/60 p-4 dark:border-white/10 dark:bg-white/[0.02]">
+                  <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                    {project.metrics.value}
+                  </p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    {project.metrics.label}
+                  </p>
+                </div>
+              )}
             </div>
 
             <div className="space-y-6 sm:space-y-10">
@@ -111,6 +168,29 @@ export default async function CaseStudyPage({
                   </p>
                 </article>
               ))}
+
+              {/* Additional Project Mockups Gallery if available */}
+              {project.mockups.length > 1 && (
+                <div className="space-y-4 pt-4">
+                  <h3 className="text-sm font-mono font-semibold uppercase tracking-wider text-slate-400">
+                    Interface Gallery
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {project.mockups.slice(1).map((mockupUrl, idx) => (
+                      <div
+                        key={idx}
+                        className="relative aspect-video rounded-xl border border-slate-200/80 dark:border-white/10 overflow-hidden bg-slate-100 dark:bg-slate-900"
+                      >
+                        <img
+                          src={mockupUrl}
+                          alt={`${project.title} detail ${idx + 2}`}
+                          className="h-full w-full object-contain p-2"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </section>
